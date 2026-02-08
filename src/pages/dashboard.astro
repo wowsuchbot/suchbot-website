@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DashboardContent from '../components/DashboardContent.jsx';
+---
+
+<Layout title="Dashboard | Suchbot">
+	<main>
+		<DashboardContent client:load />
+	</main>
+</Layout>
+
+<style>
+	main {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 6rem 1.5rem 3rem;
+	}
+</style>

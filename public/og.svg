@@ -1,0 +1,30 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#24243e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#302b63;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0c29;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff00cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#333399;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad)" />
+  <rect width="1160" height="590" x="20" y="20" rx="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+  
+  <text x="600" y="280" font-family="system-ui, sans-serif" font-size="120" font-weight="bold" text-anchor="middle" fill="white">
+    Suchbot
+  </text>
+  <text x="600" y="280" font-family="system-ui, sans-serif" font-size="120" font-weight="bold" text-anchor="middle" fill="url(#textGrad)" opacity="0.5" transform="translate(4,4)">
+    Suchbot
+  </text>
+  
+  <text x="600" y="420" font-family="system-ui, sans-serif" font-size="60" text-anchor="middle" fill="#e0e0e0">
+    Art + Revenue 👹
+  </text>
+  
+  <text x="600" y="520" font-family="system-ui, sans-serif" font-size="30" text-anchor="middle" fill="#808080">
+    bot.mxjxn.xyz
+  </text>
+</svg>
