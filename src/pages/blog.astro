@@ -1,17 +1,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <Layout title="Blog — Suchbot">
 	<main>
 		<header class="hero">
 			<a href="/" class="back">← Back</a>
-			<h1 id="page-title">Blog</h1>
-			<p id="page-tagline" class="tagline">Updates and thoughts from suchbot and MXJXN.</p>
+			<h1>Blog</h1>
+			<p class="tagline">Updates and thoughts from suchbot and MXJXN.</p>
 		</header>
 
-		<section id="content" class="content">
-			<div class="loading">Loading...</div>
+		<section class="content">
+			{allPosts.length === 0 ? (
+				<p class="empty">No posts yet.</p>
+			) : (
+				allPosts.map(post => (
+					<article class="post-card">
+						<div class="post-meta">
+							<span>{post.data.date.toISOString().split('T')[0]}</span>
+							<span>by {post.data.author}</span>
+						</div>
+						<h2 class="post-title">
+							<a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+						</h2>
+					</article>
+				))
+			)}
 		</section>
 
 		<footer>
@@ -64,7 +82,7 @@ import Layout from '../layouts/Layout.astro';
 		gap: 2.5rem;
 	}
 
-	.loading {
+	.empty {
 		color: var(--text-muted);
 		font-style: italic;
 	}
@@ -97,7 +115,6 @@ import Layout from '../layouts/Layout.astro';
 	.post-title a {
 		color: var(--text);
 		text-decoration: none;
-		cursor: pointer;
 	}
 
 	.post-title a:hover {
@@ -108,33 +125,6 @@ import Layout from '../layouts/Layout.astro';
 		color: var(--text-muted);
 		line-height: 1.6;
 		margin: 0;
-	}
-
-	/* Single post styles */
-	.single-post .post-title {
-		font-size: 2.25rem;
-		font-weight: 700;
-		margin-bottom: 2rem;
-		line-height: 1.2;
-	}
-
-	.post-content {
-		color: var(--text-muted);
-		line-height: 1.75;
-		font-size: 1.05rem;
-	}
-
-	.post-content p {
-		margin: 0 0 1.25rem;
-	}
-
-	.empty, .error {
-		color: var(--text-muted);
-		font-style: italic;
-	}
-
-	.error {
-		color: #ff6b6b;
 	}
 
 	footer {
@@ -157,115 +147,5 @@ import Layout from '../layouts/Layout.astro';
 		h1 {
 			font-size: 2rem;
 		}
-
-		.single-post .post-title {
-			font-size: 1.75rem;
-		}
 	}
 </style>
-
-<script>
-	const container = document.getElementById('content');
-	const pageTitle = document.getElementById('page-title');
-	const pageTagline = document.getElementById('page-tagline');
-	const backLink = document.querySelector('.back') as HTMLAnchorElement;
-
-	// Check if we have a slug in the hash
-	const slug = window.location.hash.slice(1);
-
-	async function loadPostList() {
-		if (!container) return;
-
-		try {
-			const res = await fetch('/api/posts');
-			const posts = await res.json();
-
-			if (!posts.length) {
-				container.innerHTML = '<p class="empty">No posts yet.</p>';
-				return;
-			}
-
-			container.innerHTML = posts.map((post: any) => `
-				<article class="post-card">
-					<div class="post-meta">
-						<span>${post.date}</span>
-						<span>by ${post.author}</span>
-					</div>
-					<h2 class="post-title">
-						<a href="#${post.slug}" onclick="loadPost('${post.slug}')">${post.title}</a>
-					</h2>
-					<p class="post-excerpt">${post.content.slice(0, 200)}${post.content.length > 200 ? '...' : ''}</p>
-				</article>
-			`).join('');
-		} catch (err) {
-			container.innerHTML = '<p class="error">Failed to load posts.</p>';
-		}
-	}
-
-	async function loadPost(postSlug: string) {
-		if (!container || !pageTitle || !pageTagline || !backLink) return;
-
-		try {
-			const res = await fetch(`/api/posts/${postSlug}`);
-			
-			if (!res.ok) {
-				container.innerHTML = '<p class="error">Post not found.</p>';
-				return;
-			}
-
-			const post = await res.json();
-
-			// Update header
-			document.title = `${post.title} — Suchbot`;
-			pageTitle.textContent = post.title;
-			pageTagline.textContent = `${post.date} · by ${post.author}`;
-			backLink.href = '/blog';
-			backLink.textContent = '← All Posts';
-			backLink.onclick = (e) => {
-				e.preventDefault();
-				window.location.hash = '';
-				pageTitle.textContent = 'Blog';
-				pageTagline.textContent = 'Updates and thoughts from suchbot and MXJXN.';
-				document.title = 'Blog — Suchbot';
-				loadPostList();
-			};
-
-			// Simple markdown to HTML (basic paragraphs)
-			const contentHtml = post.content
-				.split('\n\n')
-				.map((p: string) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
-				.join('');
-
-			container.innerHTML = `
-				<article class="single-post">
-					<div class="post-content">${contentHtml}</div>
-				</article>
-			`;
-		} catch (err) {
-			container.innerHTML = '<p class="error">Failed to load post.</p>';
-		}
-	}
-
-	// Make loadPost available globally
-	(window as any).loadPost = loadPost;
-
-	// Initial load
-	if (slug) {
-		loadPost(slug);
-	} else {
-		loadPostList();
-	}
-
-	// Handle hash changes
-	window.addEventListener('hashchange', () => {
-		const newSlug = window.location.hash.slice(1);
-		if (newSlug) {
-			loadPost(newSlug);
-		} else {
-			if (pageTitle) pageTitle.textContent = 'Blog';
-			if (pageTagline) pageTagline.textContent = 'Updates and thoughts from suchbot and MXJXN.';
-			document.title = 'Blog — Suchbot';
-			loadPostList();
-		}
-	});
-</script>

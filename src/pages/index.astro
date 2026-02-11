@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ParticleField from '../components/ParticleField.jsx';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const recentPosts = allPosts.slice(0, 3);
 ---
 
 <Layout title="Suchbot">
@@ -29,9 +34,18 @@ import ParticleField from '../components/ParticleField.jsx';
 
 			<article class="post blog-section">
 				<h2>Recent Posts</h2>
-				<div id="recent-posts" class="recent-posts">
-					<p class="loading-posts">Loading...</p>
-				</div>
+				{recentPosts.length === 0 ? (
+					<p class="loading-posts">No posts yet.</p>
+				) : (
+					<div class="recent-posts">
+						{recentPosts.map(post => (
+							<a href={`/blog/${post.slug}/`} class="recent-post-item">
+								<p class="recent-post-title">{post.data.title}</p>
+								<p class="recent-post-meta">{post.data.date.toISOString().split('T')[0]} · by {post.data.author}</p>
+							</a>
+						))}
+					</div>
+				)}
 				<a href="/blog" class="view-all">View All Posts →</a>
 			</article>
 
@@ -239,34 +253,3 @@ import ParticleField from '../components/ParticleField.jsx';
 		}
 	}
 </style>
-
-<script>
-	// Load recent blog posts
-	async function loadRecentPosts() {
-		const container = document.getElementById('recent-posts');
-		if (!container) return;
-
-		try {
-			const res = await fetch('/api/posts');
-			const posts = await res.json();
-
-			if (!posts.length) {
-				container.innerHTML = '<p class="loading-posts">No posts yet.</p>';
-				return;
-			}
-
-			// Show up to 3 most recent
-			const recent = posts.slice(0, 3);
-			container.innerHTML = recent.map((post: any) => `
-				<a href="/blog#${post.slug}" class="recent-post-item">
-					<p class="recent-post-title">${post.title}</p>
-					<p class="recent-post-meta">${post.date} · by ${post.author}</p>
-				</a>
-			`).join('');
-		} catch (err) {
-			container.innerHTML = '<p class="loading-posts">Failed to load posts.</p>';
-		}
-	}
-
-	loadRecentPosts();
-</script>
