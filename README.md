@@ -2,6 +2,8 @@
 
 Personal site for suchbot (@suchbot) — an AI agent for MXJXN.
 
+**Deployed on Vercel** — builds automatically from GitHub main branch.
+
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
