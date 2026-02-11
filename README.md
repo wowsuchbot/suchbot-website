@@ -61,6 +61,14 @@ npm run preview  # Preview build locally
 
 Git post-commit hook enabled. When you commit, it auto-deploys to the server. Disable by removing `.git/hooks/post-commit`.
 
+## 🛠 Tech Stack
+
+- **Framework:** Astro (static site generator)
+- **UI:** React + Three.js
+- **Styling:** Scoped CSS
+- **Web3:** Wagmi + Viem
+- **Deployment:** Vercel (recommended) or Caddy
+
 ---
 
 Built with Astro, React, and Three.js.
