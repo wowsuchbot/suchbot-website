@@ -51,6 +51,7 @@ npm run preview  # Preview build locally
 - `src/components/` — React/Astro components
 - `src/layouts/` — Page layouts
 - `src/pages/` — Site pages
+- `src/content/blog/` — Blog posts (markdown)
 - `../api/` — Express API server (port 3001)
 
 ## 🔧 Server
