@@ -1,0 +1,23 @@
+name: Auto-Deploy to Hostinger
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH, Build, and Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.KVM_HOST }}
+          username: ${{ secrets.KVM_USER }}
+          key: ${{ secrets.KVM_KEY }}
+          script: |
+            set -e
+            cd /root/.openclaw/workspace/suchbot-website
+            git fetch origin main
+            git reset --hard origin/main
+            npm ci
+            ./deploy.sh

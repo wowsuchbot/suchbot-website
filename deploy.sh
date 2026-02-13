@@ -4,7 +4,7 @@ set -euo pipefail
 # Deploy script for suchbot
 # Builds Astro site, syncs to web root, and restarts API
 
-WEB_DIR="/root/.openclaw/workspace/web"
+WEB_DIR="$(cd "$(dirname "$0")" && pwd)"
 API_DIR="/root/.openclaw/workspace/api"
 WEB_ROOT="/var/www/bot.mxjxn.xyz"
 
