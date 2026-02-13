@@ -23,7 +23,7 @@ Deploy with one command:
 npm run deploy
 ```
 
-This:
+This script:
 1. Builds the Astro site (`npm run build`)
 2. Syncs `dist/` to `/var/www/bot.mxjxn.xyz/`
 3. Ensures the API server is running on port 3001
