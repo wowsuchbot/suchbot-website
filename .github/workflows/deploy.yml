@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH, Build, and Deploy
+      - name: SSH and Build
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.KVM_HOST }}
@@ -17,7 +17,16 @@ jobs:
           script: |
             set -e
             cd /root/.openclaw/workspace/suchbot-website
+            
+            # Clean up the workspace
             git fetch origin main
             git reset --hard origin/main
-            npm ci
+            
+            # Build the Astro site
+            npm install
+            npm run build
+            
+            # Optional: If you still want to run your script, 
+            # ensure it's executable first:
+            chmod +x ./deploy.sh
             ./deploy.sh
