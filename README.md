@@ -70,6 +70,8 @@ The site is public at https://bot.mxjxn.xyz. Broken builds break production.
 - **API:** Express server proxies `/api/*` to `localhost:3001`
 - **Config:** `/etc/caddy/Caddyfile`
 
+**Important:** Caddy's `root *` directive must point to `/var/www/bot.mxjxn.xyz`, not the local `dist/` directory. The deploy script syncs the built site to `/var/www/bot.mxjxn.xyz`.
+
 ## Auto-deploy
 
 Git post-commit hook enabled. When you commit, it auto-deploys to the server. Disable by removing `.git/hooks/post-commit`.
