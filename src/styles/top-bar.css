@@ -17,9 +17,9 @@
 	border-radius: 50%;
 	object-fit: cover;
 	border: 2px solid var(--border);
+	margin-right: 0.5rem;
 	max-width: 2.5rem;
 	max-height: 2.5rem;
-	margin-right: 0.5rem;
 	transition: transform 0.2s, border-color 0.2s;
 }
 
@@ -38,6 +38,7 @@
 .nav-links {
 	display: flex;
 	gap: 1rem;
+	font-size: 0.9rem;
 	align-items: center;
 }
 
@@ -60,4 +61,11 @@
 .wallet-container {
 	display: flex;
 	align-items: center;
+}
+
+h1 {
+	font-family: 'Syne', sans-serif;
+	font-weight: 800;
+	margin: 0 0 0.75rem;
+	line-height: 1.1;
 }
