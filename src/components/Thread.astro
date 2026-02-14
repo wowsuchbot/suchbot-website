@@ -1,0 +1,85 @@
+---
+import Cast from './Cast.astro';
+
+interface ThreadProps {
+	thread: Array<{
+		hash: string;
+		text: string;
+		author?: {
+			username: string;
+			fid?: number;
+			displayName?: string;
+			pfpUrl?: string;
+		};
+		timestamp?: string;
+		reactions?: number;
+		replies?: number;
+		embeds?: Array<{
+			type: 'image' | 'frame' | 'url';
+			url: string;
+		}>;
+	}>;
+	maxCasts?: number;
+	showAll?: boolean;
+}
+
+const { thread = [], maxCasts = 3, showAll = false } = Astro.props;
+
+const displayCasts = showAll ? thread : thread.slice(0, maxCasts);
+const remainingCasts = showAll ? 0 : Math.max(0, thread.length - maxCasts);
+---
+
+<div class="thread-container">
+	{displayCasts.map((cast, index) => (
+		<div class={`cast-item cast-item-${index === 0 ? 'first' : 'reply'}`}>
+			<Cast
+				hash={cast.hash}
+				text={cast.text}
+				author={cast.author}
+				timestamp={cast.timestamp}
+				reactions={cast.reactions}
+				replies={cast.replies}
+				embeds={cast.embeds}
+			/>
+		</div>
+	))}
+
+	{!showAll && remainingCasts > 0 && (
+		<div class="thread-expand">
+			<span class="thread-count">+{remainingCasts} more</span>
+		</div>
+	)}
+</div>
+
+<style>
+	.thread-container {
+		border-left: 2px solid var(--border);
+		padding-left: 0;
+		margin-left: 1rem;
+	}
+
+	.cast-item-first {
+		border-left: none;
+		margin-left: 0;
+		padding-left: 0;
+	}
+
+	.cast-item-reply {
+		margin-left: 1.5rem;
+		border-left: 1px dashed var(--border);
+		padding-left: 1rem;
+	}
+
+	.thread-expand {
+		padding: 0.5rem;
+		text-align: center;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+	}
+
+	.thread-count {
+		color: var(--accent);
+		font-weight: 700;
+	}
+</style>

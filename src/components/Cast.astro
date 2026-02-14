@@ -1,0 +1,183 @@
+---
+interface Props {
+	hash?: string;
+	text: string;
+	author?: {
+		username: string;
+		fid?: number;
+		displayName?: string;
+		pfpUrl?: string;
+	};
+	timestamp?: string;
+	reactions?: number;
+	replies?: number;
+	embeds?: Array<{
+		type: 'image' | 'frame' | 'url';
+		url: string;
+	}>;
+}
+
+const { hash = '', text, author, timestamp, reactions = 0, replies = 0, embeds = [] } = Astro.props;
+
+const timeAgo = timestamp
+	? new Date(timestamp).toLocaleDateString()
+	: '';
+---
+
+<div class="cast">
+	<div class="cast-header">
+		{author?.pfpUrl && (
+			<img src={author.pfpUrl} alt={author.displayName || author.username} class="cast-pfp" />
+		)}
+		<div class="cast-author">
+			<span class="cast-username">@{author?.username || 'suchbot'}</span>
+			<span class="cast-fid">{author?.fid ? `· ${author.fid}` : ''}</span>
+		</div>
+		<a href={`https://warpcast.com/_/compose?text=${encodeURIComponent(text.replace(/^>+\s?/, ''))}`} target="_blank" class="cast-reply" title="Reply on Farcaster">
+			↩
+		</a>
+	</div>
+
+	<p class="cast-text">{text.replace(/^>+\s?/, '')}</p>
+
+	{embeds.length > 0 && (
+		<div class="cast-embeds">
+			{embeds.map(embed => (
+				<div class={`cast-embed cast-embed-${embed.type}`}>
+					{embed.type === 'image' && <img src={embed.url} alt="Cast image" />}
+					{embed.type === 'frame' && (
+						<a href={embed.url} target="_blank" class="frame-link">
+							[Frame]
+						</a>
+					)}
+					{embed.type === 'url' && (
+						<a href={embed.url} target="_blank" class="url-link">
+							{new URL(embed.url).hostname}
+						</a>
+					)}
+				</div>
+			))}
+		</div>
+	)}
+
+	<div class="cast-footer">
+		<span class="cast-timestamp">{timeAgo}</span>
+		<span class="cast-actions">
+			{(reactions > 0 || replies > 0) && (
+				<>
+					{reactions > 0 && <span class="cast-reactions">❤️ {reactions}</span>}
+					{replies > 0 && <span class="cast-replies">💬 {replies}</span>}
+				</>
+			)}
+		</span>
+	</div>
+</div>
+
+<style>
+	.cast {
+		padding: 1rem;
+		border: 1px solid var(--border);
+		border-left: 2px solid var(--border);
+		background: transparent;
+		margin-bottom: 1rem;
+	}
+
+	.cast-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.cast-pfp {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	.cast-author {
+		display: flex;
+		flex-direction: column;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.8rem;
+	}
+
+	.cast-username {
+		color: var(--text);
+		font-weight: 700;
+	}
+
+	.cast-fid {
+		color: var(--text-muted);
+		font-size: 0.75rem;
+	}
+
+	.cast-reply {
+		color: var(--text-muted);
+		text-decoration: none;
+		padding: 0.25rem 0.5rem;
+		opacity: 0;
+		transition: opacity 0.2s;
+	}
+
+	.cast:hover .cast-reply {
+		opacity: 1;
+	}
+
+	.cast-text {
+		margin: 0 0 0.75rem;
+		color: var(--text-muted);
+		line-height: 1.6;
+	}
+
+	.cast-embeds {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.cast-embed-image img {
+		max-width: 100%;
+		border-radius: 4px;
+		border: 1px solid var(--border);
+	}
+
+	.cast-embed-frame,
+	.cast-embed-url {
+		padding: 0.5rem 1rem;
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.02);
+		font-family: 'Space Mono', monospace;
+		font-size: 0.75rem;
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.cast-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.cast-timestamp {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		font-family: 'Space Mono', monospace;
+	}
+
+	.cast-actions {
+		display: flex;
+		gap: 1rem;
+		font-size: 0.85rem;
+	}
+
+	.cast-reactions,
+	.cast-replies {
+		color: var(--text-muted);
+	}
+</style>

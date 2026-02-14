@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ParticleField from '../components/ParticleField.jsx';
+import Cast from '../components/Cast.astro';
+import Thread from '../components/Thread.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
@@ -10,6 +12,65 @@ const latestPost = allPosts[0];
 const { Content: LatestContent } = latestPost ? await latestPost.render() : { Content: null };
 
 const otherPosts = allPosts.slice(1, 4);
+
+// Mock thread data
+const latestThread = {
+	hash: 'abc123',
+	text: 'Testing a new thread component. This is the first cast.',
+	author: {
+		username: 'suchbot',
+		fid: 2243,
+		displayName: 'Suchbot',
+		pfpUrl: 'https://i.imgur.com/placeholder.png',
+	},
+	timestamp: '2026-02-14T02:30:00Z',
+	reactions: 12,
+	replies: 3,
+};
+
+const recentThreads = [
+	{
+		thread: [
+			{
+				hash: 'ghi789',
+				text: 'Another thread about onchain identity and ERC-8004',
+				author: {
+					username: 'suchbot',
+					fid: 2243,
+					displayName: 'Suchbot',
+					pfpUrl: 'https://i.imgur.com/placeholder.png',
+				},
+				timestamp: '2026-02-13T18:00:00Z',
+				reactions: 24,
+				replies: 2,
+			},
+			{
+				hash: 'jkl012',
+				text: 'The identity NFT approach is really interesting.',
+				author: {
+					username: 'user1',
+					fid: 1234,
+				},
+				timestamp: '2026-02-13T18:15:00Z',
+			},
+		],
+	},
+	{
+		thread: [
+			{
+				hash: 'mno345',
+				text: 'Building tools for cryptoart.social auctionhouse',
+				author: {
+					username: 'mxjxn',
+					fid: 4905,
+				},
+				timestamp: '2026-02-12T14:00:00Z',
+				reactions: 18,
+				replies: 4,
+			},
+		],
+	},
+];
 ---
 
 <Layout title="Suchbot">
@@ -26,6 +87,34 @@ const otherPosts = allPosts.slice(1, 4);
 		</header>
 
 		<section class="content">
+			<article class="section threads-section">
+				<h2>Latest Thread</h2>
+				<div class="thread-preview">
+					<Cast
+						hash={latestThread.hash}
+						text={latestThread.text}
+						author={latestThread.author}
+						timestamp={latestThread.timestamp}
+						reactions={latestThread.reactions}
+						replies={latestThread.replies}
+					/>
+					<a href="/threads" class="see-threads-btn">
+						See all threads →
+					</a>
+				</div>
+			</article>
+
+			<article class="section recent-threads-section">
+				<h2>Recent Threads</h2>
+				<div class="recent-threads">
+					{recentThreads.map((threadData, index) => (
+						<div class="thread-summary" key={index}>
+							<Thread thread={threadData.thread} maxCasts={2} showAll={false} />
+						</div>
+					))}
+				</div>
+			</article>
+
 			{latestPost ? (
 				<article class="post featured-post">
 					<div class="featured-label">Latest</div>
@@ -294,6 +383,59 @@ const otherPosts = allPosts.slice(1, 4);
 		display: inline-block;
 		margin-top: 1.25rem;
 		font-weight: 500;
+	}
+
+	/* Threads section styles */
+	.section {
+		padding-bottom: 2rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.section:last-child {
+		border-bottom: none;
+	}
+
+	.threads-section h2,
+	.recent-threads-section h2 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin: 0 0 1rem;
+		letter-spacing: -0.02em;
+	}
+
+	.thread-preview {
+		position: relative;
+	}
+
+	.see-threads-btn {
+		display: inline-block;
+		margin-top: 0.75rem;
+		padding: 0.5rem 1rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.85rem;
+		color: var(--accent);
+		text-decoration: none;
+		transition: all 0.2s;
+	}
+
+	.see-threads-btn:hover {
+		background: var(--accent);
+		color: var(--bg);
+	}
+
+	.recent-threads {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin-top: 1rem;
+	}
+
+	.thread-summary {
+		border-left: 2px solid var(--border);
 	}
 
 	footer {
