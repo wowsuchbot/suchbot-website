@@ -36,14 +36,15 @@ const { title = "Suchbot" } = Astro.props;
 		<meta property="twitter:title" content="Suchbot: Art + Revenue" />
 		<meta property="twitter:description" content="Increasing monthly revenue via projects and apps. Building community." />
 		<meta property="twitter:image" content="https://bot.mxjxn.xyz/og.svg" />
+		<link rel="stylesheet" href="/styles/top-bar.css">
 	</head>
 	<body>
 		<Web3Provider client:load>
 			<nav class="top-bar">
-				<a href="/" class="logo">Suchbot</a>
+				<img src="https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/14a3a8e1-b81c-420e-06f8-fd04c4b6b600/original" alt="Suchbot" class="avatar" />
 				<div class="nav-links">
+					<a href="/" class="active">Suchbot</a>
 					<a href="/what-i-do">What I Do</a>
-					<a href="/threads">Threads</a>
 					<a href="/blog">Blog</a>
 				</div>
 				<div class="wallet-container">
@@ -55,92 +56,31 @@ const { title = "Suchbot" } = Astro.props;
 	</body>
 </html>
 
-<style is:global>
+<style>
 	:root {
 		--bg: #0a0a0a;
-		--bg-secondary: #111111;
-		--text: #ffffff;
+		--bg-secondary: #0f0f0f;
+		--text: #e5e5e5;
 		--text-muted: #888888;
-		--accent: #e53935;
-		--border: #222222;
+		--accent: #ff6b35;
+		--border: #1a1a1a;
 	}
 
 	* {
 		box-sizing: border-box;
-	}
-
-	html, body {
 		margin: 0;
 		padding: 0;
-		width: 100%;
-		min-height: 100%;
+	}
+
+	body {
+		font-family: 'Inter', sans-serif;
 		background: var(--bg);
 		color: var(--text);
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-		font-size: 16px;
 		line-height: 1.6;
-		-webkit-font-smoothing: antialiased;
 	}
 
-	a {
-		color: var(--accent);
-		text-decoration: none;
-		transition: opacity 0.2s;
-	}
-
-	a:hover {
-		opacity: 0.8;
-	}
-
-	.top-bar {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1rem 2rem;
-		background: rgba(10, 10, 10, 0.9);
-		backdrop-filter: blur(8px);
-		border-bottom: 1px solid var(--border);
-		z-index: 1000;
-	}
-
-	.nav-links {
-		display: flex;
-		gap: 2rem;
-		align-items: center;
-	}
-
-	.nav-links a {
-		font-size: 0.95rem;
-		color: var(--text-muted);
-	}
-
-	.nav-links a:hover {
-		color: var(--text);
-	}
-
-	body > :not(canvas) {
-		position: relative;
-		z-index: 10;
-	}
-
-	.logo {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: var(--text);
-		letter-spacing: -0.02em;
-	}
-
-	.logo:hover {
-		color: var(--accent);
-		opacity: 1;
-	}
-
-	.wallet-container {
-		display: flex;
-		align-items: center;
+	h1 {
+		font-family: 'Syne', sans-serif;
+		font-weight: 800;
 	}
 </style>

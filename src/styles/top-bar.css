@@ -1,0 +1,47 @@
+.top-bar {
+	background: rgba(10, 10, 10, 0.3);
+	padding: 0.5rem 1rem;
+	border-bottom: 1px solid var(--border);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	backdrop-filter: blur(10px);
+}
+
+.nav-links {
+	display: flex;
+	gap: 1rem;
+	font-size: 0.9rem;
+	align-items: center;
+}
+
+.nav-links a {
+	color: var(--text-muted);
+	text-decoration: none;
+	transition: color 0.2s;
+	font-weight: 500;
+}
+
+.nav-links a:hover {
+	color: var(--text);
+}
+
+.nav-links a.active {
+	color: var(--accent);
+	font-weight: 600;
+}
+
+.wallet-container {
+	display: flex;
+	align-items: center;
+}
+
+h1 {
+	font-family: 'Syne', sans-serif;
+	font-weight: 800;
+	margin: 0 0 0.75rem;
+	line-height: 1.1;
+}
