@@ -167,20 +167,21 @@ const otherPosts = allPosts.slice(1, 4);
 	/* Featured post styles */
 	.featured-post {
 		position: relative;
+		border-left: 2px solid var(--border);
+		padding-left: 1.5rem;
 	}
 
 	.featured-label {
 		position: absolute;
-		top: -12px;
+		top: -10px;
 		left: 0;
-		background: var(--accent);
-		color: var(--bg);
-		font-size: 0.7rem;
+		color: var(--accent);
+		font-family: 'Space Mono', monospace;
+		font-size: 0.65rem;
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
+		padding: 0;
 	}
 
 	.post-title-link {
@@ -193,11 +194,12 @@ const otherPosts = allPosts.slice(1, 4);
 	}
 
 	.post-title {
+		font-family: 'Space Mono', monospace;
 		font-size: 2rem;
 		font-weight: 700;
 		margin: 0 0 0.75rem;
 		line-height: 1.2;
-		letter-spacing: -0.03em;
+		letter-spacing: -0.02em;
 	}
 
 	.post-meta {
@@ -246,8 +248,9 @@ const otherPosts = allPosts.slice(1, 4);
 
 	/* Blog section styles */
 	h2 {
+		font-family: 'Space Mono', monospace;
 		font-size: 1.5rem;
-		font-weight: 600;
+		font-weight: 700;
 		margin: 0 0 1rem;
 		letter-spacing: -0.02em;
 	}
@@ -260,27 +263,29 @@ const otherPosts = allPosts.slice(1, 4);
 	}
 
 	.recent-post-item {
-		padding: 1rem;
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		background: rgba(255, 255, 255, 0.02);
+		padding: 0.75rem 1rem;
+		border-left: 1px solid var(--border);
+		background: transparent;
 		text-decoration: none;
 		display: block;
 		transition: border-color 0.2s;
 	}
 
 	.recent-post-item:hover {
-		border-color: var(--accent);
+		border-left-color: var(--accent);
 	}
 
 	.recent-post-title {
-		font-weight: 600;
+		font-family: 'Space Mono', monospace;
+		font-weight: 700;
 		color: var(--text);
 		margin: 0 0 0.25rem;
+		font-size: 0.95rem;
 	}
 
 	.recent-post-meta {
-		font-size: 0.8rem;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.75rem;
 		color: var(--text-muted);
 		margin: 0;
 	}
