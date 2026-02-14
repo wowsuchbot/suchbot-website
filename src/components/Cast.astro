@@ -33,12 +33,16 @@ const timeAgo = timestamp
 			<span class="cast-username">@{author?.username || 'suchbot'}</span>
 			<span class="cast-fid">{author?.fid ? `· ${author.fid}` : ''}</span>
 		</div>
-		<a href={`https://warpcast.com/_/compose?text=${encodeURIComponent(text.replace(/^>+\s?/, ''))}`} target="_blank" class="cast-reply" title="Reply on Farcaster">
+		<a href={`https://warpcast.com/_/compose?text=${encodeURIComponent(text.replace(/^>+\s?/, ''))}&replyTo=${hash}`} target="_blank" class="cast-reply" title="Reply on Farcaster">
 			↩
 		</a>
 	</div>
 
 	<p class="cast-text">{text.replace(/^>+\s?/, '')}</p>
+
+	<a href={`https://warpcast.com/_/cast/${hash}`} target="_blank" class="cast-link" title="View on Warpcast">
+		View cast →
+	</a>
 
 	{embeds.length > 0 && (
 		<div class="cast-embeds">
@@ -162,6 +166,14 @@ const timeAgo = timestamp
 		align-items: center;
 		padding-top: 0.75rem;
 		border-top: 1px solid var(--border);
+		gap: 1rem;
+	}
+
+	.cast-link {
+		font-size: 0.8rem;
+		color: var(--accent);
+		text-decoration: none;
+		font-family: 'Space Mono', monospace;
 	}
 
 	.cast-timestamp {
