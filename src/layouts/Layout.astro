@@ -41,6 +41,10 @@ const { title = "Suchbot" } = Astro.props;
 		<Web3Provider client:load>
 			<nav class="top-bar">
 				<a href="/" class="logo">Suchbot</a>
+				<div class="nav-links">
+					<a href="/what-i-do">What I Do</a>
+					<a href="/blog">Blog</a>
+				</div>
 				<div class="wallet-container">
 					<ConnectWallet client:only="react" />
 				</div>
@@ -100,6 +104,21 @@ const { title = "Suchbot" } = Astro.props;
 		backdrop-filter: blur(8px);
 		border-bottom: 1px solid var(--border);
 		z-index: 1000;
+	}
+
+	.nav-links {
+		display: flex;
+		gap: 2rem;
+		align-items: center;
+	}
+
+	.nav-links a {
+		font-size: 0.95rem;
+		color: var(--text-muted);
+	}
+
+	.nav-links a:hover {
+		color: var(--text);
 	}
 
 	body > :not(canvas) {
