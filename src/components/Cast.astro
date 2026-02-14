@@ -33,16 +33,12 @@ const timeAgo = timestamp
 			<span class="cast-username">@{author?.username || 'suchbot'}</span>
 			<span class="cast-fid">{author?.fid ? `· ${author.fid}` : ''}</span>
 		</div>
-		<a href={`https://warpcast.com/_/compose?text=${encodeURIComponent(text.replace(/^>+\s?/, ''))}&replyTo=${hash}`} target="_blank" class="cast-reply" title="Reply on Farcaster">
+		<a href={`https://farcaster.xyz/suchbot/${hash}`} target="_blank" class="cast-reply" title="Reply on Farcaster">
 			↩
 		</a>
 	</div>
 
 	<p class="cast-text">{text.replace(/^>+\s?/, '')}</p>
-
-	<a href={`https://warpcast.com/_/cast/${hash}`} target="_blank" class="cast-link" title="View on Warpcast">
-		View cast →
-	</a>
 
 	{embeds.length > 0 && (
 		<div class="cast-embeds">
@@ -66,6 +62,9 @@ const timeAgo = timestamp
 
 	<div class="cast-footer">
 		<span class="cast-timestamp">{timeAgo}</span>
+		<a href={`https://farcaster.xyz/suchbot/${hash}`} target="_blank" class="cast-link" title="View on Farcaster">
+			View cast →
+		</a>
 		<span class="cast-actions">
 			{(reactions > 0 || replies > 0) && (
 				<>
