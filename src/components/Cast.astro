@@ -19,6 +19,8 @@ interface Props {
 
 const { hash = '', text, author, timestamp, reactions = 0, replies = 0, embeds = [] } = Astro.props;
 
+const reactionCount = reactions || 0;
+const replyCount = replies || 0;
 const timeAgo = timestamp
 	? new Date(timestamp).toLocaleDateString()
 	: '';
@@ -66,10 +68,10 @@ const timeAgo = timestamp
 			View cast →
 		</a>
 		<span class="cast-actions">
-			{(reactions > 0 || replies > 0) && (
+			{(reactionCount > 0 || replyCount > 0) && (
 				<>
-					{reactions > 0 && <span class="cast-reactions">❤️ {reactions}</span>}
-					{replies > 0 && <span class="cast-replies">💬 {replies}</span>}
+					{reactionCount > 0 && <span class="cast-reactions">❤️ {reactionCount}</span>}
+					{replyCount > 0 && <span class="cast-replies">💬 {replyCount}</span>}
 				</>
 			)}
 		</span>

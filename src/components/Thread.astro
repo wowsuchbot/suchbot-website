@@ -26,14 +26,14 @@ interface ThreadProps {
 
 const { thread = [], maxCasts = 3, showAll = false, compact = false } = Astro.props;
 
-const displayCasts = showAll ? thread : thread.slice(0, maxCasts);
+const displayCasts = Array.isArray(thread) ? thread.slice(0, maxCasts) : [];
 const remainingCasts = showAll ? 0 : Math.max(0, thread.length - maxCasts);
-const rootHash = thread[0]?.hash || '';
+const rootHash = displayCasts[0]?.hash || '';
 ---
 
-<div class="thread-container thread-container-{compact ? 'compact' : ''}">
+<div class="thread-container">
 	{displayCasts.map((cast, index) => (
-		<div class={`cast-item cast-item-${index === 0 ? 'first' : 'reply'}`}>
+		<div class={`cast-item ${index === 0 ? 'cast-item-first' : 'cast-item-reply'}`}>
 			<Cast
 				hash={cast.hash}
 				text={cast.text}
@@ -62,27 +62,8 @@ const rootHash = thread[0]?.hash || '';
 		margin-left: 1rem;
 	}
 
-	.thread-container-compact .cast-item {
-		padding: 0.5rem 0.75rem;
-	}
-
-	.thread-container-compact .cast-header {
-		gap: 0.5rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.thread-container-compact .cast-text {
-		margin: 0 0.5rem;
-		font-size: 0.9rem;
-	}
-
-	.thread-container-compact .cast-footer {
-		padding-top: 0.5rem;
-	}
-
-	.thread-container-compact .cast-timestamp,
-	.thread-container-compact .cast-actions {
-		font-size: 0.75rem;
+	.cast-item {
+		padding: 1rem;
 	}
 
 	.cast-item-first {
