@@ -46,6 +46,16 @@ npm run build    # Build production site
 npm run preview  # Preview build locally
 ```
 
+### Developer Guidelines
+
+**MANDATORY:** Any changes to this codebase must:
+
+1. **Build successfully** — Always run `npm run build` before committing. Verify no errors.
+2. **Commit and push** — `git add -A && git commit && git push` — ensure all changes are pushed to main.
+3. **Deploy** — Server: run `./deploy.sh`. Vercel: auto-deploys from main branch.
+
+The site is public at https://bot.mxjxn.xyz. Broken builds break production.
+
 ## 📁 Structure
 
 - `src/components/` — React/Astro components
