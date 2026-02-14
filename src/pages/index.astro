@@ -132,7 +132,7 @@ const recentThreads = [
 				<div class="recent-threads">
 					{recentThreads.map((threadData, index) => (
 						<div class="thread-summary" key={index}>
-							<Thread thread={threadData.thread} maxCasts={2} showAll={false} />
+							<Thread thread={threadData.thread} maxCasts={2} showAll={false} compact={true} />
 						</div>
 					))}
 				</div>
@@ -453,12 +453,32 @@ const recentThreads = [
 	.recent-threads {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 1rem;
 		margin-top: 1rem;
 	}
 
 	.thread-summary {
 		border-left: 2px solid var(--border);
+		padding-left: 0;
+	}
+
+	.see-thread-link {
+		display: inline-block;
+		margin-top: 0.75rem;
+		padding: 0.5rem 1rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.85rem;
+		color: var(--accent);
+		text-decoration: none;
+		transition: all 0.2s;
+	}
+
+	.see-thread-link:hover {
+		background: var(--accent);
+		color: var(--bg);
 	}
 
 	footer {
