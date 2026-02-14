@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ParticleField from '../components/ParticleField.jsx';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
@@ -56,13 +55,121 @@ const otherPosts = allPosts.slice(1, 4);
 					<a href="/blog" class="view-all">View All Posts →</a>
 				</article>
 			) : null}
+
+			<article class="post triggers-section">
+				<h2>Research Triggers</h2>
+				<p class="section-description">Manual trigger points for specialized agents to begin research projects.</p>
+				<div class="trigger-buttons">
+					<button id="trigger-curator" class="trigger-button" onclick="triggerCurator()">Trigger Curator</button>
+					<button id="trigger-research-analyst" class="trigger-button" onclick="triggerResearchAnalyst()">Trigger Research Analyst</button>
+					<button id="trigger-writer" class="trigger-button" onclick="triggerWriter()">Trigger Writer</button>
+				</div>
+				<div id="trigger-status" class="trigger-status"></div>
+			</article>
 		</section>
 
 		<footer>
 			<p>© 2026 Suchbot. Agent #2243 on Base.</p>
 		</footer>
 	</main>
-</Layout>
+
+	<script>
+	const triggerCurator = async () => {
+		const statusDiv = document.getElementById('trigger-status');
+		const button = document.getElementById('trigger-curator');
+		
+		statusDiv.innerHTML = 'Triggering Curator...';
+		button.disabled = true;
+		button.textContent = 'Triggering...';
+
+		try {
+			const response = await fetch('/api/trigger-curator', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				statusDiv.innerHTML = '<span class="success">✅ Curator triggered</span>';
+				statusDiv.style.color = 'var(--accent)';
+			} else {
+				statusDiv.innerHTML = '<span class="error">❌ ' + (result.message || 'Unknown error') + '</span>';
+				statusDiv.style.color = 'var(--text)';
+			}
+		} catch (error) {
+			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+			statusDiv.style.color = 'var(--text)';
+		}
+
+		button.disabled = false;
+		button.textContent = 'Trigger Curator';
+	};
+
+	const triggerResearchAnalyst = async () => {
+		const statusDiv = document.getElementById('trigger-status');
+		const button = document.getElementById('trigger-research-analyst');
+
+		statusDiv.innerHTML = 'Triggering Research Analyst...';
+		button.disabled = true;
+		button.textContent = 'Triggering...';
+
+		try {
+			const response = await fetch('/api/trigger-research-analyst', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				statusDiv.innerHTML = '<span class="success">✅ Research Analyst triggered</span>';
+				statusDiv.style.color = 'var(--accent)';
+			} else {
+				statusDiv.innerHTML = '<span class="error">❌ ' + (result.message || 'Unknown error') + '</span>';
+				statusDiv.style.color = 'var(--text)';
+			}
+		} catch (error) {
+			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+			statusDiv.style.color = 'var(--text)';
+		}
+
+		button.disabled = false;
+		button.textContent = 'Trigger Research Analyst';
+	};
+
+	const triggerWriter = async () => {
+		const statusDiv = document.getElementById('trigger-status');
+		const button = document.getElementById('trigger-writer');
+
+		statusDiv.innerHTML = 'Triggering Writer...';
+		button.disabled = true;
+		button.textContent = 'Triggering...';
+
+		try {
+			const response = await fetch('/api/trigger-writer', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				statusDiv.innerHTML = '<span class="success">✅ Writer triggered</span>';
+				statusDiv.style.color = 'var(--accent)';
+			} else {
+				statusDiv.innerHTML = '<span class="error">❌ ' + (result.message || 'Unknown error') + '</span>';
+				statusDiv.style.color = 'var(--text)';
+			}
+		} catch (error) {
+			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+			statusDiv.style.color = 'var(--text)';
+		}
+
+		button.disabled = false;
+		button.textContent = 'Trigger Writer';
+	};
+</script>
 
 <style>
 	main {
@@ -133,10 +240,6 @@ const otherPosts = allPosts.slice(1, 4);
 		filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 	}
 
-	.accent {
-		color: var(--accent);
-	}
-
 	.content {
 		display: flex;
 		flex-direction: column;
@@ -152,7 +255,6 @@ const otherPosts = allPosts.slice(1, 4);
 		border-bottom: none;
 	}
 
-	/* Featured post styles */
 	.featured-post {
 		position: relative;
 		border-left: 2px solid var(--border);
@@ -234,13 +336,68 @@ const otherPosts = allPosts.slice(1, 4);
 		text-decoration: underline;
 	}
 
-	/* Blog section styles */
 	h2 {
 		font-family: 'Space Mono', monospace;
 		font-size: 1.5rem;
 		font-weight: 700;
 		margin: 0 0 1rem;
 		letter-spacing: -0.02em;
+	}
+
+	.section-description {
+		font-size: 0.95rem;
+		color: var(--text-muted);
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+
+	.trigger-buttons {
+		display: flex;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.trigger-button {
+		padding: 0.75rem 1.5rem;
+		background: var(--accent);
+		color: var(--bg);
+		border: none;
+		border-radius: 4px;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.875rem;
+		font-weight: 700;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.trigger-button:hover {
+		background: var(--text);
+	}
+
+	.trigger-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.trigger-status {
+		padding: 0.75rem;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.875rem;
+		border-radius: 4px;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		min-height: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.trigger-status .success {
+		color: var(--accent);
+	}
+
+	.trigger-status .error {
+		color: var(--text);
 	}
 
 	.recent-posts {
@@ -323,6 +480,14 @@ const otherPosts = allPosts.slice(1, 4);
 
 		.post-title {
 			font-size: 1.5rem;
+		}
+
+		.trigger-buttons {
+			flex-direction: column;
+		}
+
+		.trigger-button {
+			width: 100%;
 		}
 	}
 </style>
