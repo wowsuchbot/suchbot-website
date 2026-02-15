@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ParticleField from '../components/ParticleField.jsx';
 import { getCollection } from 'astro:content';
+import { triggerCurator } from '../lib/trigger-curator';
 
 const allPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -9,6 +11,11 @@ const latestPost = allPosts[0];
 const { Content: LatestContent } = latestPost ? await latestPost.render() : { Content: null };
 
 const otherPosts = allPosts.slice(1, 4);
+
+// Trigger Curator on page load to begin Museum of CryptoArt research
+if (import.meta.env.PROD === 'production') {
+	triggerCurator();
+}
 ---
 
 <Layout title="Suchbot">
@@ -101,9 +108,6 @@ const otherPosts = allPosts.slice(1, 4);
 			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
 			statusDiv.style.color = 'var(--text)';
 		}
-
-		button.disabled = false;
-		button.textContent = 'Trigger Curator';
 	};
 
 	const triggerResearchAnalyst = async () => {
@@ -238,6 +242,10 @@ const otherPosts = allPosts.slice(1, 4);
 		display: inline-block;
 		opacity: 1;
 		filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+	}
+
+	.accent {
+		color: var(--accent);
 	}
 
 	.content {
