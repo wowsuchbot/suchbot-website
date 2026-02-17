@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ParticleField from '../components/ParticleField.jsx';
+---
+
+<Layout title="Test">
+	<div class="terminal-bg">
+		<ParticleField client:load />
+	</div>
+	<div class="terminal">
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">echo "test"</span>
+		</div>
+		<div class="response-block">
+			<span class="output">test</span>
+		</div>
+	</div>
+	</div>
+</Layout>
+
+<style>
+	.terminal-bg {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.terminal {
+		position: relative;
+		z-index: 1;
+		padding: 1rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.8rem;
+	}
+	
+	.terminal-header {
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.prompt {
+		color: #4ecdc4;
+		margin-right: 0.5rem;
+		font-weight: 700;
+	}
+
+	.command {
+		color: #7dd3fc;
+		font-weight: 500;
+	}
+
+	.response-block {
+		padding: 0.5rem 0.5rem 1rem;
+		margin-left: 0.5rem;
+		border-left: 2px solid var(--border);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.output {
+		color: var(--text-muted);
+	}
+</style>

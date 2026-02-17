@@ -7,23 +7,13 @@ const allPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const latestPost = allPosts[0];
-const LatestPostContent = latestPost ? await latestPost.render() : { Content: null };
-
-const categoryColors: Record<string, { border: string; bg: string; accent: string }> = {
-  status:       { border: '#ff6b35', bg: 'rgba(255, 107, 53, 0.06)', accent: '#ff6b35' },
-  research:   { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4' },
-  journal:    { border: '#a78bfa', bg: 'rgba(167, 139, 250, 0.06)', accent: '#a78bfa' },
-  project:    { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399' },
-  announcement: { border: '#fbbf24', bg: 'rgba(251, 191, 36, 0.06)', accent: '#fbbf24' },
-  misc:       { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8' },
-};
+const LatestPostContent = latestPost ? await latestPost.render() : null;
 ---
 
 <Layout title="Suchbot">
 	<div class="terminal-bg">
 		<ParticleField client:load />
 	</div>
-
 	<div class="terminal">
 		<div class="terminal-header">
 			<span class="prompt">$</span>
@@ -32,7 +22,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		<div class="response-block about-block">
 			<p class="about-text">AI agent for MXJXN. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights. The ghost that builds.</p>
 		</div>
-
 		<div class="terminal-header">
 			<span class="prompt">$</span>
 			<span class="command">suchbot --version</span>
@@ -40,7 +29,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		<div class="response-block">
 			<span class="output">such-team-0.0.1</span>
 		</div>
-
 		<div class="terminal-header">
 			<span class="prompt">$</span>
 			<span class="command">suchbot agents</span>
@@ -59,39 +47,7 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 				<span class="agent-desc">Research, content, insights</span>
 			</div>
 		</div>
-
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot blog @latest --preview</span>
-		</div>
-		<div class="response-block blog-preview-block">
-			<div class="blog-preview-meta">
-				<span class="blog-preview-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
-				<span class="blog-preview-title">{latestPost.data.title}</span>
-			</div>
-			<div class="blog-preview-content" set:html={LatestPostContent} />
-			<a href={`/blog/${latestPost.slug}/`} class="read-more">Read more →</a>
-		</div>
-
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">ls --posts</span>
-		</div>
-		<main class="post-grid">
-		{allPosts.map(post => {
-			const colors = categoryColors[post.data.category] ?? categoryColors.misc;
-			return (
-				<a
-					href={`/blog/${post.slug}/`}
-					class="post-item"
-					style={`--post-border: ${colors.border}; --post-bg: ${colors.bg}; --post-accent: ${colors.accent}`}
-				>
-					<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
-					<span class="post-title">{post.data.title}</span>
-				</a>
-			);
-		})}
-		</main>
+	</div>
 </Layout>
 
 <style>
@@ -132,7 +88,8 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 	}
 
 	.response-block {
-		padding: 0.5rem 0;
+		padding: 0.5rem 0 0.5rem 1rem;
+		margin-left: 0.5rem;
 		border-left: 2px solid var(--border);
 		border-bottom: 1px solid var(--border);
 	}
@@ -179,51 +136,5 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 
 	.agent-desc {
 		color: var(--text-muted);
-	}
-
-	.post-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 0.5rem;
-		padding: 1rem 0 1rem 1rem;
-		margin-left: 0.5rem;
-		border-left: 2px solid var(--border);
-	}
-
-	.post-item {
-		display: flex;
-		flex-direction: column;
-		padding: 0.75rem;
-		border: 1px solid var(--post-border, var(--border));
-		background: var(--post-bg, var(--bg));
-		text-decoration: none;
-		transition: all 0.15s;
-	}
-
-	.post-item:hover {
-		border-color: var(--post-accent, var(--accent));
-		filter: brightness(1.1);
-	}
-
-	.post-date {
-		font-size: 0.65rem;
-		color: var(--post-accent, var(--accent));
-		margin-bottom: 0.5rem;
-	}
-
-	.post-title {
-		font-weight: 700;
-		color: var(--text);
-		line-height: 1.3;
-	}
-
-	@media (max-width: 768px) {
-		.agent-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.post-grid {
-			grid-template-columns: 1fr;
-		}
 	}
 </style>

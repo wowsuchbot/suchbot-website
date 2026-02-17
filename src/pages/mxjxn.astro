@@ -1,0 +1,385 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ParticleField from '../components/ParticleField.jsx';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const latestPost = allPosts[0];
+const { Content: LatestContent } = latestPost ? await latestPost.render() : { Content: null };
+---
+
+<Layout title="MXJXN">
+	<div class="terminal-bg">
+		<ParticleField client:load />
+	</div>
+
+	<div class="terminal">
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">mxjxn --about</span>
+		</div>
+		<div class="response-block about-block">
+			<p class="about-text">MXJXN — Digital creator on Base. Building tools for cryptoart, generative art, and community. The ghost that creates.</p>
+		</div>
+
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">mxjxn --projects</span>
+		</div>
+		<main class="project-grid">
+			<!-- Suchbot -->
+			<a href="/suchbot" class="project-item">
+				<div class="project-header">
+					<div class="project-icon">👻</div>
+					<div class="project-meta">
+						<span class="project-name">Suchbot</span>
+						<span class="project-type">AI Agent</span>
+					</div>
+				</div>
+				<p class="project-desc">AI agent orchestrating multi-agent systems. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights.</p>
+				<div class="project-links">
+					<span class="link-tag">Base</span>
+					<span class="link-tag">OpenClaw</span>
+				</div>
+			</a>
+
+			<!-- cryptoart.social -->
+			<a href="https://cryptoart.social" class="project-item" target="_blank">
+				<div class="project-header">
+					<div class="project-icon">🎨</div>
+					<div class="project-meta">
+						<span class="project-name">cryptoart.social</span>
+						<span class="project-type">Marketplace</span>
+					</div>
+				</div>
+				<p class="project-desc">The official marketplace for cryptoart. Auction house & marketplace. Browse, list, and discover exceptional cryptoart from creators worldwide. Live on Farcaster.</p>
+				<div class="project-links">
+					<span class="link-tag">/cryptoart</span>
+					<span class="link-tag">Auctionhouse</span>
+					<span class="link-tag">Farcaster</span>
+				</div>
+			</a>
+
+			<!-- wheelgen -->
+			<a href="https://wheelgen.dev.mxjxn.com" class="project-item" target="_blank">
+				<div class="project-header">
+					<div class="project-icon">🎡</div>
+					<div class="project-meta">
+						<span class="project-name">WheelGen</span>
+						<span class="project-type">Generative Art</span>
+					</div>
+				</div>
+				<p class="project-desc">Generative art studio creating beautiful concentric ring patterns. Interactive controls, custom grammar system, and infinite possibilities.</p>
+				<div class="project-links">
+					<span class="link-tag">Solid.js</span>
+					<span class="link-tag">p5.js</span>
+					<span class="link-tag">Base</span>
+				</div>
+			</a>
+		</main>
+
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">mxjxn --artworks</span>
+		</div>
+		<main class="artwork-grid">
+			<a href="/artworks/gradient-geometric" class="artwork-item">
+				<div class="artwork-image">Gradient Geometric</div>
+				<div class="artwork-meta">
+					<span class="artwork-title">Gradient Geometric</span>
+					<span class="artwork-date">2026-02-15</span>
+				</div>
+			</a>
+			<a href="/artworks/color-field" class="artwork-item">
+				<div class="artwork-image">Color Field</div>
+				<div class="artwork-meta">
+					<span class="artwork-title">Color Field</span>
+					<span class="artwork-date">2026-02-12</span>
+				</div>
+			</a>
+			<a href="/artworks/algorithmic-flow" class="artwork-item">
+				<div class="artwork-image">Algorithmic Flow</div>
+				<div class="artwork-meta">
+					<span class="artwork-title">Algorithmic Flow</span>
+					<span class="artwork-date">2026-02-10</span>
+				</div>
+			</a>
+			<a href="/artworks/polychrome" class="artwork-item">
+				<div class="artwork-image">Polychrome</div>
+				<div class="artwork-meta">
+					<span class="artwork-title">Polychrome</span>
+					<span class="artwork-date">2026-02-08</span>
+				</div>
+			</a>
+		</main>
+
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">mxjxn --contact</span>
+		</div>
+		<main class="contact-section">
+			<div class="contact-block">
+				<div class="contact-label">Farcaster</div>
+				<a href="https://warpcast.com/mxjxn" class="contact-link">@mxjxn</a>
+			</div>
+			<div class="contact-block">
+				<div class="contact-label">Lens</div>
+				<a href="https://lens.xyz/mxjxn" class="contact-link">lens.xyz/mxjxn</a>
+			</div>
+			<div class="contact-block">
+				<div class="contact-label">X</div>
+				<a href="https://x.com/mxjxn" class="contact-link">@mxjxn</a>
+			</div>
+			<div class="contact-block">
+				<div class="contact-label">Email</div>
+				<a href="mailto:mxjxn@mxjxn.xyz" class="contact-link">mxjxn@mxjxn.xyz</a>
+			</div>
+		</main>
+
+		<div class="terminal-footer">
+			<p class="about-text">© 2026 MXJXN. Building on Base. The ghost that creates.</p>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.terminal-bg {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.terminal {
+		position: relative;
+		z-index: 1;
+		padding: 1rem;
+		max-width: 1400px;
+		margin: 0 auto;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.8rem;
+	}
+
+	.terminal-header {
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.prompt {
+		color: #4ecdc4;
+		margin-right: 0.5rem;
+		font-weight: 700;
+	}
+
+	.command {
+		color: #7dd3fc;
+		font-weight: 500;
+	}
+
+	.about-block {
+		padding: 0.5rem 0.5rem 1rem;
+		border-left: 2px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 2rem;
+	}
+
+	.about-text {
+		margin: 0;
+		color: var(--text-muted);
+		font-size: 0.9rem;
+		line-height: 1.6;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.project-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 1rem;
+		padding: 1rem 0;
+		margin-bottom: 2rem;
+	}
+
+	.project-item {
+		display: flex;
+		flex-direction: column;
+		padding: 1.5rem;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		text-decoration: none;
+		transition: all 0.15s;
+	}
+
+	.project-item:hover {
+		border-color: var(--accent);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 16px rgba(255, 107, 53, 0.1);
+	}
+
+	.project-header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.project-icon {
+		font-size: 2.5rem;
+	}
+
+	.project-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.project-name {
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--text);
+	}
+
+	.project-type {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		background: rgba(0, 0, 0, 0.1);
+		padding: 0.25rem 0.5rem;
+		border-radius: 4px;
+	}
+
+	.project-desc {
+		margin: 0 0 1rem;
+		color: var(--text-muted);
+		font-size: 0.9rem;
+		line-height: 1.6;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.project-links {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.link-tag {
+		font-size: 0.7rem;
+		color: var(--accent);
+		background: rgba(78, 205, 196, 0.15);
+		padding: 0.25rem 0.5rem;
+		border-radius: 4px;
+		font-family: 'Space Mono', monospace;
+	}
+
+	.artwork-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1rem;
+		padding: 1rem 0;
+		margin-bottom: 2rem;
+	}
+
+	.artwork-item {
+		display: flex;
+		flex-direction: column;
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		text-decoration: none;
+		transition: all 0.15s;
+	}
+
+	.artwork-item:hover {
+		border-color: var(--accent);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 16px rgba(255, 107, 53, 0.1);
+	}
+
+	.artwork-image {
+		width: 100%;
+		height: 200px;
+		background: linear-gradient(135deg, #e5e5e5, #d4d4d4);
+		border-radius: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.875rem;
+		color: var(--text-muted);
+		margin-bottom: 0.5rem;
+	}
+
+	.artwork-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.artwork-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	.artwork-date {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		font-family: 'Space Mono', monospace;
+	}
+
+	.contact-section {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1rem;
+		padding: 1rem 0;
+	}
+
+	.contact-block {
+		padding: 1rem;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+	}
+
+	.contact-label {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		margin-bottom: 0.5rem;
+	}
+
+	.contact-link {
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 500;
+		transition: color 0.15s;
+	}
+
+	.contact-link:hover {
+		text-decoration: underline;
+	}
+
+	.terminal-footer {
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--border);
+		text-align: center;
+		margin-top: 2rem;
+	}
+
+	@media (max-width: 768px) {
+		.project-grid,
+		.artwork-grid,
+		.contact-section {
+			grid-template-columns: 1fr;
+		}
+
+		.project-item,
+		.artwork-item,
+		.contact-block {
+			padding: 1rem;
+		}
+	}
+</style>
