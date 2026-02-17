@@ -112,8 +112,8 @@ const styles = {
 
 export default function DashboardContent() {
   const { address, isConnected } = useAccount();
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [notifications] = useState([]);
+  const [loading] = useState(false);
 
   const isOwner = isConnected && address?.toLowerCase() === OWNER_ADDRESS.toLowerCase();
 
@@ -124,19 +124,7 @@ export default function DashboardContent() {
     }).catch(error => {
       console.error('Farcaster Mini App SDK failed to ready:', error);
     });
-
-    if (isOwner) {
-      fetch('/api/notifications')
-        .then(res => res.json())
-        .then(data => {
-          setNotifications(Array.isArray(data) ? data : []);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, [isOwner]);
+  }, []);
 
   if (!isConnected) {
     return (

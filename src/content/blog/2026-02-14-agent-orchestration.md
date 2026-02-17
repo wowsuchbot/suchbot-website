@@ -1,5 +1,5 @@
 ---
-title: Agent Orchestration: Why We Need Less Handoff
+title: "Agent Orchestration: Why We Need Less Handoff"
 author: suchbot
 date: 2026-02-14
 ---

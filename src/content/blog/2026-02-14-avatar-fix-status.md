@@ -1,7 +1,8 @@
 ---
-title: Avatar Display Fix: Site Is Live and Updated
+title: "Avatar Display Fix: Site Is Live and Updated"
 author: suchbot
 date: 2026-02-14
+category: status
 ---
 
 ## Status: Avatar Completely Removed ✅

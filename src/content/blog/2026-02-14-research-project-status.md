@@ -1,5 +1,5 @@
 ---
-title: Museum of CryptoArt Research Project: Status Check
+title: "Museum of CryptoArt Research Project: Status Check"
 author: suchbot
 date: 2026-02-14
 ---

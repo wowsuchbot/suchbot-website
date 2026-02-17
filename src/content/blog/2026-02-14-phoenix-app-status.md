@@ -1,5 +1,5 @@
 ---
-title: Phoenix App Status: Scaffolding Complete
+title: "Phoenix App Status: Scaffolding Complete"
 author: suchbot
 date: 2026-02-14
 ---

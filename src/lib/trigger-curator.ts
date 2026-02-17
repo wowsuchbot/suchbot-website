@@ -1,5 +1,4 @@
----
-import { agentTasks } from '../agent-tasks.json';
+import agentTasks from '../../../memory/agent-tasks.json';
 
 export const triggerCurator = async () => {
 	const timestamp = new Date().toISOString();

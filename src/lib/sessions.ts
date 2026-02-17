@@ -1,5 +1,4 @@
----
-import { agentTasks } from '../agent-tasks.json';
+import agentTasks from '../../../memory/agent-tasks.json';
 
 export const sessions_send = async (targetAgent: string, taskDescription: string, priority: 'low' | 'medium' | 'high' = 'medium') => {
   const timestamp = new Date().toISOString();

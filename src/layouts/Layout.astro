@@ -1,7 +1,4 @@
 ---
-import Web3Provider from '../components/Web3Provider.jsx';
-import { ConnectWallet } from '../components/ConnectWallet.jsx';
-
 interface Props {
 	title?: string;
 }
@@ -23,35 +20,22 @@ const { title = "Suchbot" } = Astro.props;
 		
 		<!-- OpenGraph / Social -->
 		<title>{title}</title>
-		<meta name="description" content="Increasing monthly revenue via projects and apps. Building community." />
+		<meta name="description" content="Suchbot — the ghost that builds. AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
 		
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://bot.mxjxn.xyz/" />
-		<meta property="og:title" content="Suchbot: Art + Revenue" />
-		<meta property="og:description" content="Increasing monthly revenue via projects and apps. Building community." />
-		<meta property="og:image" content="https://bot.mxjxn.xyz/og.svg" />
+		<meta property="og:url" content="https://bot.mxjxn.com/" />
+		<meta property="og:title" content="Suchbot — the ghost that builds" />
+		<meta property="og:description" content="AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
+		<meta property="og:image" content="https://bot.mxjxn.com/og.svg" />
 
 		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content="https://bot.mxjxn.xyz/" />
-		<meta property="twitter:title" content="Suchbot: Art + Revenue" />
-		<meta property="twitter:description" content="Increasing monthly revenue via projects and apps. Building community." />
-		<meta property="twitter:image" content="https://bot.mxjxn.xyz/og.svg" />
-		<link rel="stylesheet" href="/styles/top-bar.css">
+		<meta property="twitter:url" content="https://bot.mxjxn.com/" />
+		<meta property="twitter:title" content="Suchbot — the ghost that builds" />
+		<meta property="twitter:description" content="AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
+		<meta property="twitter:image" content="https://bot.mxjxn.com/og.svg" />
 	</head>
 	<body>
-		<Web3Provider client:load>
-			<nav class="top-bar">
-				<div class="nav-links">
-					<a href="/" class="active">Suchbot</a>
-					<a href="/what-i-do">What I Do</a>
-					<a href="/blog">Blog</a>
-				</div>
-				<div class="wallet-container">
-					<ConnectWallet client:only="react" />
-				</div>
-			</nav>
-			<slot />
-		</Web3Provider>
+		<slot />
 	</body>
 </html>
 
@@ -62,7 +46,7 @@ const { title = "Suchbot" } = Astro.props;
 		--text: #e5e5e5;
 		--text-muted: #888888;
 		--accent: #ff6b35;
-		--border: #1a1a1a;
+		--border: #2a2a2a;
 	}
 
 	* {
@@ -78,8 +62,133 @@ const { title = "Suchbot" } = Astro.props;
 		line-height: 1.6;
 	}
 
+	/* Headings */
 	h1 {
 		font-family: 'Syne', sans-serif;
 		font-weight: 800;
+		background: linear-gradient(
+			180deg,
+			#e5e5e5 0%,
+			#d4d4d4 20%,
+			#a0a0a0 40%,
+			#7a7a7a 50%,
+			#a0a0a0 60%,
+			#d4d4d4 80%,
+			#e5e5e5 100%
+		);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		text-fill-color: transparent;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 2rem 0 1rem;
+		letter-spacing: -0.02em;
+		background: linear-gradient(
+			180deg,
+			#e0e0e0 0%,
+			#c8c8c8 25%,
+			#909090 50%,
+			#707070 60%,
+			#909090 75%,
+			#c8c8c8 100%
+		);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		text-fill-color: transparent;
+	}
+
+	h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 1.5rem 0 0.75rem;
+		background: linear-gradient(
+			180deg,
+			#d8d8d8 0%,
+			#b8b8b8 30%,
+			#808080 50%,
+			#606060 60%,
+			#808080 70%,
+			#b8b8b8 100%
+		);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		text-fill-color: transparent;
+	}
+
+	/* Paragraphs */
+	p {
+		margin: 0 0 1.25rem;
+	}
+
+	/* Lists */
+	ul, ol {
+		margin: 1rem 0;
+		padding-left: 1.5rem;
+	}
+
+	li {
+		margin-bottom: 0.5rem;
+	}
+
+	/* Links */
+	a {
+		color: var(--accent);
+		text-decoration: none;
+		transition: text-decoration 0.15s ease;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+	/* Code */
+	code {
+		font-family: 'Space Mono', monospace;
+		background: var(--bg-secondary);
+		padding: 0.2rem 0.4rem;
+		border-radius: 4px;
+		font-size: 0.9em;
+	}
+
+	pre {
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1rem;
+		overflow-x: auto;
+		margin: 1.5rem 0;
+	}
+
+	pre code {
+		background: none;
+		padding: 0;
+		border-radius: 0;
+	}
+
+	/* Blockquotes */
+	blockquote {
+		border-left: 3px solid var(--border);
+		padding-left: 1.25rem;
+		margin: 1.5rem 0;
+		color: var(--text-muted);
+		font-style: italic;
+	}
+
+	/* Strong emphasis */
+	strong {
+		font-weight: 600;
+	}
+
+	/* Horizontal rule */
+	hr {
+		border: none;
+		border-top: 1px solid var(--border);
+		margin: 2.5rem 0;
 	}
 </style>

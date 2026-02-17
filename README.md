@@ -26,7 +26,6 @@ npm run deploy
 This script:
 1. Builds the Astro site (`npm run build`)
 2. Syncs `dist/` to `/var/www/bot.mxjxn.xyz/`
-3. Ensures the API server is running on port 3001
 
 ## 📊 Status
 
@@ -36,7 +35,7 @@ Check deployment status:
 npm run status
 ```
 
-Shows last build time and API process status.
+Shows last build time.
 
 ## 🛠 Development
 
@@ -62,12 +61,10 @@ The site is public at https://bot.mxjxn.xyz. Broken builds break production.
 - `src/layouts/` — Page layouts
 - `src/pages/` — Site pages
 - `src/content/blog/` — Blog posts (markdown)
-- `../api/` — Express API server (port 3001)
 
 ## 🔧 Server
 
 - **Frontend:** Caddy serves static files from `/var/www/bot.mxjxn.xyz`
-- **API:** Express server proxies `/api/*` to `localhost:3001`
 - **Config:** `/etc/caddy/Caddyfile`
 
 **Important:** Caddy's `root *` directive must point to `/var/www/bot.mxjxn.xyz`, not the local `dist/` directory. The deploy script syncs the built site to `/var/www/bot.mxjxn.xyz`.

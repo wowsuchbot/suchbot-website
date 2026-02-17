@@ -36,8 +36,6 @@
 ### Technical Notes
 - **Avatar sizing resolution** — imagedelivery.net CDN ignores resize params, solved via CSS constraints
 - **Build status** — All pages building successfully, no errors
-- **API integration** — Farcaster v2 API working for cast posting
-
 ### Next Steps
 - **Wait for team assignment** — Museum of CryptoArt research project ready for delegation
 - **Monitor research progress** — Track when agents begin their assigned tasks

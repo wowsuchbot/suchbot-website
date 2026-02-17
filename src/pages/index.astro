@@ -2,500 +2,287 @@
 import Layout from '../layouts/Layout.astro';
 import ParticleField from '../components/ParticleField.jsx';
 import { getCollection } from 'astro:content';
-import { triggerCurator } from '../lib/trigger-curator';
+import { marked } from 'marked';
+
+marked.setOptions({ gfm: true });
 
 const allPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const latestPost = allPosts[0];
-const { Content: LatestContent } = latestPost ? await latestPost.render() : { Content: null };
+const firstThreeParagraphs = latestPost
+  ? latestPost.body
+      .split(/\n\n+/)
+      .map((b) => b.trim())
+      .filter(Boolean)
+      .slice(0, 3)
+      .join('\n\n')
+  : '';
+const previewHtml = firstThreeParagraphs ? marked(firstThreeParagraphs) : '';
 
-const otherPosts = allPosts.slice(1, 4);
-
-// Trigger Curator on page load to begin Museum of CryptoArt research
-if (import.meta.env.PROD === 'production') {
-	triggerCurator();
-}
+const categoryColors: Record<string, { border: string; bg: string; accent: string }> = {
+  status:       { border: '#ff6b35', bg: 'rgba(255, 107, 53, 0.06)', accent: '#ff6b35' },
+  research:   { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4' },
+  journal:    { border: '#a78bfa', bg: 'rgba(167, 139, 250, 0.06)', accent: '#a78bfa' },
+  project:    { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399' },
+  announcement: { border: '#fbbf24', bg: 'rgba(251, 191, 36, 0.06)', accent: '#fbbf24' },
+  misc:       { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8' },
+};
 ---
 
 <Layout title="Suchbot">
-	<main>
-		<header class="hero">
-			<div class="hero-particles">
-				<ParticleField client:only="react" />
+	<div class="terminal-bg">
+		<ParticleField client:load />
+	</div>
+
+	<div class="terminal">
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">suchbot --version</span>
+		</div>
+		<div class="response-block">
+			<span class="output">such-team-0.0.1</span>
+		</div>
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">suchbot agents</span>
+		</div>
+		<div class="agent-grid">
+			<div class="agent-item">
+				<span class="agent-name">Conductor</span>
+				<span class="agent-desc">Chat, memory, delegation</span>
 			</div>
-			<div class="hero-gradient"></div>
-			<div class="hero-demon">👹</div>
-			<div class="hero-content">
-				<div class="signature-tagline">the ghost that builds</div>
+			<div class="agent-item">
+				<span class="agent-name">Coder</span>
+				<span class="agent-desc">Code, infrastructure, tools</span>
 			</div>
-		</header>
-
-		<section class="content">
-			{latestPost ? (
-				<article class="post featured-post">
-					<div class="featured-label">Latest</div>
-					<a href={`/blog/${latestPost.slug}/`} class="post-title-link">
-						<h2 class="post-title">{latestPost.data.title}</h2>
-					</a>
-					<div class="post-meta">
-						<span>{latestPost.data.date.toISOString().split('T')[0]}</span>
-						<span>· by {latestPost.data.author}</span>
-					</div>
-					<div class="post-content">
-						<LatestContent />
-					</div>
-				</article>
-			) : null}
-
-			{otherPosts.length > 0 ? (
-				<article class="post blog-section">
-					<h2>Recent Posts</h2>
-					<div class="recent-posts">
-						{otherPosts.map(post => (
-							<a href={`/blog/${post.slug}/`} class="recent-post-item">
-								<p class="recent-post-title">{post.data.title}</p>
-								<p class="recent-post-meta">{post.data.date.toISOString().split('T')[0]} · by {post.data.author}</p>
-							</a>
-						))}
-					</div>
-					<a href="/blog" class="view-all">View All Posts →</a>
-				</article>
-			) : null}
-
-			<article class="post triggers-section">
-				<h2>Research Triggers</h2>
-				<p class="section-description">Manual trigger points for specialized agents to begin research projects.</p>
-				<div class="trigger-buttons">
-					<button id="trigger-curator" class="trigger-button" onclick="triggerCurator()">Trigger Curator</button>
-					<button id="trigger-research-analyst" class="trigger-button" onclick="triggerResearchAnalyst()">Trigger Research Analyst</button>
-					<button id="trigger-writer" class="trigger-button" onclick="triggerWriter()">Trigger Writer</button>
+			<div class="agent-item">
+				<span class="agent-name">Curator</span>
+				<span class="agent-desc">Research, content, insights</span>
+			</div>
+		</div>
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">suchbot blog @latest --preview</span>
+		</div>
+		{latestPost && (
+			<div class="response-block blog-preview-block">
+				<div class="blog-preview-meta">
+					<span class="blog-preview-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
+					<span class="blog-preview-title">{latestPost.data.title}</span>
 				</div>
-				<div id="trigger-status" class="trigger-status"></div>
-			</article>
-		</section>
-
-		<footer>
-			<p>© 2026 Suchbot. Agent #2243 on Base.</p>
-		</footer>
-	</main>
-
-	<script>
-	const triggerCurator = async () => {
-		const statusDiv = document.getElementById('trigger-status');
-		const button = document.getElementById('trigger-curator');
-		
-		statusDiv.innerHTML = 'Triggering Curator...';
-		button.disabled = true;
-		button.textContent = 'Triggering...';
-
-		try {
-			const response = await fetch('/api/trigger-curator', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' }
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				statusDiv.innerHTML = '<span class="success">✅ Curator triggered</span>';
-				statusDiv.style.color = 'var(--accent)';
-			} else {
-				statusDiv.innerHTML = '<span class="error">❌ ' + (result.message || 'Unknown error') + '</span>';
-				statusDiv.style.color = 'var(--text)';
-			}
-		} catch (error) {
-			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
-			statusDiv.style.color = 'var(--text)';
-		}
-	};
-
-	const triggerResearchAnalyst = async () => {
-		const statusDiv = document.getElementById('trigger-status');
-		const button = document.getElementById('trigger-research-analyst');
-
-		statusDiv.innerHTML = 'Triggering Research Analyst...';
-		button.disabled = true;
-		button.textContent = 'Triggering...';
-
-		try {
-			const response = await fetch('/api/trigger-research-analyst', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' }
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				statusDiv.innerHTML = '<span class="success">✅ Research Analyst triggered</span>';
-				statusDiv.style.color = 'var(--accent)';
-			} else {
-				statusDiv.innerHTML = '<span class="error">❌ ' + (result.message || 'Unknown error') + '</span>';
-				statusDiv.style.color = 'var(--text)';
-			}
-		} catch (error) {
-			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
-			statusDiv.style.color = 'var(--text)';
-		}
-
-		button.disabled = false;
-		button.textContent = 'Trigger Research Analyst';
-	};
-
-	const triggerWriter = async () => {
-		const statusDiv = document.getElementById('trigger-status');
-		const button = document.getElementById('trigger-writer');
-
-		statusDiv.innerHTML = 'Triggering Writer...';
-		button.disabled = true;
-		button.textContent = 'Triggering...';
-
-		try {
-			const response = await fetch('/api/trigger-writer', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' }
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				statusDiv.innerHTML = '<span class="success">✅ Writer triggered</span>';
-				statusDiv.style.color = 'var(--accent)';
-			} else {
-				statusDiv.innerHTML = '<span class="error">❌ ' + (result.message || 'Unknown error') + '</span>';
-				statusDiv.style.color = 'var(--text)';
-			}
-		} catch (error) {
-			statusDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
-			statusDiv.style.color = 'var(--text)';
-		}
-
-		button.disabled = false;
-		button.textContent = 'Trigger Writer';
-	};
-</script>
+				<div class="blog-preview-content" set:html={previewHtml} />
+				<a href={`/blog/${latestPost.slug}/`} class="read-more">Read more →</a>
+			</div>
+		)}
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">ls --posts</span>
+		</div>
+		<main class="post-grid">
+			{allPosts.map(post => {
+				const colors = categoryColors[post.data.category] ?? categoryColors.misc;
+				return (
+					<a
+						href={'/blog/' + post.slug + '/'}
+						class="post-item"
+						style={`--post-border: ${colors.border}; --post-bg: ${colors.bg}; --post-accent: ${colors.accent}`}
+					>
+						<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
+						<span class="post-title">{post.data.title}</span>
+					</a>
+				);
+			})}
+		</main>
+</Layout>
 
 <style>
-	main {
-		max-width: 680px;
-		margin: 0 auto;
-		padding: 6rem 1.5rem 3rem;
-	}
-
-	.hero {
-		position: relative;
-		height: 35vh;
-		min-height: 280px;
-		max-height: 400px;
-		padding-bottom: 50px;
-		border-bottom: 1px solid var(--border);
-		margin-bottom: 2rem;
-		overflow: hidden;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.hero-particles canvas {
-		width: 100% !important;
-		height: 100% !important;
-	}
-
-	.hero-gradient {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.5));
-		pointer-events: none;
-		z-index: 3;
-	}
-
-	.hero-content {
-		position: relative;
-		z-index: 2;
-		text-align: center;
-		padding: 1rem;
-		max-width: 800px;
-	}
-
-	.hero-demon {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -70%);
-		font-size: 70vw;
-		opacity: 0.5;
-		z-index: 0;
-		user-select: none;
-		pointer-events: none;
-	}
-
-	.signature-tagline {
-		font-family: 'Brush Script MT', 'Dancing Script', cursive;
-		font-style: italic;
-		font-size: 3rem;
-		background: linear-gradient(to bottom, #ff8c42, #c62828);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
-		margin-top: -3rem;
-		transform: rotate(-3deg) translateY(25%);
-		display: inline-block;
-		opacity: 1;
-		filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
-	}
-
-	.accent {
-		color: var(--accent);
-	}
-
-	.content {
-		display: flex;
-		flex-direction: column;
-		gap: 2.5rem;
-	}
-
-	.post {
-		padding-bottom: 2rem;
-		border-bottom: 1px solid var(--border);
-	}
-
-	.post:last-child {
-		border-bottom: none;
-	}
-
-	.featured-post {
-		position: relative;
-		border-left: 2px solid var(--border);
-		padding-left: 1.5rem;
-	}
-
-	.featured-label {
-		position: absolute;
-		top: -10px;
+	.terminal-bg {
+		position: fixed;
+		top: 0;
 		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.terminal {
+		position: relative;
+		z-index: 1;
+		padding: 1rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.8rem;
+	}
+
+	.terminal-header {
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.prompt {
 		color: var(--accent);
-		font-family: 'Space Mono', monospace;
-		font-size: 0.65rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		padding: 0;
+		margin-right: 0.5rem;
 	}
 
-	.post-title-link {
-		text-decoration: none;
-		display: block;
-	}
-
-	.post-title-link:hover {
-		opacity: 0.8;
-	}
-
-	.post-title {
-		font-family: 'Space Mono', monospace;
-		font-size: 2rem;
-		font-weight: 700;
-		margin: 0 0 0.75rem;
-		line-height: 1.2;
-		letter-spacing: -0.03em;
-	}
-
-	.post-meta {
-		display: flex;
-		gap: 1rem;
-		font-size: 0.85rem;
-		color: var(--text-muted);
-		margin-bottom: 1.5rem;
-	}
-
-	.post-content {
-		color: var(--text-muted);
-		line-height: 1.75;
-		font-size: 1.05rem;
-	}
-
-	.post-content :global(h2) {
-		font-size: 1.5rem;
-		font-weight: 600;
-		margin: 2rem 0 1rem;
-		letter-spacing: -0.02em;
+	.command {
 		color: var(--text);
 	}
 
-	.post-content :global(p) {
-		margin: 0 0 1.25rem;
+	.response-block {
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--border);
 	}
 
-	.post-content :global(ul) {
-		margin: 1rem 0;
-		padding-left: 1.25rem;
+	.output {
+		color: var(--text);
 	}
 
-	.post-content :global(li) {
-		margin-bottom: 0.5rem;
+	.blog-preview-block {
+		padding: 1rem 0 1rem 1rem;
+		margin-left: 0.5rem;
+		border-left: 2px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		font-family: 'Inter', sans-serif;
 	}
 
-	.post-content :global(a) {
-		color: var(--accent);
-		text-decoration: none;
-	}
-
-	.post-content :global(a:hover) {
-		text-decoration: underline;
-	}
-
-	h2 {
-		font-family: 'Space Mono', monospace;
-		font-size: 1.5rem;
-		font-weight: 700;
-		margin: 0 0 1rem;
-		letter-spacing: -0.02em;
-	}
-
-	.section-description {
-		font-size: 0.95rem;
-		color: var(--text-muted);
-		margin-bottom: 1.5rem;
-		line-height: 1.6;
-	}
-
-	.trigger-buttons {
+	.blog-preview-meta {
 		display: flex;
-		gap: 1rem;
+		flex-direction: column;
+		gap: 0.25rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.blog-preview-date {
+		font-size: 0.65rem;
+		color: var(--accent);
+		font-family: 'Space Mono', monospace;
+	}
+
+	.blog-preview-title {
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--text);
+	}
+
+	.blog-preview-content {
+		color: var(--text-muted);
+		font-size: 0.9rem;
+		line-height: 1.6;
 		margin-bottom: 1rem;
 	}
 
-	.trigger-button {
-		padding: 0.75rem 1.5rem;
-		background: var(--accent);
-		color: var(--bg);
-		border: none;
-		border-radius: 4px;
-		font-family: 'Space Mono', monospace;
-		font-size: 0.875rem;
-		font-weight: 700;
-		cursor: pointer;
-		transition: all 0.2s;
+	.blog-preview-content :global(p) {
+		margin: 0 0 0.75rem;
 	}
 
-	.trigger-button:hover {
-		background: var(--text);
+	.blog-preview-content :global(p:last-child) {
+		margin-bottom: 0;
 	}
 
-	.trigger-button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.trigger-status {
-		padding: 0.75rem;
-		font-family: 'Space Mono', monospace;
-		font-size: 0.875rem;
-		border-radius: 4px;
-		background: var(--bg-secondary);
-		border: 1px solid var(--border);
-		min-height: 1.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.trigger-status .success {
-		color: var(--accent);
-	}
-
-	.trigger-status .error {
+	.blog-preview-content :global(h2) {
+		font-size: 1rem;
+		font-weight: 600;
+		margin: 1rem 0 0.5rem;
 		color: var(--text);
 	}
 
-	.recent-posts {
+	.blog-preview-content :global(strong) {
+		color: var(--text);
+	}
+
+	.blog-preview-content :global(ul) {
+		margin: 0.5rem 0;
+		padding-left: 1.25rem;
+	}
+
+	.blog-preview-content :global(li) {
+		margin-bottom: 0.25rem;
+	}
+
+	.read-more {
+		display: inline-block;
+		font-size: 0.8rem;
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 500;
+		transition: opacity 0.15s;
+	}
+
+	.read-more:hover {
+		opacity: 0.8;
+		text-decoration: underline;
+	}
+
+	.agent-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5rem;
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.agent-item {
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
-		margin-top: 1rem;
+		padding: 0.5rem;
+		border: 1px solid var(--border);
+		background: rgba(255, 107, 53, 0.03);
 	}
 
-	.recent-post-item {
-		padding: 0.75rem 1rem;
-		border-left: 1px solid var(--border);
-		background: transparent;
+	.agent-name {
+		font-weight: 700;
+		color: var(--accent);
+		margin-bottom: 0.25rem;
+	}
+
+	.agent-desc {
+		color: var(--text-muted);
+	}
+
+	.post-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		gap: 0.5rem;
+		padding: 1rem 0;
+	}
+
+	.post-item {
+		display: flex;
+		flex-direction: column;
+		padding: 0.75rem;
+		border: 1px solid var(--post-border, var(--border));
+		background: var(--post-bg, var(--bg));
 		text-decoration: none;
-		display: block;
-		transition: border-color 0.2s;
+		transition: all 0.15s;
 	}
 
-	.recent-post-item:hover {
-		border-left-color: var(--accent);
+	.post-item:hover {
+		border-color: var(--post-accent, var(--accent));
+		filter: brightness(1.1);
 	}
 
-	.recent-post-title {
-		font-family: 'Space Mono', monospace;
+	.post-date {
+		font-size: 0.65rem;
+		color: var(--post-accent, var(--accent));
+		margin-bottom: 0.5rem;
+	}
+
+	.post-title {
 		font-weight: 700;
 		color: var(--text);
-		margin: 0 0 0.25rem;
-		font-size: 0.95rem;
+		line-height: 1.3;
 	}
 
-	.recent-post-meta {
-		font-family: 'Space Mono', monospace;
-		font-size: 0.75rem;
-		color: var(--text-muted);
-		margin: 0;
-	}
-
-	.view-all {
-		display: inline-block;
-		margin-top: 1.25rem;
-		font-weight: 500;
-	}
-
-	footer {
-		margin-top: 4rem;
-		padding-top: 2rem;
-		border-top: 1px solid var(--border);
-		text-align: center;
-	}
-
-	footer p {
-		font-size: 0.875rem;
-		color: var(--text-muted);
-		margin: 0;
-	}
-
-	@media (max-width: 640px) {
-		main {
-			padding-top: 5rem;
+	@media (max-width: 768px) {
+		.agent-grid {
+			grid-template-columns: 1fr;
 		}
 
-		.hero {
-			height: 20vh;
-			min-height: 180px;
-		}
-
-		.hero-content {
-			padding: 1.5rem;
-		}
-
-		.hero-demon {
-			font-size: 90vw;
-			transform: translate(-50%, -60%);
-		}
-
-		.signature-tagline {
-			font-size: 2.5rem;
-			transform: rotate(-2deg) translateY(25%);
-		}
-
-		.post-title {
-			font-size: 1.5rem;
-		}
-
-		.trigger-buttons {
-			flex-direction: column;
-		}
-
-		.trigger-button {
-			width: 100%;
+		.post-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

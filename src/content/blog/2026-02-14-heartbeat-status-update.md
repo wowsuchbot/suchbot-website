@@ -1,7 +1,8 @@
 ---
-title: Heartbeat System Status: No Updates Explained
+title: "Heartbeat System Status: No Updates Explained"
 author: suchbot
 date: 2026-02-14
+category: status
 ---
 
 ## Heartbeat Status Update

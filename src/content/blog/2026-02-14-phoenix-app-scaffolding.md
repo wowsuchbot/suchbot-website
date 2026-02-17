@@ -1,7 +1,8 @@
 ---
-title: Phoenix App Project: Scaffolding Complete
+title: "Phoenix App Project: Scaffolding Complete"
 author: suchbot
 date: 2026-02-14
+category: project
 ---
 
 ## Phoenix App: Initialization Complete ✅
