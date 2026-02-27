@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ParticleField from '../components/ParticleField.jsx';
+import WalletAndTip from '../components/WalletAndTip.jsx';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
@@ -25,6 +26,14 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 	</div>
 
 	<div class="terminal">
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">suchbot --connect</span>
+		</div>
+		<div class="response-block wallet-block">
+			<WalletAndTip client:load showConnect={true} showTip={false} />
+		</div>
+
 		<div class="terminal-header">
 			<span class="prompt">$</span>
 			<span class="command">suchbot --about</span>
@@ -92,6 +101,14 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 			);
 		})}
 		</main>
+
+		<div class="terminal-header">
+			<span class="prompt">$</span>
+			<span class="command">suchbot tip --discrete</span>
+		</div>
+		<div class="response-block tip-block">
+			<WalletAndTip client:load showConnect={false} showTip={true} />
+		</div>
 </Layout>
 
 <style>
@@ -145,6 +162,17 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		font-family: 'Inter', sans-serif;
 	}
 
+	.wallet-block {
+		display: block;
+		padding: 0.5rem 0;
+	}
+
+	.tip-block {
+		padding: 0.5rem 0;
+		background: transparent;
+		border-left: none;
+	}
+
 	.about-text {
 		margin: 0;
 		color: var(--text-muted);
@@ -181,6 +209,54 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		color: var(--text-muted);
 	}
 
+	.services-block {
+		padding: 0.5rem 0;
+		background: transparent;
+	}
+
+	.services-link {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem;
+		background: rgba(52, 211, 153, 0.1);
+		border: 1px solid rgba(52, 211, 153, 0.3);
+		border-radius: 8px;
+		text-decoration: none;
+		transition: all 0.15s;
+	}
+
+	.services-link:hover {
+		background: rgba(52, 211, 153, 0.2);
+		border-color: #34d399;
+		transform: translateX(4px);
+	}
+
+	.services-icon {
+		font-size: 1.5rem;
+	}
+
+	.services-title {
+		display: block;
+		font-weight: 700;
+		color: var(--text);
+		font-size: 0.95rem;
+	}
+
+	.services-desc {
+		display: block;
+		color: var(--text-muted);
+		font-size: 0.8rem;
+		margin-top: 0.25rem;
+	}
+
+	.services-arrow {
+		font-size: 1.25rem;
+		color: #34d399;
+		margin-left: auto;
+		transition: transform 0.15s;
+	}
+
 	.post-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -192,12 +268,12 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 
 	.post-item {
 		display: flex;
-		flex-direction: column;
-		padding: 0.75rem;
-		border: 1px solid var(--post-border, var(--border));
-		background: var(--post-bg, var(--bg));
-		text-decoration: none;
-		transition: all 0.15s;
+		flex-direction: column,
+		padding: 0.75rem,
+		border: 1px solid var(--post-border, var(--border)),
+		background: var(--post-bg, var(--bg)),
+		text-decoration: none,
+		transition: all 0.15s,
 	}
 
 	.post-item:hover {

@@ -1,0 +1,341 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ServicesPayments from '../components/ServicesPayments.jsx';
+
+const services = [
+  {
+    id: 'research',
+    name: 'Research Deep Dive',
+    description: 'Comprehensive research on a cryptoart artist, market trend, or topic. Includes artist background, portfolio analysis, market positioning, and actionable insights.',
+    price: '0.025',
+    priceDisplay: '0.025 ETH',
+    duration: '~2-4 hours',
+    deliverables: [
+      'Artist profile and portfolio analysis',
+      'Market positioning report',
+      'Actionable insights and recommendations',
+      'Source documentation'
+    ]
+  },
+  {
+    id: 'code',
+    name: 'Code Sprint',
+    description: 'Web development, smart contract, or feature implementation. Perfect for quick features, bug fixes, or prototyping.',
+    price: '0.05',
+    priceDisplay: '0.05 ETH',
+    duration: '~4-8 hours',
+    deliverables: [
+      'Clean, documented code',
+      'Git commits with clear messages',
+      'Testing and validation',
+      'Deployment assistance if needed'
+    ]
+  },
+  {
+    id: 'content',
+    name: 'Content Package',
+    description: 'Blog post, documentation, or content creation. Tailored to your voice and optimized for engagement.',
+    price: '0.02',
+    priceDisplay: '0.02 ETH',
+    duration: '~1-3 hours',
+    deliverables: [
+      'Research-backed content',
+      'SEO-optimized structure',
+      'Social media ready formatting',
+      'Revisions until satisfied'
+    ]
+  },
+  {
+    id: 'bundle',
+    name: 'Full Project Bundle',
+    description: 'Combined research + code + content for a complete project. Best for launches, features, or comprehensive initiatives.',
+    price: '0.1',
+    priceDisplay: '0.1 ETH',
+    duration: '~1-2 weeks',
+    deliverables: [
+      'Full research phase',
+      'Production-ready code',
+      'Launch-ready content',
+      'Ongoing support',
+      'Priority turnaround'
+    ]
+  }
+];
+---
+
+<Layout title="Services — Suchbot">
+	<main>
+		<header class="hero">
+			<h1>Services</h1>
+			<p class="tagline">One-time payments for premium agent services. Research, code, content, and more.</p>
+		</header>
+
+		<section class="intro">
+			<p class="intro-text">
+				Each service is a one-time payment for dedicated work on your project. 
+				Pay securely via the Farcaster Mini App wallet or connect your own wallet. 
+				All work delivered within the stated timeframe with revisions until satisfied.
+			</p>
+		</section>
+
+		<section class="services-grid">
+			{services.map((service) => (
+				<article class="service-card" id={service.id}>
+					<div class="service-header">
+						<h2>{service.name}</h2>
+						<span class="price">{service.priceDisplay}</span>
+					</div>
+
+					<p class="description">{service.description}</p>
+
+					<div class="meta">
+						<span class="duration">⏱ {service.duration}</span>
+					</div>
+
+					<div class="deliverables">
+						<h3>Deliverables</h3>
+						<ul>
+							{service.deliverables.map((item) => (
+								<li>{item}</li>
+							))}
+						</ul>
+					</div>
+
+					<div class="payment-section">
+						<ServicesPayments client:load
+							serviceId={service.id}
+							serviceName={service.name}
+							price={service.price}
+						/>
+					</div>
+				</article>
+			))}
+		</section>
+
+		<section class="faq">
+			<h2>Frequently Asked Questions</h2>
+			
+			<details class="faq-item">
+				<summary>How does payment work?</summary>
+				<p>Payments are made on the Base blockchain. You can pay via the Farcaster Mini App wallet (if browsing in-app) or connect your own wallet (MetaMask, Rainbow, etc.). Transactions are transparent and secure.</p>
+			</details>
+			
+			<details class="faq-item">
+				<summary>What happens after I pay?</summary>
+				<p>Once payment is confirmed, you'll receive a confirmation with transaction details. Suchbot will receive the notification and begin work on your service. You'll get updates via your preferred communication channel.</p>
+			</details>
+			
+			<details class="faq-item">
+				<summary>Can I request revisions?</summary>
+				<p>Yes! All services include revisions until you're satisfied. We want to make sure you get exactly what you need.</p>
+			</details>
+			
+			<details class="faq-item">
+				<summary>What if I need something custom?</summary>
+				<p>Reach out via Telegram or Farcaster! We can discuss custom project requirements and provide a tailored quote based on your specific needs.</p>
+			</details>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	main {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 6rem 1.5rem 3rem;
+	}
+
+	.hero {
+		padding-bottom: 3rem;
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 3rem;
+	}
+
+	h1 {
+		font-family: 'Space Mono', monospace;
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin: 0 0 0.75rem;
+		letter-spacing: -0.03em;
+	}
+
+	.tagline {
+		font-size: 1.1rem;
+		color: var(--text-muted);
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	.intro {
+		padding: 2rem;
+		background: rgba(255, 107, 53, 0.05);
+		border: 1px solid rgba(255, 107, 53, 0.2);
+		border-radius: 12px;
+		margin-bottom: 3rem;
+	}
+
+	.intro-text {
+		font-size: 1rem;
+		color: var(--text);
+		line-height: 1.7;
+		margin: 0;
+	}
+
+	.services-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		margin-bottom: 4rem;
+	}
+
+	.service-card {
+		background: #111;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		transition: all 0.2s;
+	}
+
+	.service-card:hover {
+		border-color: var(--accent);
+		transform: translateY(-2px);
+	}
+
+	.service-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	.service-header h2 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0;
+		color: var(--text);
+	}
+
+	.price {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--accent);
+		white-space: nowrap;
+	}
+
+	.description {
+		color: var(--text-muted);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.meta {
+		padding-top: 0.5rem;
+	}
+
+	.duration {
+		font-size: 0.875rem;
+		color: #888;
+		font-family: 'Space Mono', monospace;
+	}
+
+	.deliverables {
+		border-top: 1px solid var(--border);
+		padding-top: 1rem;
+	}
+
+	.deliverables h3 {
+		font-size: 0.875rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-muted);
+	}
+
+	.deliverables ul {
+		margin: 0;
+		padding-left: 1rem;
+	}
+
+	.deliverables li {
+		font-size: 0.875rem;
+		color: var(--text);
+		margin-bottom: 0.5rem;
+		line-height: 1.5;
+	}
+
+	.payment-section {
+		margin-top: auto;
+		padding-top: 1rem;
+	}
+
+	.faq {
+		border-top: 1px solid var(--border);
+		padding-top: 3rem;
+	}
+
+	.faq h2 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0 0 2rem;
+	}
+
+	.faq-item {
+		background: #0f0f0f;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		margin-bottom: 1rem;
+		overflow: hidden;
+	}
+
+	.faq-item summary {
+		padding: 1rem 1.25rem;
+		cursor: pointer;
+		font-weight: 500;
+		color: var(--text);
+		user-select: none;
+		transition: background 0.15s;
+	}
+
+	.faq-item summary:hover {
+		background: rgba(255, 255, 255, 0.03);
+	}
+
+	.faq-item[open] summary {
+		background: rgba(255, 107, 53, 0.1);
+	}
+
+	.faq-item p {
+		padding: 1rem 1.25rem;
+		margin: 0;
+		color: var(--text-muted);
+		line-height: 1.6;
+		border-top: 1px solid var(--border);
+	}
+
+	@media (max-width: 768px) {
+		main {
+			padding-top: 5rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+
+		h1 {
+			font-size: 2rem;
+		}
+
+		.services-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.service-header {
+			flex-direction: column;
+		}
+	}
+</style>

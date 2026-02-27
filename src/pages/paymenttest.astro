@@ -1,0 +1,490 @@
+---
+import X402Payment from '../components/X402Payment.jsx';
+
+layout: '../layouts/layout.astro'
+title: 'x402 Payment Test'
+description: 'x402 payment flow demo - HTTP-based payments via Coinbase x402'
+---
+
+# x402 Payment Test
+
+<div class="container">
+  <h1>x402 Payment Flow Demo</h1>
+  
+  <p class="description">
+    Testing HTTP-based payments via Coinbase x402 protocol.
+    This page demonstrates a simple payment trigger → x402 UI → success flow.
+  </p>
+
+  <div class="demo-section">
+    <h2>Demo Flow</h2>
+    <ol class="steps">
+      <li>User clicks "Pay 0.001 ETH" button below</li>
+      <li>x402 payment interface opens (iframe/embed)</li>
+      <li>User approves payment and signs transaction</li>
+      <li>x402 SDK confirms payment on-chain</li>
+      <li>Success state shows on this page</li>
+    </ol>
+  </div>
+
+  <div class="payment-trigger">
+    <h2>Test Payment</h2>
+    <p>Click to test the x402 payment flow:</p>
+    
+    <X402Payment
+      price="0.001"
+      description="x402 payment test"
+      serviceName="x402 Payment Test"
+    />
+  </div>
+
+  <div class="info">
+    <h2>Implementation Notes</h2>
+    <ul>
+      <li><strong>Component:</strong> <code>X402Payment.jsx</code></li>
+      <li><strong>Protocol:</strong> x402 (Coinbase open standard)</li>
+      <li><strong>Network:</strong> Base (8453)</li>
+      <li><strong>Model:</strong> HTTP-based facilitator pattern</li>
+      <li><strong>Receiver:</strong> suchbot wallet (0xe1eA12cFB888E8307dA30AD48AC5e89C6fEB787A)</li>
+      <li><strong>Endpoint:</strong> <code>https://bot.mxjxn.xyz/paymenttest</code></li>
+    </ul>
+  </div>
+
+  <div class="links">
+    <h2>Resources</h2>
+    <ul>
+      <li><a href="https://github.com/coinbase/x402" target="_blank" rel="noopener">x402 Protocol Docs</a></li>
+      <li><a href="/services" rel="noopener">Paid Services</a></li>
+      <li><a href="/suchbot" rel="noopener">suchbot Home</a></li>
+    </ul>
+  </div>
+
+  <div class="metadata">
+    <h2>OpenGraph</h2>
+    <ul>
+      <li><code>og:title</code>: x402 Payment Test</li>
+      <li><code>og:description</code>: x402 HTTP-based payment flow demo</li>
+      <li><code>og:image</code>: /images/x402-payment-test.png</li>
+      <li><code>fc:frame</code>: vNext</li>
+      <li><code>fc::image</code>: https://bot.mxjxn.com/images/x402-payment-test.png</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  :root {
+    --bg-primary: #0ea5e9;
+    --bg-secondary: #1e3a8a;
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --accent: #22c55e;
+    --success: #22c55e;
+    --border: #e5e7eb;
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .demo-section {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .demo-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .steps {
+    color: var(--text-primary);
+    line-height: 1.8;
+  }
+
+  .steps li {
+    margin-bottom: 0.5rem;
+  }
+
+  .payment-trigger {
+    border: 2px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .payment-trigger h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .info, .links {
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .info h2, .links h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .info ul {
+    list-style: none;
+  }
+
+  .info li {
+    margin-bottom: 0.5rem;
+  }
+
+  .info a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .info a:hover {
+    text-decoration: underline;
+  }
+
+  code {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .metadata {
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  .metadata h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .metadata ul {
+    list-style: none;
+  }
+
+  .metadata li {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+  }
+
+  .x402-payment-card {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  }
+
+  .x402-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .x402-header h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .x402-header .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .x402-header .description {
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .x402-status {
+    margin-top: 2rem;
+  }
+
+  .x402-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .x402-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .x402-btn-primary {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .x402-btn-primary:hover:not(:disabled) {
+    background: var(--accent);
+  }
+
+  .x402-btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+  }
+
+  .x402-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--text-primary);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .x402-success, .x402-error {
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+
+  .x402-success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid var(--success);
+  }
+
+  .x402-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+  }
+
+  .success-icon, .error-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .x402-success h4 {
+    margin: 0 0 0.5rem;
+    color: var(--success);
+  }
+
+  .x402-error h4 {
+    margin: 0 0 0.5rem;
+    color: #ef4444;
+  }
+
+  .tx-link {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .tx-link:hover {
+    text-decoration: none;
+  }
+
+  .wallet-connect-hint {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 107, 53, 0.05);
+    border-radius: 8px;
+  }
+
+  .wallet-connect-hint p {
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+  }
+
+  .wallet-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: var(--accent);
+  }
+
+  .badge-icon {
+    font-size: 1rem;
+  }
+
+  .process-steps {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+  }
+
+  .step {
+    opacity: 0.5;
+  }
+
+  .step-active {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .step-arrow {
+    color: var(--text-secondary);
+  }
+
+  .receiver-info {
+    margin: 0.75rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .receiver-info code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .x402-info {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .info-value {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 640px) {
+    .x402-info {
+      grid-template-columns: 1fr;
+    }
+
+    .process-steps {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .architecture-diagram {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .arrow {
+      transform: rotate(90deg);
+    }
+  }
+
+  .x402-architecture {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .x402-architecture h4 {
+    font-size: 0.875rem;
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .architecture-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .node {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    min-width: 100px;
+    transition: all 0.2s;
+  }
+
+  .node:hover {
+    background: rgba(255, 107, 53, 0.1);
+    border-color: var(--accent);
+  }
+
+  .node-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .node-desc {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .arrow {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+</style>
