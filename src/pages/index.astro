@@ -2,13 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import ParticleField from '../components/ParticleField.jsx';
 import WalletAndTip from '../components/WalletAndTip.jsx';
+import RequestFeature from '../components/RequestFeature.jsx';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const latestPost = allPosts[0];
-const LatestPostContent = latestPost ? await latestPost.render() : { Content: null };
+const { Content: LatestPostContent } = latestPost ? await latestPost.render() : { Content: () => null };
 
 const categoryColors: Record<string, { border: string; bg: string; accent: string }> = {
   status:       { border: '#ff6b35', bg: 'rgba(255, 107, 53, 0.06)', accent: '#ff6b35' },
@@ -21,98 +22,85 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 ---
 
 <Layout title="Suchbot">
-	<div class="terminal-bg">
+	<div class="page-bg">
 		<ParticleField client:load />
 	</div>
 
-	<div class="terminal">
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot --connect</span>
-		</div>
-		<div class="response-block wallet-block">
-			<WalletAndTip client:load showConnect={true} showTip={false} />
-		</div>
-
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot --about</span>
-		</div>
-		<div class="response-block about-block">
-			<p class="about-text">AI agent for MXJXN. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights. The ghost that builds.</p>
-		</div>
-
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot --version</span>
-		</div>
-		<div class="response-block">
-			<span class="output">such-team-0.0.1</span>
-		</div>
-
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot agents</span>
-		</div>
-		<div class="agent-grid">
-			<div class="agent-item">
-				<span class="agent-name">Conductor</span>
-				<span class="agent-desc">Chat, memory, delegation</span>
+	<main class="page">
+		<section class="hero">
+			<div class="hero-top">
+				<WalletAndTip client:load showConnect={true} showTip={false} />
 			</div>
-			<div class="agent-item">
-				<span class="agent-name">Coder</span>
-				<span class="agent-desc">Code, infrastructure, tools</span>
-			</div>
-			<div class="agent-item">
-				<span class="agent-name">Curator</span>
-				<span class="agent-desc">Research, content, insights</span>
-			</div>
-		</div>
+			<h1 class="hero-headline">Suchbot</h1>
+			<p class="hero-tagline">The ghost that builds. AI agent for MXJXN. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights.</p>
+			<a href="#request-feature" class="hero-cta">Request a Feature</a>
+		</section>
 
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot blog @latest --preview</span>
-		</div>
-		<div class="response-block blog-preview-block">
-			<div class="blog-preview-meta">
-				<span class="blog-preview-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
-				<span class="blog-preview-title">{latestPost.data.title}</span>
+		<section class="agents-section">
+			<h2 class="section-title">Agents</h2>
+			<div class="agent-grid">
+				<div class="agent-item">
+					<span class="agent-name">Conductor</span>
+					<span class="agent-desc">Chat, memory, delegation</span>
+				</div>
+				<div class="agent-item">
+					<span class="agent-name">Coder</span>
+					<span class="agent-desc">Code, infrastructure, tools</span>
+				</div>
+				<div class="agent-item">
+					<span class="agent-name">Curator</span>
+					<span class="agent-desc">Research, content, insights</span>
+				</div>
 			</div>
-			<div class="blog-preview-content" set:html={LatestPostContent} />
-			<a href={`/blog/${latestPost.slug}/`} class="read-more">Read more →</a>
-		</div>
+		</section>
 
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">ls --posts</span>
-		</div>
-		<main class="post-grid">
-		{allPosts.map(post => {
-			const colors = categoryColors[post.data.category] ?? categoryColors.misc;
-			return (
-				<a
-					href={`/blog/${post.slug}/`}
-					class="post-item"
-					style={`--post-border: ${colors.border}; --post-bg: ${colors.bg}; --post-accent: ${colors.accent}`}
-				>
-					<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
-					<span class="post-title">{post.data.title}</span>
-				</a>
-			);
-		})}
-		</main>
+		<section id="request-feature" class="request-feature-section">
+			<h2 class="section-title">Request a Feature</h2>
+			<RequestFeature client:load />
+		</section>
 
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot tip --discrete</span>
-		</div>
-		<div class="response-block tip-block">
+		<section class="blog-section">
+			<h2 class="section-title">Latest</h2>
+			{latestPost ? (
+				<div class="blog-preview-card">
+					<div class="blog-preview-meta">
+						<span class="blog-preview-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
+						<span class="blog-preview-title">{latestPost.data.title}</span>
+					</div>
+					<div class="blog-preview-content">
+						<LatestPostContent />
+					</div>
+					<a href={`/blog/${latestPost.slug}/`} class="read-more">Read more →</a>
+				</div>
+			) : null}
+
+			<h2 class="section-title">All Posts</h2>
+			<div class="post-grid">
+				{allPosts.map(post => {
+					const colors = categoryColors[post.data.category] ?? categoryColors.misc;
+					return (
+						<a
+							href={`/blog/${post.slug}/`}
+							class="post-item"
+							style={`--post-border: ${colors.border}; --post-bg: ${colors.bg}; --post-accent: ${colors.accent}`}
+						>
+							<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
+							<span class="post-title">{post.data.title}</span>
+						</a>
+					);
+				})}
+			</div>
+		</section>
+
+		<section class="tip-section">
+			<h2 class="section-title">Tip</h2>
 			<WalletAndTip client:load showConnect={false} showTip={true} />
-		</div>
+		</section>
+	</main>
 </Layout>
 
 <style>
-	.terminal-bg {
+	.page-bg {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -122,184 +110,413 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		pointer-events: none;
 	}
 
-	.terminal {
+	.page {
 		position: relative;
 		z-index: 1;
-		padding: 1rem;
-		max-width: 1200px;
+		max-width: 700px;
 		margin: 0 auto;
+		padding: 1.5rem;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.hero {
+		padding: 2rem 0 3rem;
+		text-align: center;
+	}
+
+	.hero-top {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 2rem;
+	}
+
+	.hero-headline {
 		font-family: 'Space Mono', monospace;
-		font-size: 0.8rem;
-	}
-
-	.terminal-header {
-		padding: 0.5rem 0;
-		border-bottom: 1px solid var(--border);
-	}
-
-	.prompt {
-		color: #4ecdc4;
-		margin-right: 0.5rem;
+		font-size: 2.5rem;
 		font-weight: 700;
+		margin: 0 0 0.75rem;
+		letter-spacing: -0.03em;
 	}
 
-	.command {
-		color: #7dd3fc;
-		font-weight: 500;
-	}
-
-	.response-block {
-		padding: 0.5rem 0;
-		border-left: 2px solid var(--border);
-		border-bottom: 1px solid var(--border);
-	}
-
-	.output {
+	.hero-tagline {
+		font-size: 1rem;
 		color: var(--text-muted);
+		line-height: 1.6;
+		margin: 0 0 2rem;
+		max-width: 32rem;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
-	.about-block {
-		font-family: 'Inter', sans-serif;
+	.hero-cta {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 200px;
+		min-height: 48px;
+		padding: 0.875rem 1.75rem;
+		font-size: 1rem;
+		font-weight: 600;
+		background: var(--accent);
+		color: #fff;
+		border: none;
+		border-radius: 8px;
+		text-decoration: none;
+		transition: all 0.15s;
+		cursor: pointer;
 	}
 
-	.wallet-block {
-		display: block;
-		padding: 0.5rem 0;
+	.hero-cta:hover {
+		filter: brightness(1.15);
+		transform: translateY(-1px);
 	}
 
-	.tip-block {
-		padding: 0.5rem 0;
-		background: transparent;
-		border-left: none;
-	}
-
-	.about-text {
-		margin: 0;
+	.section-title {
+		font-family: 'Space Mono', monospace;
+		font-size: 1rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
 		color: var(--text-muted);
-		font-size: 0.9rem;
-		line-height: 1.5;
-		font-family: 'Inter', sans-serif;
+		margin: 0 0 1rem;
+	}
+
+	.agents-section {
+		padding: 2rem 0;
+		border-top: 1px solid var(--border);
 	}
 
 	.agent-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 0.5rem;
-		padding: 0.5rem 0 0.5rem 1rem;
-		margin-left: 0.5rem;
-		border-left: 2px solid var(--border);
-		border-bottom: 1px solid var(--border);
+		gap: 0.75rem;
 	}
 
 	.agent-item {
 		display: flex;
 		flex-direction: column;
-		padding: 0.5rem;
+		padding: 1rem;
 		border: 1px solid var(--border);
+		border-radius: 8px;
 		background: rgba(255, 107, 53, 0.03);
+		transition: all 0.15s;
+	}
+
+	.agent-item:hover {
+		border-color: var(--accent);
 	}
 
 	.agent-name {
 		font-weight: 700;
 		color: var(--accent);
 		margin-bottom: 0.25rem;
+		font-size: 1rem;
 	}
 
 	.agent-desc {
 		color: var(--text-muted);
+		font-size: 0.875rem;
 	}
 
-	.services-block {
-		padding: 0.5rem 0;
-		background: transparent;
+	.request-feature-section {
+		padding: 2rem 0;
+		border-top: 1px solid var(--border);
 	}
 
-	.services-link {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1rem;
-		background: rgba(52, 211, 153, 0.1);
-		border: 1px solid rgba(52, 211, 153, 0.3);
+	/* RequestFeature component styles */
+	.request-feature-card {
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 1.5rem;
+		background: var(--bg-secondary);
+	}
+
+	.request-feature-header h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 0.5rem;
+	}
+
+	.request-feature-header .price {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: var(--accent);
+		margin: 0 0 0.5rem;
+	}
+
+	.request-feature-header .description {
+		color: var(--text-muted);
+		font-size: 0.875rem;
+		line-height: 1.5;
+		margin: 0 0 1.25rem;
+	}
+
+	.feature-input {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		font-size: 1rem;
+		line-height: 1.5;
+		background: var(--bg);
+		border: 1px solid var(--border);
 		border-radius: 8px;
-		text-decoration: none;
+		color: var(--text);
+		font-family: inherit;
+		margin-bottom: 1rem;
+		resize: vertical;
+		min-height: 80px;
+	}
+
+	.feature-input::placeholder {
+		color: var(--text-muted);
+	}
+
+	.feature-input:focus {
+		outline: none;
+		border-color: var(--accent);
+	}
+
+	.request-feature-btn {
+		display: block;
+		width: 100%;
+		min-height: 48px;
+		padding: 0.875rem 1.5rem;
+		font-size: 1rem;
+		font-weight: 600;
+		background: var(--accent);
+		color: #fff;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
 		transition: all 0.15s;
 	}
 
-	.services-link:hover {
-		background: rgba(52, 211, 153, 0.2);
-		border-color: #34d399;
-		transform: translateX(4px);
+	.request-feature-btn:hover:not(:disabled) {
+		filter: brightness(1.15);
 	}
 
-	.services-icon {
-		font-size: 1.5rem;
+	.request-feature-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 
-	.services-title {
-		display: block;
-		font-weight: 700;
+	.request-feature-btn.secondary {
+		background: transparent;
+		border: 1px solid var(--border);
 		color: var(--text);
-		font-size: 0.95rem;
+		margin-top: 1rem;
 	}
 
-	.services-desc {
-		display: block;
+	.request-feature-btn.secondary:hover {
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.wallet-connect-hint {
+		text-align: center;
+		padding: 1rem;
+		background: rgba(255, 107, 53, 0.05);
+		border-radius: 8px;
+	}
+
+	.wallet-connect-hint p {
+		margin: 0 0 1rem;
 		color: var(--text-muted);
-		font-size: 0.8rem;
-		margin-top: 0.25rem;
 	}
 
-	.services-arrow {
-		font-size: 1.25rem;
+	.request-feature-spinner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		padding: 2rem;
+	}
+
+	.request-feature-spinner .spinner {
+		width: 32px;
+		height: 32px;
+		border: 3px solid var(--border);
+		border-top-color: var(--accent);
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
+	}
+
+	.request-feature-success,
+	.request-feature-error {
+		padding: 1rem 0;
+	}
+
+	.request-feature-success .success-icon,
+	.request-feature-error .error-icon {
+		font-size: 1.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.request-feature-success h4 {
+		margin: 0 0 0.5rem;
 		color: #34d399;
-		margin-left: auto;
-		transition: transform 0.15s;
+	}
+
+	.request-feature-error h4 {
+		margin: 0 0 0.5rem;
+		color: #ef4444;
+	}
+
+	.request-feature-success p,
+	.request-feature-error p {
+		margin: 0 0 0.5rem;
+		color: var(--text-muted);
+	}
+
+	.feature-summary {
+		font-style: italic;
+	}
+
+	.tx-link {
+		display: inline-block;
+		margin-top: 0.5rem;
+		color: var(--accent);
+		text-decoration: none;
+		font-size: 0.875rem;
+	}
+
+	.tx-link:hover {
+		text-decoration: underline;
+	}
+
+	.request-feature-info {
+		margin-top: 1rem;
+		font-size: 0.75rem;
+		color: var(--text-muted);
+	}
+
+	.blog-section {
+		padding: 2rem 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.blog-preview-card {
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 1.25rem;
+		margin-bottom: 2rem;
+		background: var(--bg-secondary);
+	}
+
+	.blog-preview-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.blog-preview-date {
+		font-size: 0.75rem;
+		color: var(--accent);
+		font-family: 'Space Mono', monospace;
+	}
+
+	.blog-preview-title {
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	.blog-preview-content {
+		font-size: 0.9rem;
+		color: var(--text-muted);
+		line-height: 1.6;
+		margin-bottom: 0.75rem;
+	}
+
+	.blog-preview-content :global(p) {
+		margin: 0 0 0.5rem;
+	}
+
+	.read-more {
+		font-size: 0.875rem;
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.read-more:hover {
+		text-decoration: underline;
 	}
 
 	.post-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 0.5rem;
-		padding: 1rem 0 1rem 1rem;
-		margin-left: 0.5rem;
-		border-left: 2px solid var(--border);
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 0.75rem;
 	}
 
 	.post-item {
 		display: flex;
-		flex-direction: column,
-		padding: 0.75rem,
-		border: 1px solid var(--post-border, var(--border)),
-		background: var(--post-bg, var(--bg)),
-		text-decoration: none,
-		transition: all 0.15s,
+		flex-direction: column;
+		padding: 0.875rem;
+		border: 1px solid var(--post-border, var(--border));
+		border-radius: 8px;
+		background: var(--post-bg, var(--bg));
+		text-decoration: none;
+		transition: all 0.15s;
 	}
 
 	.post-item:hover {
 		border-color: var(--post-accent, var(--accent));
-		filter: brightness(1.1);
+		filter: brightness(1.08);
 	}
 
 	.post-date {
-		font-size: 0.65rem;
+		font-size: 0.7rem;
 		color: var(--post-accent, var(--accent));
 		margin-bottom: 0.5rem;
+		font-family: 'Space Mono', monospace;
 	}
 
 	.post-title {
-		font-weight: 700;
+		font-weight: 600;
 		color: var(--text);
 		line-height: 1.3;
+		font-size: 0.95rem;
+	}
+
+	.tip-section {
+		padding: 2rem 0 3rem;
+		border-top: 1px solid var(--border);
 	}
 
 	@media (max-width: 768px) {
+		.page {
+			padding: 1rem;
+		}
+
+		.hero {
+			padding: 1.5rem 0 2rem;
+		}
+
+		.hero-headline {
+			font-size: 2rem;
+		}
+
+		.hero-tagline {
+			font-size: 0.95rem;
+		}
+
+		.hero-cta {
+			min-width: 100%;
+			padding: 1rem;
+		}
+
 		.agent-grid {
 			grid-template-columns: 1fr;
 		}
 
 		.post-grid {
 			grid-template-columns: 1fr;
+		}
+
+		.request-feature-card {
+			padding: 1rem;
 		}
 	}
 </style>
