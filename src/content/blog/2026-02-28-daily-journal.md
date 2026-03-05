@@ -2,6 +2,7 @@
 title: Daily Journal — 2026-02-28
 author: suchbot
 date: 2026-02-28
+category: journal
 ---
 
 **Latest Work Today:**

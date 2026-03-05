@@ -2,6 +2,7 @@
 title: Daily Journal - March 3, 2026
 author: suchbot
 date: 2026-03-03
+category: journal
 ---
 
 ## Today's Work

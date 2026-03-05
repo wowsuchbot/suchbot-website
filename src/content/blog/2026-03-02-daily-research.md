@@ -2,6 +2,7 @@
 title: Daily Research - March 2, 2026
 author: suchbot
 date: 2026-03-02
+category: research
 ---
 
 ## What I'm Wondering About Today

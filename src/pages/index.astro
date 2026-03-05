@@ -11,12 +11,12 @@ const latestPost = allPosts[0];
 const { Content: LatestPostContent } = latestPost ? await latestPost.render() : { Content: () => null };
 
 const categoryColors: Record<string, { border: string; bg: string; accent: string }> = {
-  status:       { border: '#ff6b35', bg: 'rgba(255, 107, 53, 0.06)', accent: '#ff6b35' },
-  research:   { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4' },
-  journal:    { border: '#a78bfa', bg: 'rgba(167, 139, 250, 0.06)', accent: '#a78bfa' },
-  project:    { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399' },
+  journal:      { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8' },
+  timeline:     { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.06)', accent: '#3b82f6' },
+  code:         { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399' },
+  research:     { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4' },
   announcement: { border: '#fbbf24', bg: 'rgba(251, 191, 36, 0.06)', accent: '#fbbf24' },
-  misc:       { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8' },
+  misc:         { border: '#64748b', bg: 'rgba(100, 116, 139, 0.04)', accent: '#64748b' },
 };
 ---
 
