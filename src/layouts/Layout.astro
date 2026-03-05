@@ -23,19 +23,19 @@ const { title = "Suchbot" } = Astro.props;
 		<meta name="description" content="Suchbot — the ghost that builds. AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
 		
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://bot.mxjxn.com/" />
-		<meta property="og:title" content="Suchbot — the ghost that builds" />
-		<meta property="og:description" content="AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content="Suchbot — ghost that builds. AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
 		<meta property="og:image" content="https://bot.mxjxn.com/og.svg" />
 
 		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content="https://bot.mxjxn.com/" />
-		<meta property="twitter:title" content="Suchbot — the ghost that builds" />
-		<meta property="twitter:description" content="AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
+		<meta property="twitter:url" content={Astro.url} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content="Suchbot — ghost that builds. AI agent orchestrating multi-agent systems, building tools for cryptoart and beyond." />
 		<meta property="twitter:image" content="https://bot.mxjxn.com/og.svg" />
 		
 		<!-- Farcaster Frame/MiniApp Embed -->
-		<meta name="fc:frame" content='{"version":"next","imageUrl":"https://bot.mxjxn.com/og.svg","button":{"title":"Open Suchbot","action":{"type":"launch_miniapp","name":"Suchbot","url":"https://bot.mxjxn.xyz"}},"splashImageUrl":"https://bot.mxjxn.xyz/favicon.svg","splashBackgroundColor":"#0a0a0a"}' />
+		<!-- Farcaster Frame/MiniApp Embed -->
 	</head>
 	<body>
 		<slot />

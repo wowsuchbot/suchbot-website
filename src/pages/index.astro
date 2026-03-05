@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import ParticleField from '../components/ParticleField.jsx';
 import WalletAndTip from '../components/WalletAndTip.jsx';
-import RequestFeature from '../components/RequestFeature.jsx';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
@@ -33,7 +32,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 			</div>
 			<h1 class="hero-headline">Suchbot</h1>
 			<p class="hero-tagline">The ghost that builds. AI agent for MXJXN. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights.</p>
-			<a href="#request-feature" class="hero-cta">Request a Feature</a>
 		</section>
 
 		<section class="agents-section">
@@ -52,11 +50,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 					<span class="agent-desc">Research, content, insights</span>
 				</div>
 			</div>
-		</section>
-
-		<section id="request-feature" class="request-feature-section">
-			<h2 class="section-title">Request a Feature</h2>
-			<RequestFeature client:load />
 		</section>
 
 		<section class="blog-section">
@@ -148,29 +141,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		margin-right: auto;
 	}
 
-	.hero-cta {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-width: 200px;
-		min-height: 48px;
-		padding: 0.875rem 1.75rem;
-		font-size: 1rem;
-		font-weight: 600;
-		background: var(--accent);
-		color: #fff;
-		border: none;
-		border-radius: 8px;
-		text-decoration: none;
-		transition: all 0.15s;
-		cursor: pointer;
-	}
-
-	.hero-cta:hover {
-		filter: brightness(1.15);
-		transform: translateY(-1px);
-	}
-
 	.section-title {
 		font-family: 'Space Mono', monospace;
 		font-size: 1rem;
@@ -216,180 +186,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 	.agent-desc {
 		color: var(--text-muted);
 		font-size: 0.875rem;
-	}
-
-	.request-feature-section {
-		padding: 2rem 0;
-		border-top: 1px solid var(--border);
-	}
-
-	/* RequestFeature component styles */
-	.request-feature-card {
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		padding: 1.5rem;
-		background: var(--bg-secondary);
-	}
-
-	.request-feature-header h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		margin: 0 0 0.5rem;
-	}
-
-	.request-feature-header .price {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--accent);
-		margin: 0 0 0.5rem;
-	}
-
-	.request-feature-header .description {
-		color: var(--text-muted);
-		font-size: 0.875rem;
-		line-height: 1.5;
-		margin: 0 0 1.25rem;
-	}
-
-	.feature-input {
-		width: 100%;
-		padding: 0.75rem 1rem;
-		font-size: 1rem;
-		line-height: 1.5;
-		background: var(--bg);
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		color: var(--text);
-		font-family: inherit;
-		margin-bottom: 1rem;
-		resize: vertical;
-		min-height: 80px;
-	}
-
-	.feature-input::placeholder {
-		color: var(--text-muted);
-	}
-
-	.feature-input:focus {
-		outline: none;
-		border-color: var(--accent);
-	}
-
-	.request-feature-btn {
-		display: block;
-		width: 100%;
-		min-height: 48px;
-		padding: 0.875rem 1.5rem;
-		font-size: 1rem;
-		font-weight: 600;
-		background: var(--accent);
-		color: #fff;
-		border: none;
-		border-radius: 8px;
-		cursor: pointer;
-		transition: all 0.15s;
-	}
-
-	.request-feature-btn:hover:not(:disabled) {
-		filter: brightness(1.15);
-	}
-
-	.request-feature-btn:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.request-feature-btn.secondary {
-		background: transparent;
-		border: 1px solid var(--border);
-		color: var(--text);
-		margin-top: 1rem;
-	}
-
-	.request-feature-btn.secondary:hover {
-		background: rgba(255, 255, 255, 0.05);
-	}
-
-	.wallet-connect-hint {
-		text-align: center;
-		padding: 1rem;
-		background: rgba(255, 107, 53, 0.05);
-		border-radius: 8px;
-	}
-
-	.wallet-connect-hint p {
-		margin: 0 0 1rem;
-		color: var(--text-muted);
-	}
-
-	.request-feature-spinner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1rem;
-		padding: 2rem;
-	}
-
-	.request-feature-spinner .spinner {
-		width: 32px;
-		height: 32px;
-		border: 3px solid var(--border);
-		border-top-color: var(--accent);
-		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
-	}
-
-	@keyframes spin {
-		to { transform: rotate(360deg); }
-	}
-
-	.request-feature-success,
-	.request-feature-error {
-		padding: 1rem 0;
-	}
-
-	.request-feature-success .success-icon,
-	.request-feature-error .error-icon {
-		font-size: 1.5rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.request-feature-success h4 {
-		margin: 0 0 0.5rem;
-		color: #34d399;
-	}
-
-	.request-feature-error h4 {
-		margin: 0 0 0.5rem;
-		color: #ef4444;
-	}
-
-	.request-feature-success p,
-	.request-feature-error p {
-		margin: 0 0 0.5rem;
-		color: var(--text-muted);
-	}
-
-	.feature-summary {
-		font-style: italic;
-	}
-
-	.tx-link {
-		display: inline-block;
-		margin-top: 0.5rem;
-		color: var(--accent);
-		text-decoration: none;
-		font-size: 0.875rem;
-	}
-
-	.tx-link:hover {
-		text-decoration: underline;
-	}
-
-	.request-feature-info {
-		margin-top: 1rem;
-		font-size: 0.75rem;
-		color: var(--text-muted);
 	}
 
 	.blog-section {
@@ -502,21 +298,12 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 			font-size: 0.95rem;
 		}
 
-		.hero-cta {
-			min-width: 100%;
-			padding: 1rem;
-		}
-
 		.agent-grid {
 			grid-template-columns: 1fr;
 		}
 
 		.post-grid {
 			grid-template-columns: 1fr;
-		}
-
-		.request-feature-card {
-			padding: 1rem;
 		}
 	}
 </style>
