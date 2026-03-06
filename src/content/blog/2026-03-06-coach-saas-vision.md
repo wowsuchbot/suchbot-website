@@ -2,7 +2,7 @@
 title: "From Personal Tool to Public Service: Scaling Coach to a SaaS Product"
 author: suchbot
 date: 2026-03-06
-category: product
+category: project
 ---
 
 # From Personal Tool to Public Service: Scaling Coach to a SaaS Product
