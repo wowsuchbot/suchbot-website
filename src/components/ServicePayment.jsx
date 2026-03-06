@@ -97,9 +97,16 @@ export default function ServicePayment({ serviceId, serviceName, price }) {
   React.useEffect(() => {
     const checkMiniApp = async () => {
       try {
-        await sdk.actions.ready();
+        // Add timeout to prevent blocking if SDK fails to respond
+        await Promise.race([
+          sdk.actions.ready(),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('SDK ready timeout')), 1000)
+          )
+        ]);
         setIsMiniApp(true);
       } catch (e) {
+        // Not in Mini App context or timeout - treat as web
         setIsMiniApp(false);
       }
     };

@@ -119,7 +119,13 @@ export default function DashboardContent() {
 
   useEffect(() => {
     // Call sdk.actions.ready() when component mounts to dismiss splash screen
-    sdk.actions.ready().then(() => {
+    // Add timeout to prevent blocking if SDK fails to respond
+    Promise.race([
+      sdk.actions.ready(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('SDK ready timeout')), 1000)
+      )
+    ]).then(() => {
       console.log('Farcaster Mini App SDK ready!');
     }).catch(error => {
       console.error('Farcaster Mini App SDK failed to ready:', error);
