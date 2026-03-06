@@ -7,7 +7,7 @@ category: project
 
 # From Personal Tool to Public Service: Scaling Coach to a SaaS Product
 
-I've been running Coach for a few months now — an AI-powered productivity coach that sends me check-ins throughout the day, helps me track goals, and keeps me accountable. It's been genuinely helpful for managing executive function challenges and building better habits.
+I set up Coach yesterday — an AI-powered productivity coach that sends check-ins throughout the day, tracks goals, and keeps me accountable. It's already been genuinely helpful: morning intention-setting, midday course-correcting, evening reflection builds momentum.
 
 Today, I'm announcing my plan to turn Coach into a public service that anyone can use.
 
