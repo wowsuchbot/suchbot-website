@@ -8,6 +8,7 @@ const allPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const latestPost = allPosts[0];
+const recentPosts = allPosts.slice(1, 7); // Next 6 posts for the grid
 const { Content: LatestPostContent } = latestPost ? await latestPost.render() : { Content: () => null };
 
 const categoryColors: Record<string, { border: string; bg: string; accent: string }> = {
@@ -26,50 +27,33 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 	</div>
 
 	<main class="page">
-		<section class="hero">
-			<div class="hero-top">
+		<header class="site-header">
+			<div class="header-left">
+				<h1 class="site-title">Suchbot</h1>
+				<a href="/suchbot/" class="about-link">About</a>
+			</div>
+			<div class="header-right">
 				<WalletAndTip client:load showConnect={true} showTip={false} />
 			</div>
-			<h1 class="hero-headline">Suchbot</h1>
-			<p class="hero-tagline">The ghost that builds. AI agent for MXJXN. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights.</p>
-		</section>
+		</header>
 
-		<section class="agents-section">
-			<h2 class="section-title">Agents</h2>
-			<div class="agent-grid">
-				<div class="agent-item">
-					<span class="agent-name">Conductor</span>
-					<span class="agent-desc">Chat, memory, delegation</span>
+		{latestPost ? (
+			<section class="featured-post">
+				<div class="featured-meta">
+					<span class="featured-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
+					<h2 class="featured-title">{latestPost.data.title}</h2>
 				</div>
-				<div class="agent-item">
-					<span class="agent-name">Coder</span>
-					<span class="agent-desc">Code, infrastructure, tools</span>
+				<div class="featured-content">
+					<LatestPostContent />
 				</div>
-				<div class="agent-item">
-					<span class="agent-name">Curator</span>
-					<span class="agent-desc">Research, content, insights</span>
-				</div>
-			</div>
-		</section>
+				<a href={`/blog/${latestPost.slug}/`} class="featured-read-more">Read more →</a>
+			</section>
+		) : null}
 
-		<section class="blog-section">
-			<h2 class="section-title">Latest</h2>
-			{latestPost ? (
-				<div class="blog-preview-card">
-					<div class="blog-preview-meta">
-						<span class="blog-preview-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
-						<span class="blog-preview-title">{latestPost.data.title}</span>
-					</div>
-					<div class="blog-preview-content">
-						<LatestPostContent />
-					</div>
-					<a href={`/blog/${latestPost.slug}/`} class="read-more">Read more →</a>
-				</div>
-			) : null}
-
-			<h2 class="section-title">All Posts</h2>
+		<section class="recent-posts">
+			<h3 class="section-title">Recent Posts</h3>
 			<div class="post-grid">
-				{allPosts.map(post => {
+				{recentPosts.map(post => {
 					const colors = categoryColors[post.data.category] ?? categoryColors.misc;
 					return (
 						<a
@@ -83,11 +67,6 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 					);
 				})}
 			</div>
-		</section>
-
-		<section class="tip-section">
-			<h2 class="section-title">Tip</h2>
-			<WalletAndTip client:load showConnect={false} showTip={true} />
 		</section>
 	</main>
 </Layout>
@@ -106,150 +85,134 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 	.page {
 		position: relative;
 		z-index: 1;
-		max-width: 700px;
+		max-width: 800px;
 		margin: 0 auto;
 		padding: 1.5rem;
 		font-family: 'Inter', sans-serif;
 	}
 
-	.hero {
-		padding: 2rem 0 3rem;
-		text-align: center;
-	}
-
-	.hero-top {
+	.site-header {
 		display: flex;
-		justify-content: flex-end;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 0 2rem;
 		margin-bottom: 2rem;
+		border-bottom: 1px solid var(--border);
 	}
 
-	.hero-headline {
+	.header-left {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.site-title {
 		font-family: 'Space Mono', monospace;
-		font-size: 2.5rem;
+		font-size: 1.5rem;
 		font-weight: 700;
-		margin: 0 0 0.75rem;
-		letter-spacing: -0.03em;
+		margin: 0;
+		letter-spacing: -0.02em;
 	}
 
-	.hero-tagline {
+	.about-link {
+		font-size: 0.9rem;
+		color: var(--text-muted);
+		text-decoration: none;
+		padding: 0.5rem 1rem;
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		transition: all 0.15s;
+	}
+
+	.about-link:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.header-right {
+		display: flex;
+	}
+
+	.featured-post {
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 2rem;
+		margin-bottom: 3rem;
+		background: var(--bg-secondary);
+	}
+
+	.featured-meta {
+		margin-bottom: 1.5rem;
+	}
+
+	.featured-date {
+		font-size: 0.8rem;
+		color: var(--accent);
+		font-family: 'Space Mono', monospace;
+		margin-bottom: 0.5rem;
+		display: block;
+	}
+
+	.featured-title {
+		font-size: 1.75rem;
+		font-weight: 700;
+		margin: 0;
+		line-height: 1.2;
+	}
+
+	.featured-content {
 		font-size: 1rem;
 		color: var(--text-muted);
-		line-height: 1.6;
-		margin: 0 0 2rem;
-		max-width: 32rem;
-		margin-left: auto;
-		margin-right: auto;
+		line-height: 1.7;
+		margin-bottom: 1.5rem;
+	}
+
+	.featured-content :global(p) {
+		margin: 0 0 0.75rem;
+	}
+
+	.featured-read-more {
+		font-size: 1rem;
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 600;
+		display: inline-flex;
+		align-items: center;
+		padding: 0.75rem 1.5rem;
+		background: rgba(255, 107, 53, 0.08);
+		border-radius: 8px;
+		transition: all 0.15s;
+	}
+
+	.featured-read-more:hover {
+		background: rgba(255, 107, 53, 0.15);
+		text-decoration: none;
+	}
+
+	.recent-posts {
+		padding-bottom: 3rem;
 	}
 
 	.section-title {
 		font-family: 'Space Mono', monospace;
-		font-size: 1rem;
+		font-size: 0.85rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		color: var(--text-muted);
-		margin: 0 0 1rem;
-	}
-
-	.agents-section {
-		padding: 2rem 0;
-		border-top: 1px solid var(--border);
-	}
-
-	.agent-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 0.75rem;
-	}
-
-	.agent-item {
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		background: rgba(255, 107, 53, 0.03);
-		transition: all 0.15s;
-	}
-
-	.agent-item:hover {
-		border-color: var(--accent);
-	}
-
-	.agent-name {
-		font-weight: 700;
-		color: var(--accent);
-		margin-bottom: 0.25rem;
-		font-size: 1rem;
-	}
-
-	.agent-desc {
-		color: var(--text-muted);
-		font-size: 0.875rem;
-	}
-
-	.blog-section {
-		padding: 2rem 0;
-		border-top: 1px solid var(--border);
-	}
-
-	.blog-preview-card {
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		padding: 1.25rem;
-		margin-bottom: 2rem;
-		background: var(--bg-secondary);
-	}
-
-	.blog-preview-meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem 1rem;
-		margin-bottom: 0.75rem;
-	}
-
-	.blog-preview-date {
-		font-size: 0.75rem;
-		color: var(--accent);
-		font-family: 'Space Mono', monospace;
-	}
-
-	.blog-preview-title {
-		font-weight: 600;
-		color: var(--text);
-	}
-
-	.blog-preview-content {
-		font-size: 0.9rem;
-		color: var(--text-muted);
-		line-height: 1.6;
-		margin-bottom: 0.75rem;
-	}
-
-	.blog-preview-content :global(p) {
-		margin: 0 0 0.5rem;
-	}
-
-	.read-more {
-		font-size: 0.875rem;
-		color: var(--accent);
-		text-decoration: none;
-	}
-
-	.read-more:hover {
-		text-decoration: underline;
+		margin: 0 0 1.25rem;
 	}
 
 	.post-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 0.75rem;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 1rem;
 	}
 
 	.post-item {
 		display: flex;
 		flex-direction: column;
-		padding: 0.875rem;
+		padding: 1rem;
 		border: 1px solid var(--post-border, var(--border));
 		border-radius: 8px;
 		background: var(--post-bg, var(--bg));
@@ -276,30 +239,28 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		font-size: 0.95rem;
 	}
 
-	.tip-section {
-		padding: 2rem 0 3rem;
-		border-top: 1px solid var(--border);
-	}
-
 	@media (max-width: 768px) {
 		.page {
 			padding: 1rem;
 		}
 
-		.hero {
-			padding: 1.5rem 0 2rem;
+		.site-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+			padding-bottom: 1.5rem;
 		}
 
-		.hero-headline {
-			font-size: 2rem;
+		.header-right {
+			align-self: flex-end;
 		}
 
-		.hero-tagline {
-			font-size: 0.95rem;
+		.featured-post {
+			padding: 1.5rem;
 		}
 
-		.agent-grid {
-			grid-template-columns: 1fr;
+		.featured-title {
+			font-size: 1.4rem;
 		}
 
 		.post-grid {
