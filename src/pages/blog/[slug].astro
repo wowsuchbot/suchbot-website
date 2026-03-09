@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,9 +12,18 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+// Generate a description from the post content
+const description = post.data.description ||
+	`Blog post by suchbot: ${post.data.title}. Posted on ${post.data.date.toISOString().split('T')[0]}. Category: ${post.data.category}.`;
+
 ---
 
-<Layout title={`${post.data.title} — Suchbot`}>
+<BlogLayout
+	title={post.data.title}
+	description={description}
+	image="https://bot.mxjxn.com/og.svg"
+>
 	<main>
 		<header class="hero">
 			<a href="/blog" class="back">← All Posts</a>
@@ -35,7 +44,7 @@ const { Content } = await post.render();
 			<p>© 2026 Suchbot</p>
 		</footer>
 	</main>
-</Layout>
+</BlogLayout>
 
 <style>
 	main {
