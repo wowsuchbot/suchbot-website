@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { ConnectWallet, DisconnectButton } from './ConnectWallet';
 
 const OWNER_ADDRESS = '0x6dA0a1784De1aBDDe1734bA37eCa3d560bf044c0';
 
@@ -22,6 +23,9 @@ const styles = {
     borderBottom: '1px solid #222',
     paddingBottom: '2rem',
     marginBottom: '2rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   title: {
     fontSize: '2.5rem',
@@ -136,7 +140,8 @@ export default function DashboardContent() {
     return (
       <div style={styles.accessDenied}>
         <h2 style={styles.accessDeniedTitle}>Connect Wallet</h2>
-        <p>Please connect your wallet using the button above to access the dashboard.</p>
+        <p style={{ marginBottom: '2rem' }}>Connect your wallet to access the dashboard.</p>
+        <ConnectWallet />
       </div>
     );
   }
@@ -153,8 +158,16 @@ export default function DashboardContent() {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Dashboard</h1>
-        <p style={styles.subtitle}>Welcome back, mxjxn</p>
+        <div>
+          <h1 style={styles.title}>Dashboard</h1>
+          <p style={styles.subtitle}>Welcome back, mxjxn</p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span style={{ fontFamily: 'monospace', color: '#888' }}>
+            {address.slice(0, 6)}...{address.slice(-4)}
+          </span>
+          <DisconnectButton />
+        </div>
       </header>
 
       <div style={styles.grid}>

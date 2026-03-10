@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import DashboardContent from '../components/DashboardContent.jsx';
+import DashboardWrapped from '../components/DashboardWrapped.jsx';
 ---
 
 <Layout title="Dashboard | Suchbot">
 	<main style={{ paddingTop: '60px' }}>
-		<DashboardContent client:only="react" />
+		<DashboardWrapped client:load />
 	</main>
 </Layout>
