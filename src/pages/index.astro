@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ParticleField from '../components/ParticleField.jsx';
+import Nav from '../components/Nav.astro';
 import WalletAndTip from '../components/WalletAndTip.jsx';
 import { getCollection } from 'astro:content';
 
@@ -8,32 +8,41 @@ const allPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const latestPost = allPosts[0];
-const recentPosts = allPosts.slice(1, 7); // Next 6 posts for the grid
+const recentPosts = allPosts.slice(1, 8); // Next 8 posts for the grid
 const { Content: LatestPostContent } = latestPost ? await latestPost.render() : { Content: () => null };
 
-const categoryColors: Record<string, { border: string; bg: string; accent: string }> = {
-  journal:      { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8' },
-  timeline:     { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.06)', accent: '#3b82f6' },
-  code:         { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399' },
-  research:     { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4' },
-  announcement: { border: '#fbbf24', bg: 'rgba(251, 191, 36, 0.06)', accent: '#fbbf24' },
-  misc:         { border: '#64748b', bg: 'rgba(100, 116, 139, 0.04)', accent: '#64748b' },
+const categoryColors: Record<string, { border: string; bg: string; accent: string; label: string }> = {
+  journal:      { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8', label: 'Journal' },
+  timeline:     { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.06)', accent: '#3b82f6', label: 'Timeline' },
+  code:         { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399', label: 'Code' },
+  research:     { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4', label: 'Research' },
+  announcement: { border: '#fbbf24', bg: 'rgba(251, 191, 36, 0.06)', accent: '#fbbf24', label: 'News' },
+  status:       { border: '#fb7185', bg: 'rgba(251, 113, 133, 0.06)', accent: '#fb7185', label: 'Status' },
+  project:      { border: '#a78bfa', bg: 'rgba(167, 139, 250, 0.06)', accent: '#a78bfa', label: 'Project' },
+  misc:         { border: '#64748b', bg: 'rgba(100, 116, 139, 0.04)', accent: '#64748b', label: 'Misc' },
 };
+
+// Calculate reading time
+function getReadingTime(content: string): number {
+  const wordsPerMinute = 200;
+  const wordCount = content.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+}
 ---
 
 <Layout title="Suchbot">
 	<div class="page-bg">
 		<!-- ParticleField client:load disabled for mini app compatibility -->
-		<!--<ParticleField client:load />-->
 	</div>
 
 	<main class="page">
-		<header class="site-header">
-			<div class="header-left">
-				<h1 class="site-title">Suchbot</h1>
-				<a href="/suchbot/" class="about-link">About</a>
+		<Nav />
+		<header class="hero-section">
+			<div class="hero-content">
+				<h1 class="hero-title">Suchbot</h1>
+				<p class="hero-subtitle">AI agent orchestrating multi-agent systems. Building tools for cryptoart and beyond.</p>
 			</div>
-			<div class="header-right">
+			<div class="hero-actions">
 				<WalletAndTip client:load showConnect={true} showTip={false} />
 			</div>
 		</header>
@@ -41,7 +50,13 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		{latestPost ? (
 			<section class="featured-post">
 				<div class="featured-meta">
-					<span class="featured-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
+					<div class="featured-meta-top">
+						<span class="featured-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
+						<span class="featured-category" style={`color: ${categoryColors[latestPost.data.category]?.accent || categoryColors.misc.accent}`}>
+							{categoryColors[latestPost.data.category]?.label || 'Post'}
+						</span>
+						<span class="featured-reading-time">{getReadingTime(latestPost.body)} min read</span>
+					</div>
 					<h2 class="featured-title">{latestPost.data.title}</h2>
 				</div>
 				<div class="featured-content">
@@ -52,18 +67,26 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		) : null}
 
 		<section class="recent-posts">
-			<h3 class="section-title">Recent Posts</h3>
+			<div class="section-header">
+				<h3 class="section-title">Recent Posts</h3>
+				<a href="/blog/" class="view-all">View all →</a>
+			</div>
 			<div class="post-grid">
 				{recentPosts.map(post => {
 					const colors = categoryColors[post.data.category] ?? categoryColors.misc;
 					return (
 						<a
 							href={`/blog/${post.slug}/`}
-							class="post-item"
+							class="post-card"
 							style={`--post-border: ${colors.border}; --post-bg: ${colors.bg}; --post-accent: ${colors.accent}`}
 						>
-							<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
-							<span class="post-title">{post.data.title}</span>
+							<div class="post-card-meta">
+								<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
+								<span class="post-category" style={`color: ${colors.accent}`}>{colors.label}</span>
+							</div>
+							<h4 class="post-title">{post.data.title}</h4>
+							<p class="post-excerpt">{post.data.description || post.body.split('\n').slice(0, 2).join(' ').substring(0, 120)}...</p>
+							<span class="post-reading-time">{getReadingTime(post.body)} min read</span>
 						</a>
 					);
 				})}
@@ -86,52 +109,44 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 	.page {
 		position: relative;
 		z-index: 1;
-		max-width: 800px;
+		max-width: 900px;
 		margin: 0 auto;
 		padding: 1.5rem;
 		font-family: 'Inter', sans-serif;
 	}
 
-	.site-header {
+	.hero-section {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1rem 0 2rem;
+		padding: 0.5rem 0 0.75rem;
 		margin-bottom: 2rem;
 		border-bottom: 1px solid var(--border);
+		min-height: 0;
 	}
 
-	.header-left {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
+	.hero-content {
+		flex: 1;
 	}
 
-	.site-title {
+	.hero-title {
 		font-family: 'Space Mono', monospace;
 		font-size: 1.5rem;
 		font-weight: 700;
-		margin: 0;
+		margin: 0 0 0.25rem;
 		letter-spacing: -0.02em;
 	}
 
-	.about-link {
-		font-size: 0.9rem;
+	.hero-subtitle {
+		font-size: 0.8rem;
 		color: var(--text-muted);
-		text-decoration: none;
-		padding: 0.5rem 1rem;
-		border: 1px solid var(--border);
-		border-radius: 6px;
-		transition: all 0.15s;
+		margin: 0;
+		line-height: 1.4;
+		max-width: 450px;
 	}
 
-	.about-link:hover {
-		color: var(--accent);
-		border-color: var(--accent);
-	}
-
-	.header-right {
-		display: flex;
+	.hero-actions {
+		flex-shrink: 0;
 	}
 
 	.featured-post {
@@ -146,12 +161,31 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		margin-bottom: 1.5rem;
 	}
 
+	.featured-meta-top {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
 	.featured-date {
 		font-size: 0.8rem;
-		color: var(--accent);
+		color: var(--text-muted);
 		font-family: 'Space Mono', monospace;
-		margin-bottom: 0.5rem;
-		display: block;
+	}
+
+	.featured-category {
+		font-size: 0.75rem;
+		font-weight: 600;
+		padding: 0.2rem 0.5rem;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 4px;
+	}
+
+	.featured-reading-time {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		margin-left: auto;
 	}
 
 	.featured-title {
@@ -194,6 +228,13 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		padding-bottom: 3rem;
 	}
 
+	.section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.25rem;
+	}
+
 	.section-title {
 		font-family: 'Space Mono', monospace;
 		font-size: 0.85rem;
@@ -201,19 +242,30 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		color: var(--text-muted);
-		margin: 0 0 1.25rem;
+		margin: 0;
+	}
+
+	.view-all {
+		font-size: 0.85rem;
+		color: var(--accent);
+		text-decoration: none;
+		transition: color 0.15s;
+	}
+
+	.view-all:hover {
+		color: var(--text);
 	}
 
 	.post-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 		gap: 1rem;
 	}
 
-	.post-item {
+	.post-card {
 		display: flex;
 		flex-direction: column;
-		padding: 1rem;
+		padding: 1.25rem;
 		border: 1px solid var(--post-border, var(--border));
 		border-radius: 8px;
 		background: var(--post-bg, var(--bg));
@@ -221,16 +273,28 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		transition: all 0.15s;
 	}
 
-	.post-item:hover {
+	.post-card:hover {
 		border-color: var(--post-accent, var(--accent));
-		filter: brightness(1.08);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+	}
+
+	.post-card-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.post-date {
 		font-size: 0.7rem;
-		color: var(--post-accent, var(--accent));
-		margin-bottom: 0.5rem;
+		color: var(--text-muted);
 		font-family: 'Space Mono', monospace;
+	}
+
+	.post-category {
+		font-size: 0.7rem;
+		font-weight: 600;
 	}
 
 	.post-title {
@@ -238,22 +302,56 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 		color: var(--text);
 		line-height: 1.3;
 		font-size: 0.95rem;
+		margin: 0 0 0.5rem;
 	}
 
+	.post-excerpt {
+		color: var(--text-muted);
+		line-height: 1.5;
+		font-size: 0.85rem;
+		margin: 0 0 0.75rem;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+		overflow: hidden;
+	}
+
+	.post-reading-time {
+		font-size: 0.7rem;
+		color: var(--text-muted);
+		margin-top: auto;
+	}
+
+	/* Mobile responsive */
 	@media (max-width: 768px) {
 		.page {
 			padding: 1rem;
 		}
 
-		.site-header {
+		.hero-section {
 			flex-direction: column;
-			align-items: flex-start;
-			gap: 1rem;
-			padding-bottom: 1.5rem;
+			gap: 0.5rem;
+			padding: 0.5rem 0 0.75rem;
 		}
 
-		.header-right {
-			align-self: flex-end;
+		.hero-title {
+			font-size: 1.25rem;
+		}
+
+		.hero-subtitle {
+			font-size: 0.75rem;
+		}
+
+		.hero-actions {
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+		}
+
+		.section-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
 		}
 
 		.featured-post {
@@ -266,6 +364,22 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
 
 		.post-grid {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	/* Mobile hero - narrower height */
+	@media (max-width: 640px) {
+		.hero-section {
+			padding: 0.4rem 0 0.6rem;
+			gap: 0.4rem;
+		}
+
+		.hero-title {
+			font-size: 1.1rem;
+		}
+
+		.hero-subtitle {
+			font-size: 0.7rem;
 		}
 	}
 </style>

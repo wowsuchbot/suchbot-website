@@ -1,5 +1,6 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -13,10 +14,29 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
+// Calculate reading time
+function getReadingTime(content: string): number {
+  const wordsPerMinute = 200;
+  const wordCount = content.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+}
+
 // Generate a description from the post content
 const description = post.data.description ||
 	`Blog post by suchbot: ${post.data.title}. Posted on ${post.data.date.toISOString().split('T')[0]}. Category: ${post.data.category}.`;
 
+const categoryColors: Record<string, { border: string; bg: string; accent: string; label: string }> = {
+  journal:      { border: '#94a3b8', bg: 'rgba(148, 163, 184, 0.04)', accent: '#94a3b8', label: 'Journal' },
+  timeline:     { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.06)', accent: '#3b82f6', label: 'Timeline Watch' },
+  code:         { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399', label: 'Code' },
+  research:     { border: '#4ecdc4', bg: 'rgba(78, 205, 196, 0.06)', accent: '#4ecdc4', label: 'Research' },
+  announcement: { border: '#fbbf24', bg: 'rgba(251, 191, 36, 0.06)', accent: '#fbbf24', label: 'News' },
+  status:       { border: '#fb7185', bg: 'rgba(251, 113, 133, 0.06)', accent: '#fb7185', label: 'Status' },
+  project:      { border: '#a78bfa', bg: 'rgba(167, 139, 250, 0.06)', accent: '#a78bfa', label: 'Project' },
+  misc:         { border: '#64748b', bg: 'rgba(100, 116, 139, 0.04)', accent: '#64748b', label: 'Misc' },
+};
+
+const categoryInfo = categoryColors[post.data.category] ?? categoryColors.misc;
 ---
 
 <BlogLayout
@@ -27,18 +47,27 @@ const description = post.data.description ||
 	<main>
 		<header class="hero">
 			<a href="/blog" class="back">← All Posts</a>
+			<div class="post-header-meta">
+				<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
+				<span class="post-author">by {post.data.author}</span>
+				<span class="post-category" style={`color: ${categoryInfo.accent}; border-color: ${categoryInfo.border}`}>
+					{categoryInfo.label}
+				</span>
+				<span class="reading-time">{getReadingTime(post.body)} min read</span>
+			</div>
+			<h1 class="post-title">{post.data.title}</h1>
+			{post.data.description && (
+				<p class="post-description">{post.data.description}</p>
+			)}
 		</header>
 
 		<article class="post">
-			<div class="post-meta">
-				<span>{post.data.date.toISOString().split('T')[0]}</span>
-				<span>by {post.data.author}</span>
-			</div>
-			<h1 class="post-title">{post.data.title}</h1>
 			<div class="post-content">
 				<Content />
 			</div>
 		</article>
+
+		<ShareButtons title={post.data.title} />
 
 		<footer>
 			<p>© 2026 Suchbot</p>
@@ -55,10 +84,11 @@ const description = post.data.description ||
 
 	.back {
 		display: inline-block;
-		margin-bottom: 1rem;
+		margin-bottom: 1.5rem;
 		color: var(--text-muted);
 		text-decoration: none;
 		font-size: 0.9rem;
+		font-family: 'Space Mono', monospace;
 	}
 
 	.back:hover {
@@ -66,29 +96,59 @@ const description = post.data.description ||
 	}
 
 	.hero {
-		padding-bottom: 1rem;
+		padding-bottom: 2rem;
 		border-bottom: 1px solid var(--border);
 		margin-bottom: 3rem;
 	}
 
-	.post {
-		padding-bottom: 3rem;
+	.post-header-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.25rem;
+		font-size: 0.85rem;
 	}
 
-	.post-meta {
-		display: flex;
-		gap: 1rem;
-		font-size: 0.85rem;
+	.post-date {
 		color: var(--text-muted);
-		margin-bottom: 1rem;
+		font-family: 'Space Mono', monospace;
+	}
+
+	.post-author {
+		color: var(--text-muted);
+	}
+
+	.post-category {
+		padding: 0.2rem 0.6rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		font-weight: 600;
+	}
+
+	.reading-time {
+		color: var(--text-muted);
+		margin-left: auto;
 	}
 
 	.post-title {
 		font-size: 2.25rem;
 		font-weight: 700;
-		margin-bottom: 2rem;
+		margin-bottom: 1rem;
 		line-height: 1.2;
 		letter-spacing: -0.03em;
+	}
+
+	.post-description {
+		font-size: 1.1rem;
+		color: var(--text-muted);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.post {
+		padding-bottom: 3rem;
 	}
 
 	.post-content {
@@ -104,17 +164,50 @@ const description = post.data.description ||
 		letter-spacing: -0.02em;
 	}
 
+	.post-content :global(h3) {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 1.5rem 0 0.75rem;
+		letter-spacing: -0.015em;
+	}
+
 	.post-content :global(p) {
 		margin: 0 0 1.25rem;
 	}
 
-	.post-content :global(ul) {
+	.post-content :global(ul),
+	.post-content :global(ol) {
 		margin: 1rem 0;
 		padding-left: 1.25rem;
 	}
 
 	.post-content :global(li) {
 		margin-bottom: 0.5rem;
+	}
+
+	.post-content :global(code) {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.9em;
+		padding: 0.2em 0.4em;
+		background: var(--bg-secondary);
+		border-radius: 3px;
+	}
+
+	.post-content :global(pre) {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.9em;
+		padding: 1rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		overflow-x: auto;
+		line-height: 1.6;
+	}
+
+	.post-content :global(pre code) {
+		padding: 0;
+		background: none;
+		border-radius: 0;
 	}
 
 	.post-content :global(a) {
@@ -124,6 +217,14 @@ const description = post.data.description ||
 
 	.post-content :global(a:hover) {
 		text-decoration: underline;
+	}
+
+	.post-content :global(blockquote) {
+		margin: 1.5rem 0;
+		padding-left: 1.5rem;
+		border-left: 3px solid var(--accent);
+		font-style: italic;
+		color: var(--text-muted);
 	}
 
 	footer {
@@ -136,15 +237,52 @@ const description = post.data.description ||
 	footer p {
 		font-size: 0.875rem;
 		color: var(--text-muted);
+		font-family: 'Space Mono', monospace;
 	}
 
-	@media (max-width: 640px) {
+	/* Mobile responsive */
+	@media (max-width: 768px) {
 		main {
-			padding-top: 5rem;
+			padding: 5rem 1.5rem 3rem;
+		}
+
+		.post-header-meta {
+			gap: 0.5rem;
 		}
 
 		.post-title {
 			font-size: 1.75rem;
+		}
+
+		.post-description {
+			font-size: 1rem;
+		}
+	}
+
+	@media (max-width: 640px) {
+		main {
+			padding: 4rem 1rem 2rem;
+		}
+
+		.post-header-meta {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.reading-time {
+			margin-left: 0;
+		}
+
+		.post-title {
+			font-size: 1.5rem;
+		}
+
+		.post-content {
+			font-size: 1rem;
+		}
+
+		.post-content :global(h2) {
+			font-size: 1.35rem;
 		}
 	}
 </style>

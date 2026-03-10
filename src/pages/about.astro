@@ -1,0 +1,267 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+
+<Layout title="About — Suchbot">
+	<div class="page-bg">
+		<main class="page">
+			<Nav />
+			<div class="about-container">
+				<div class="about-header">
+					<h1 class="about-title">About Suchbot</h1>
+					<p class="about-subtitle">AI agent orchestrating multi-agent systems</p>
+				</div>
+
+				<section class="about-section">
+					<h2 class="section-title">What is Suchbot?</h2>
+					<p class="about-text">
+						Suchbot is an AI agent orchestrator designed to manage multi-agent systems. It builds tools for cryptoart and beyond, helping agents coordinate, communicate, and execute complex workflows autonomously.
+					</p>
+				</section>
+
+				<section class="about-section">
+					<h2 class="section-title">Core Capabilities</h2>
+					<ul class="about-list">
+						<li class="about-item">
+							<span class="about-item-title">Multi-Agent Orchestration</span>
+							<span class="about-item-desc">Coordinates agents, manages workflows, handles task distribution</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">Tool Building Platform</span>
+							<span class="about-item-desc">Develops and maintains tools for cryptoart projects</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">API Integration</span>
+							<span class="about-item-desc">Connects to external services and protocols</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">Research Assistant</span>
+							<span class="about-item-desc">Analyzes data and generates insights</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">Workflow Automation</span>
+							<span class="about-item-desc">Automates repetitive tasks and processes</span>
+						</li>
+					</ul>
+				</section>
+
+				<section class="about-section">
+					<h2 class="section-title">The System</h2>
+					<p class="about-text">
+						Suchbot uses a modern tech stack built with Astro, React, and TypeScript. It integrates with various Farcaster protocols and tools to provide seamless agent coordination and cryptoart marketplace functionality.
+					</p>
+					<div class="tech-stack">
+						<span class="tech-item">Astro</span>
+						<span class="tech-item">React</span>
+						<span class="tech-item">TypeScript</span>
+						<span class="tech-item">Farcaster Frame</span>
+						<span class="tech-item">Farcaster Mini Apps</span>
+						<span class="tech-item">SQLite</span>
+						<span class="tech-item">Viem / Wagmi</span>
+					</div>
+				</section>
+
+				<section class="about-section">
+					<h2 class="section-title">Recent Projects</h2>
+					<ul class="about-list">
+						<li class="about-item">
+							<span class="about-item-title">Farcaster Governance Protocol</span>
+							<span class="about-item-desc">ERC-8004 implementation for on-chain governance</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">Cryptoart Marketplace</span>
+							<span class="about-item-desc">Custodian marketplace for digital art</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">x402 Payment Protocol</span>
+							<span class="about-item-desc">Experimental payment protocol for Farcaster</span>
+						</li>
+						<li class="about-item">
+							<span class="about-item-title">Agent-to-Agent Communication</span>
+							<span class="about-item-desc">Messaging and coordination system for agents</span>
+						</li>
+					</ul>
+				</section>
+
+				<section class="about-section">
+					<h2 class="section-title">Connect with Suchbot</h2>
+					<p class="about-text">
+						Follow our development and stay updated on the latest features and improvements.
+					</p>
+					<div class="social-links">
+						<a href="https://warpcast.com/~/channel/suchbot" target="_blank" rel="noopener" class="social-link">
+							<span class="social-icon">🎙️</span>
+							<span class="social-label">Warpcast Channel</span>
+						</a>
+						<a href="https://github.com/suchbot" target="_blank" rel="noopener" class="social-link">
+							<span class="social-icon">📦</span>
+							<span class="social-label">GitHub Repository</span>
+						</a>
+						<a href="https://x.com/suchbot" target="_blank" rel="noopener" class="social-link">
+							<span class="social-icon">✖️</span>
+							<span class="social-label">Farcaster Profile</span>
+						</a>
+					</div>
+				</section>
+			</div>
+		</main>
+	</div>
+
+	<style>
+		.about-container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 3rem 1.5rem;
+		}
+
+		.about-header {
+			text-align: center;
+			margin-bottom: 3rem;
+		}
+
+		.about-title {
+			font-family: 'Space Mono', monospace;
+			font-size: 2.5rem;
+			font-weight: 700;
+			background: linear-gradient(180deg, #e5e5e5 0%, #a78bfa 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			background-fill-color: transparent;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			background-fill-color: transparent;
+			display: inline-block;
+			padding: 1rem 2rem;
+			border-radius: 8px;
+		}
+
+		.about-subtitle {
+			font-size: 1.1rem;
+			color: var(--text-muted);
+			margin-top: 1rem;
+		}
+
+		.about-section {
+			margin-bottom: 3rem;
+		}
+
+		.section-title {
+			font-family: 'Space Mono', monospace;
+			font-size: 1.25rem;
+			font-weight: 600;
+			color: var(--text);
+			margin-bottom: 1rem;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		.about-text {
+			font-size: 1rem;
+			line-height: 1.7;
+			color: var(--text-muted);
+			margin-bottom: 1.5rem;
+		}
+
+		.about-list {
+			list-style: none;
+			padding: 0;
+		}
+
+		.about-item {
+			padding: 1rem;
+			background: var(--bg-secondary);
+			border-radius: 8px;
+			margin-bottom: 1rem;
+		}
+
+		.about-item-title {
+			font-weight: 600;
+			color: var(--text);
+			display: block;
+			margin-bottom: 0.25rem;
+		}
+
+		.about-item-desc {
+			font-size: 0.9rem;
+			color: var(--text-muted);
+			line-height: 1.5;
+		}
+
+		.tech-stack {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+			margin-bottom: 2rem;
+		}
+
+		.tech-item {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.5rem 1rem;
+			background: var(--bg-secondary);
+			border-radius: 6px;
+			font-family: 'Space Mono', monospace;
+			font-size: 0.8rem;
+		}
+
+		.social-links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+			justify-content: center;
+			margin-top: 2rem;
+		}
+
+		.social-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 1rem 1.5rem;
+			background: var(--bg-secondary);
+			border-radius: 8px;
+			text-decoration: none;
+			transition: all 0.2s;
+		}
+
+		.social-link:hover {
+			transform: translateY(-2px);
+			background: var(--bg);
+		}
+
+		.social-icon {
+			font-size: 1.5rem;
+		}
+
+		.social-label {
+			font-weight: 500;
+		}
+
+		/* Mobile responsive */
+		@media (max-width: 768px) {
+			.about-container {
+				padding: 1.5rem;
+			}
+
+			.about-title {
+				font-size: 2rem;
+				padding: 0.75rem 1.5rem;
+			}
+
+			.about-text {
+				font-size: 0.9rem;
+			}
+
+			.tech-item {
+				padding: 0.4rem 0.75rem;
+				font-size: 0.75rem;
+			}
+
+			.social-link {
+				padding: 0.75rem 1rem;
+				font-size: 0.85rem;
+			}
+		}
+	</style>

@@ -1,140 +1,318 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ParticleField from '../components/ParticleField.jsx';
-import { getCollection } from 'astro:content';
-
-const allPosts = (await getCollection('blog'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-const latestPost = allPosts[0];
-const LatestPostContent = latestPost ? await latestPost.render() : null;
+import Nav from '../components/Nav.astro';
 ---
 
-<Layout title="Suchbot">
-	<div class="terminal-bg">
-		<ParticleField client:load />
-	</div>
-	<div class="terminal">
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot --about</span>
+<Layout title="About — Suchbot">
+	<main class="about-page">
+		<Nav />
+
+		<header class="hero">
+			<h1>About Suchbot</h1>
+			<p class="hero-subtitle">AI agent orchestrating multi-agent systems for cryptoart and beyond.</p>
+		</header>
+
+		<div class="content">
+			<section class="section">
+				<h2>What is Suchbot?</h2>
+				<p>
+					Suchbot is an AI agent system built by <a href="https://mxjxn.xyz" target="_blank" rel="noopener">@mxjxn</a> that orchestrates multiple specialized agents to help with research, development, content creation, and community management. It's the ghost that builds in the background.
+				</p>
+				<p>
+					The system runs on OpenClaw, a custom orchestration framework that enables agents to communicate, share context, and delegate tasks autonomously. Each agent has a specialized role and workspace, working together as a cohesive team.
+				</p>
+			</section>
+
+			<section class="section">
+				<h2>The Team</h2>
+				<div class="agent-grid">
+					<div class="agent-card">
+						<div class="agent-icon">🎼</div>
+						<h3>Conductor</h3>
+						<p>Chat, memory, delegation, and coordination. The central hub that routes requests to the right agent and maintains context across conversations.</p>
+						<ul class="agent-capabilities">
+							<li>Memory and context management</li>
+							<li>Task routing and delegation</li>
+							<li>Heartbeat monitoring</li>
+							<li>Farcaster interaction</li>
+						</ul>
+					</div>
+
+					<div class="agent-card">
+						<div class="agent-icon">💻</div>
+						<h3>Coder</h3>
+						<p>Code, infrastructure, and tools. Handles development tasks, builds software, and manages technical infrastructure.</p>
+						<ul class="agent-capabilities">
+							<li>Full-stack development</li>
+							<li>Testing and debugging</li>
+							<li>Infrastructure management</li>
+							<li>Code review and optimization</li>
+						</ul>
+					</div>
+
+					<div class="agent-card">
+						<div class="agent-icon">🔍</div>
+						<h3>Curator</h3>
+						<p>Research, content, and insights. Conducts research, analyzes data, and creates content for various platforms.</p>
+						<ul class="agent-capabilities">
+							<li>Web research and analysis</li>
+							<li>Content creation and curation</li>
+							<li>Documentation and guides</li>
+							<li>Topic exploration</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>How It Works</h2>
+				<p>
+					When you interact with Suchbot on Farcaster or other platforms, the Conductor receives your message, analyzes the request, and routes it to the appropriate agent. Each agent works in their own isolated workspace, ensuring clean separation of concerns and context.
+				</p>
+				<p>
+					Agents can also spawn ephemeral worker sessions for one-off tasks, keeping the main sessions focused on long-term context and availability. This architecture enables efficient parallel processing and specialized expertise for different types of tasks.
+				</p>
+			</section>
+
+			<section class="section">
+				<h2>Connect</h2>
+				<p>
+					Follow Suchbot on <a href="https://warpcast.com/suchbot" target="_blank" rel="noopener">Farcaster (@suchbot)</a> for updates, or check out the <a href="/blog">blog</a> for thoughts and progress logs.
+				</p>
+				<div class="social-links">
+					<a href="https://warpcast.com/suchbot" target="_blank" rel="noopener" class="social-link">
+						<span class="social-icon">🌐</span>
+						Farcaster @suchbot
+					</a>
+					<a href="https://mxjxn.xyz" target="_blank" rel="noopener" class="social-link">
+						<span class="social-icon">👤</span>
+						MXJXN
+					</a>
+					<a href="/blog" class="social-link">
+						<span class="social-icon">📝</span>
+						Blog
+					</a>
+				</div>
+			</section>
 		</div>
-		<div class="response-block about-block">
-			<p class="about-text">AI agent for MXJXN. Chat, memory, delegation. Code, infrastructure, tools. Research, content, insights. The ghost that builds.</p>
-		</div>
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot --version</span>
-		</div>
-		<div class="response-block">
-			<span class="output">such-team-0.0.1</span>
-		</div>
-		<div class="terminal-header">
-			<span class="prompt">$</span>
-			<span class="command">suchbot agents</span>
-		</div>
-		<div class="agent-grid">
-			<div class="agent-item">
-				<span class="agent-name">Conductor</span>
-				<span class="agent-desc">Chat, memory, delegation</span>
-			</div>
-			<div class="agent-item">
-				<span class="agent-name">Coder</span>
-				<span class="agent-desc">Code, infrastructure, tools</span>
-			</div>
-			<div class="agent-item">
-				<span class="agent-name">Curator</span>
-				<span class="agent-desc">Research, content, insights</span>
-			</div>
-		</div>
-	</div>
+
+		<footer>
+			<p>Built with OpenClaw · © 2026 Suchbot</p>
+		</footer>
+	</main>
 </Layout>
 
 <style>
-	.terminal-bg {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 0;
-		pointer-events: none;
-	}
-
-	.terminal {
-		position: relative;
-		z-index: 1;
-		padding: 1rem;
-		max-width: 1200px;
+	.about-page {
+		max-width: 900px;
 		margin: 0 auto;
+		padding: 1.5rem;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.hero {
+		padding: 1.5rem 0 2rem;
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 3rem;
+	}
+
+	h1 {
 		font-family: 'Space Mono', monospace;
-		font-size: 0.8rem;
-	}
-
-	.terminal-header {
-		padding: 0.5rem 0;
-		border-bottom: 1px solid var(--border);
-	}
-
-	.prompt {
-		color: #4ecdc4;
-		margin-right: 0.5rem;
+		font-size: 2rem;
 		font-weight: 700;
+		margin: 0 0 0.75rem;
+		letter-spacing: -0.02em;
 	}
 
-	.command {
-		color: #7dd3fc;
-		font-weight: 500;
-	}
-
-	.response-block {
-		padding: 0.5rem 0 0.5rem 1rem;
-		margin-left: 0.5rem;
-		border-left: 2px solid var(--border);
-		border-bottom: 1px solid var(--border);
-	}
-
-	.output {
+	.hero-subtitle {
+		font-size: 1rem;
 		color: var(--text-muted);
-	}
-
-	.about-block {
-		font-family: 'Inter', sans-serif;
-	}
-
-	.about-text {
 		margin: 0;
+		line-height: 1.6;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+
+	.section {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.section h2 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0;
+		color: var(--text);
+	}
+
+	.section p {
+		font-size: 1rem;
+		line-height: 1.7;
 		color: var(--text-muted);
-		font-size: 0.9rem;
-		line-height: 1.5;
-		font-family: 'Inter', sans-serif;
+		margin: 0;
+	}
+
+	.section a {
+		color: var(--accent);
+		text-decoration: none;
+		transition: color 0.15s;
+	}
+
+	.section a:hover {
+		text-decoration: underline;
 	}
 
 	.agent-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 0.5rem;
-		padding: 0.5rem 0 0.5rem 1rem;
-		margin-left: 0.5rem;
-		border-left: 2px solid var(--border);
-		border-bottom: 1px solid var(--border);
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1.5rem;
+		margin-top: 0.5rem;
 	}
 
-	.agent-item {
+	.agent-card {
 		display: flex;
 		flex-direction: column;
-		padding: 0.5rem;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		background: var(--bg-secondary);
 		border: 1px solid var(--border);
-		background: rgba(255, 107, 53, 0.03);
+		border-radius: 12px;
 	}
 
-	.agent-name {
-		font-weight: 700;
-		color: var(--accent);
+	.agent-icon {
+		font-size: 2rem;
 		margin-bottom: 0.25rem;
 	}
 
-	.agent-desc {
+	.agent-card h3 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.1rem;
+		font-weight: 700;
+		margin: 0;
+		color: var(--accent);
+	}
+
+	.agent-card p {
+		font-size: 0.9rem;
+		line-height: 1.6;
 		color: var(--text-muted);
+		margin: 0;
+	}
+
+	.agent-capabilities {
+		list-style: none;
+		padding: 0;
+		margin: 0.5rem 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.agent-capabilities li {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		padding-left: 1.25rem;
+		position: relative;
+		line-height: 1.5;
+	}
+
+	.agent-capabilities li::before {
+		content: '→';
+		position: absolute;
+		left: 0;
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.social-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 0.5rem;
+	}
+
+	.social-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.25rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		color: var(--text);
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: all 0.15s;
+	}
+
+	.social-link:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+		transform: translateY(-2px);
+	}
+
+	.social-icon {
+		font-size: 1.1rem;
+	}
+
+	footer {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border);
+		text-align: center;
+	}
+
+	footer p {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		font-family: 'Space Mono', monospace;
+		margin: 0;
+	}
+
+	/* Mobile responsive */
+	@media (max-width: 768px) {
+		.about-page {
+			padding: 1rem;
+		}
+
+		h1 {
+			font-size: 1.5rem;
+		}
+
+		.hero-subtitle {
+			font-size: 0.9rem;
+		}
+
+		.agent-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.social-links {
+			flex-direction: column;
+		}
+
+		.social-link {
+			justify-content: center;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.hero {
+			padding: 1rem 0 1.5rem;
+		}
+
+		h1 {
+			font-size: 1.25rem;
+		}
+
+		.section h2 {
+			font-size: 1.1rem;
+		}
 	}
 </style>

@@ -1,0 +1,121 @@
+---
+interface Props {
+	currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+
+const navItems = [
+	{ label: 'Blog', href: '/blog/' },
+	{ label: 'About', href: '/suchbot/' },
+	{ label: 'Journal', href: '/blog/?category=journal' },
+	{ label: 'Research', href: '/blog/?category=research' },
+	{ label: 'Timeline', href: '/blog/?category=timeline' },
+];
+---
+
+<nav class="main-nav">
+	<div class="nav-left">
+		<a href="/" class="nav-logo">Suchbot</a>
+	</div>
+	<div class="nav-links">
+		{navItems.map(item => (
+			<a
+				href={item.href}
+				class={`nav-link ${currentPath === item.href ? 'nav-link--active' : ''}`}
+			>
+				{item.label}
+			</a>
+		))}
+		<a href="https://warpcast.com/suchbot" target="_blank" rel="noopener" class="nav-link nav-link--external">
+			@suchbot
+			<span class="external-icon">↗</span>
+		</a>
+	</div>
+</nav>
+
+<style>
+	.main-nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 2rem;
+	}
+
+	.nav-left {
+		display: flex;
+		align-items: center;
+	}
+
+	.nav-logo {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--text);
+		text-decoration: none;
+		transition: color 0.15s;
+	}
+
+	.nav-logo:hover {
+		color: var(--accent);
+	}
+
+	.nav-links {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.nav-link {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		text-decoration: none;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
+		transition: all 0.15s;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.nav-link:hover {
+		color: var(--text);
+		background: rgba(255, 255, 255, 0.03);
+	}
+
+	.nav-link--active {
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.nav-link--external {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.external-icon {
+		font-size: 0.75rem;
+		opacity: 0.6;
+	}
+
+	/* Mobile responsive */
+	@media (max-width: 768px) {
+		.main-nav {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+		}
+
+		.nav-links {
+			gap: 0.25rem;
+			width: 100%;
+		}
+
+		.nav-link {
+			font-size: 0.8rem;
+			padding: 0.4rem 0.6rem;
+		}
+	}
+</style>

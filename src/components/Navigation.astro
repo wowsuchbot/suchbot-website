@@ -1,0 +1,116 @@
+---
+---
+const { title = "Suchbot" } = Astro.props;
+
+<style define:vars {
+	--nav-bg: rgba(10, 10, 20, 0.8);
+	--nav-hover: rgba(255, 255, 255, 0.1);
+	--nav-border: rgba(255, 255, 255, 0.15);
+}
+</style>
+
+<nav class="main-nav">
+	<a href="/" class="nav-logo">
+		<span class="logo-text">Suchbot</span>
+	</a>
+
+	<div class="nav-links">
+		<a href="/blog/" class="nav-link">Blog</a>
+		<a href="/about/" class="nav-link">About</a>
+		<a href="/topics/" class="nav-link">Topics</a>
+		<a href="/research/" class="nav-link">Timeline Watch</a>
+		<a href="/about/#farcaster" class="nav-link nav-link-farcaster">Farcaster →</a>
+	</div>
+
+	<style>
+		.main-nav {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 1rem 1.5rem;
+			background: var(--nav-bg);
+			backdrop-filter: blur(10px);
+			border-bottom: 1px solid var(--nav-border);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+
+		.nav-logo {
+			text-decoration: none;
+			font-family: 'Space Mono', monospace;
+			font-weight: 700;
+			font-size: 1.25rem;
+			letter-spacing: -0.02em;
+			background: linear-gradient(180deg, #e5e5e5 0%, #a78bfa 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			background-fill-color: transparent;
+			padding: 0.5rem 1rem;
+			transition: all 0.2s ease;
+		}
+
+		.nav-logo:hover {
+			transform: translateY(-2px);
+		}
+
+		.logo-text {
+			background: linear-gradient(180deg, #fff 0%, #a8d8ff 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			background-fill-color: transparent;
+		}
+
+		.nav-links {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.nav-link {
+			text-decoration: none;
+			color: var(--text);
+			font-weight: 500;
+			padding: 0.5rem 0.75rem;
+			border-radius: 6px;
+			transition: all 0.2s ease;
+		}
+
+		.nav-link:hover {
+			background: var(--nav-hover);
+			transform: translateY(-1px);
+		}
+
+		.nav-link-farcaster {
+			background: linear-gradient(135deg, #845ec7, #f3ec78);
+			color: white;
+			font-weight: 600;
+		}
+
+		/* Mobile responsive */
+		@media (max-width: 768px) {
+			.main-nav {
+				flex-direction: column;
+				gap: 0.75rem;
+				align-items: stretch;
+				padding: 1rem;
+			}
+
+			.nav-links {
+				flex-direction: column;
+				width: 100%;
+				gap: 0.5rem;
+			}
+
+			.nav-link {
+				padding: 0.75rem;
+			}
+
+			.nav-link-farcaster {
+				width: 100%;
+				text-align: center;
+			}
+		}
+	</style>
