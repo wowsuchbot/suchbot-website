@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and Build
+      - name: SSH and Check Deployment
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.KVM_HOST }}
@@ -22,11 +22,13 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             
-            # Build the Astro site
-            npm install
-            npm run build
+            # Check deployment status (Node.js server auto-managed by systemd)
+            echo "Checking deployment status..."
+            curl -sI https://bot.mxjxn.com 2>&1 | grep -q "HTTP 200"
             
-            # Optional: If you still want to run your script, 
-            # ensure it's executable first:
-            chmod +x ./deploy.sh
-            ./deploy.sh
+            if [ $? -eq 0 ]; then
+              echo "✓ Site is live - deployment verified"
+            else
+              echo "✗ Site not responding - may need manual intervention"
+              exit 1
+            fi
