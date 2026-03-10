@@ -18,9 +18,17 @@ jobs:
             set -e
             cd /root/.openclaw/workspace/suchbot-website
             
-            # Clean up the workspace
-            git fetch origin main
-            git reset --hard origin/main
+            # Pull latest changes from origin
+            git pull origin main
+            
+            # Build: Skip npm install if package.json hasn't changed
+            # Check if node_modules exists and is newer than package-lock.json
+            if [ ! -d "node_modules" ] || [ "node_modules" -ot "package-lock.json" ]; then
+              echo "Skipping npm install (dependencies up to date)"
+            else
+              npm install
+            
+            npm run build
             
             # Check deployment status (Node.js server auto-managed by systemd)
             echo "Checking deployment status..."
