@@ -60,18 +60,9 @@ const { title = "Suchbot" } = Astro.props;
 
 	body {
 		font-family: 'Inter', sans-serif;
-		background: linear-gradient(
-			180deg,
-			#909090 0%,
-			#c8c8c8 25%,
-			#e0e0e0 50%,
-			#c8c8c8 75%,
-			#707070 100%
-		);
+		background: var(--bg);
 		color: var(--text);
 		line-height: 1.6;
-		animation: gradientShift 8s linear infinite;
-		background-size: 400% 400%;
 	}
 
 	@keyframes gradientShift {
