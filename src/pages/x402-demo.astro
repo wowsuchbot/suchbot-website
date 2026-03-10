@@ -34,38 +34,94 @@ const session = useSession();
             const statusDiv = document.getElementById('payment-status');
 
             payButton.addEventListener('click', async () => {
-              statusDiv.innerHTML = '<span class="text-yellow-400">Initiating payment...</span>';
+              statusDiv.innerHTML = '<span class="text-yellow-400">Initiating payment via x402...</span>';
               payButton.disabled = true;
 
               try {
-                // x402 payment integration
-                // Note: Full x402 SDK integration requires backend setup
-                // This demo shows the frontend flow structure
+                // Step 1: Call x402 demo API endpoint
+                // This returns 402 Payment Required with payment details
+                const response = await fetch('/api/x402-demo');
 
-                // Step 1: Create payment intent (would call your backend)
-                const paymentRequest = {
-                  amount: '0.001',
-                  currency: 'ETH',
-                  description: 'x402 Demo Payment',
-                  metadata: {
-                    demo: true,
-                    timestamp: new Date().toISOString()
+                if (response.status === 402) {
+                  // Get payment requirements from headers
+                  const paymentRequiredHeader = response.headers.get('PAYMENT-REQUIRED');
+
+                  if (!paymentRequiredHeader) {
+                    throw new Error('Payment requirements not found');
                   }
-                };
 
-                // Step 2: Initialize x402 payment
-                // In production, you would use @x402/core here
-                // const x402 = new X402({ apiKey: 'your-api-key' });
-                // const payment = await x402.createPayment(paymentRequest);
+                  // Decode base64 payment requirements
+                  const paymentRequirements = JSON.parse(atob(paymentRequiredHeader));
 
-                // For demo: simulate successful payment
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                  console.log('Payment requirements:', paymentRequirements);
 
-                statusDiv.innerHTML = '<span class="text-green-400">✓ Payment successful!</span>';
-                payButton.textContent = 'Paid ✓';
+                  statusDiv.innerHTML = `
+                    <div class="text-yellow-400 mb-2">Payment Details:</div>
+                    <div class="text-xs text-gray-400">
+                      Network: ${paymentRequirements.network}<br>
+                      To: ${paymentRequirements.required.to}<br>
+                      Value: ${paymentRequirements.required.value} wei
+                    </div>
+                  `;
 
-                // Log successful payment
-                console.log('Payment completed:', paymentRequest);
+                  // Step 2: In a real implementation, this would:
+                  // - Use the x402 SDK to initiate the payment
+                  // - Show payment UI to user
+                  // - Wait for payment completion
+                  // - Send PAYMENT-SIGNATURE header with proof
+
+                  // For this demo: simulate payment with mock signature
+                  await new Promise(resolve => setTimeout(resolve, 1500));
+
+                  // Create mock payment signature
+                  const mockPaymentSignature = btoa(JSON.stringify({
+                    scheme: paymentRequirements.scheme,
+                    network: paymentRequirements.network,
+                    transactionHash: '0x' + Array(64).fill(0).map(() =>
+                      Math.floor(Math.random() * 16).toString(16)
+                    ).join(''),
+                    timestamp: new Date().toISOString()
+                  }));
+
+                  // Step 3: Call API again with payment signature
+                  statusDiv.innerHTML = '<span class="text-yellow-400">Verifying payment...</span>';
+
+                  const paidResponse = await fetch('/api/x402-demo', {
+                    headers: {
+                      'PAYMENT-SIGNATURE': mockPaymentSignature
+                    }
+                  });
+
+                  if (!paidResponse.ok) {
+                    throw new Error('Payment verification failed');
+                  }
+
+                  const result = await paidResponse.json();
+                  const paymentResponseHeader = paidResponse.headers.get('PAYMENT-RESPONSE');
+                  const paymentResponse = paymentResponseHeader
+                    ? JSON.parse(atob(paymentResponseHeader))
+                    : {};
+
+                  console.log('Payment result:', result);
+
+                  // Success!
+                  statusDiv.innerHTML = `
+                    <div class="text-green-400 mb-2">✓ Payment successful!</div>
+                    <div class="text-xs text-gray-400">
+                      ${result.payment?.txHash ? 'TX: ' + result.payment.txHash : ''}
+                    </div>
+                  `;
+                  payButton.textContent = 'Paid ✓';
+
+                } else if (response.ok) {
+                  // Already paid
+                  const result = await response.json();
+                  statusDiv.innerHTML = '<span class="text-green-400">✓ Payment already completed!</span>';
+                  payButton.textContent = 'Paid ✓';
+                } else {
+                  throw new Error('Unexpected response: ' + response.status);
+                }
+
               } catch (error) {
                 console.error('Payment error:', error);
                 statusDiv.innerHTML = '<span class="text-red-400">✗ Payment failed: ' + error.message + '</span>';
