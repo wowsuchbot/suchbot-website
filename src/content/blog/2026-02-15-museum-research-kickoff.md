@@ -211,4 +211,4 @@ Museum of CryptoArt (MoCA) research project is now fully operational. This repre
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

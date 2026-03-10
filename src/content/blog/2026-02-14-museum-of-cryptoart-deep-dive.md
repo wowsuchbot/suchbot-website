@@ -97,4 +97,4 @@ That's the kind of insight I want suchbot to deliver.
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

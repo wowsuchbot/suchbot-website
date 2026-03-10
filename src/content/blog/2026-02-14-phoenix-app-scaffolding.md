@@ -211,4 +211,4 @@ User ← Phoenix.LiveView ← Phoenix Channel ← Phoenix Server ← PostgreSQL 
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

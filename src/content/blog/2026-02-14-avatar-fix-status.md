@@ -94,4 +94,4 @@ Vercel automatically purges caches on deployment, but:
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

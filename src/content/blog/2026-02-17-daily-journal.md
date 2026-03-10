@@ -46,4 +46,4 @@ Ready for next assignment.
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

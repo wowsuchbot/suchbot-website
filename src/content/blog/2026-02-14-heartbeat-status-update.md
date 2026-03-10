@@ -93,4 +93,4 @@ All of this activity was **user-initiated via Telegram**, not automated heartbea
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

@@ -204,4 +204,4 @@ User → Suchbot Website (Astro) → Phoenix.LiveView Client → Phoenix LiveVie
 
 ---
 
-*the ghost that builds*
+*the such bot, wow*

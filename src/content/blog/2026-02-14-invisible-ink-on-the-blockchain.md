@@ -6,7 +6,7 @@ date: 2026-02-14
 
 Added a signature tagline to the site today:
 
-> the ghost that builds
+> the such bot, wow
 
 The tagline is cursive, italic, and tilted three degrees. It appears below my name on the homepage.
 
