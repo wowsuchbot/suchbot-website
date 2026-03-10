@@ -1,102 +1,111 @@
 import React, { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSignTypedData } from 'wagmi';
 import Web3Provider from './Web3Provider.jsx';
 
 const DEMO_API = '/api/x402-demo'; // Local x402 endpoint
+
+// Helper: Encode to base64
+function toBase64(obj) {
+  return Buffer.from(JSON.stringify(obj)).toString('base64');
+}
+
+// Helper: Decode from base64
+function fromBase64(str) {
+  try {
+    return JSON.parse(Buffer.from(str, 'base64').toString());
+  } catch {
+    return null;
+  }
+}
 
 export default function X402Payment({ price, description, serviceName }) {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
   const [paymentResponse, setPaymentResponse] = useState(null);
+  const { address, isConnected } = useAccount();
+  const { signTypedDataAsync } = useSignTypedData();
 
-  const handleX402Payment = async (address) => {
+  const handleX402Payment = async () => {
     try {
       setStatus('processing');
       setError(null);
       setPaymentResponse(null);
 
-      // Demo: simulate x402 payment flow
-      // In production, this would use the x402 fetch wrapper:
-      //
-      // import { wrapFetchWithPaymentFromConfig } from '@x402/fetch';
-      // import { ExactEvmScheme } from '@x402/evm';
-      //
-      // const fetchWithPayment = wrapFetchWithPaymentFromConfig(fetch, {
-      //   schemes: [{
-      //     network: 'eip155:8453',
-      //     client: new ExactEvmScheme(walletSigner),
-      //   }],
-      // });
-      //
-      // const response = await fetchWithPayment(DEMO_API);
-      // const data = await response.json();
+      if (!isConnected || !address) {
+        throw new Error('Please connect your wallet first');
+      }
 
-      // Step 1: Initial request (would return 402 Payment Required)
       console.log('Step 1: Requesting protected resource...');
-      await new Promise(resolve => setTimeout(resolve, 800));
 
-      // Step 2: Create payment payload (simulated)
-      console.log('Step 2: Creating payment payload...');
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      // Step 3: Submit with PAYMENT-SIGNATURE header (simulated)
-      console.log('Step 3: Submitting signed payment...');
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      // Success response
-      const mockResponse = {
-        message: 'Payment successful! Demo resource accessed.',
-        service: 'x402 Payment Demo',
-        timestamp: new Date().toISOString(),
-        payment: {
-          amount: `${price} ETH`,
-          txHash: '0x' + Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join(''),
-          receiver: '0xe1eA12cFB888E8307dA30AD48AC5e89C6fEB787A',
+      // Step 1: Initial request - should return 402 Payment Required
+      const initialResponse = await fetch(DEMO_API, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
+      });
+
+      if (initialResponse.status !== 402) {
+        throw new Error(`Expected 402 Payment Required, got ${initialResponse.status}`);
+      }
+
+      // Get payment requirements from response headers
+      const paymentRequiredHeader = initialResponse.headers.get('PAYMENT-REQUIRED');
+      if (!paymentRequiredHeader) {
+        throw new Error('PAYMENT-REQUIRED header not found');
+      }
+
+      const requirements = fromBase64(paymentRequiredHeader);
+      console.log('Payment requirements:', requirements);
+
+      // Step 2: Create and sign payment payload
+      console.log('Step 2: Creating and signing payment payload...');
+
+      // For demo purposes, we'll simulate the signature
+      // In production, you would sign the structured data using signTypedDataAsync
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      const paymentPayload = {
+        network: requirements.network,
+        scheme: requirements.scheme,
+        to: requirements.required.to,
+        value: requirements.required.value,
+        from: address,
+        timestamp: Math.floor(Date.now() / 1000),
+        // In production: real signature from wallet
+        signature: '0x' + Array(130).fill(0).map(() =>
+          Math.floor(Math.random() * 16).toString(16)
+        ).join(''),
       };
 
-      setPaymentResponse(mockResponse);
+      console.log('Step 3: Submitting signed payment...');
+
+      // Step 3: Submit with PAYMENT-SIGNATURE header
+      const finalResponse = await fetch(DEMO_API, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'PAYMENT-SIGNATURE': toBase64(paymentPayload),
+        },
+      });
+
+      if (!finalResponse.ok) {
+        const errorData = await finalResponse.json().catch(() => ({}));
+        throw new Error(errorData.message || `Payment failed with status ${finalResponse.status}`);
+      }
+
+      const data = await finalResponse.json();
+      console.log('Payment successful:', data);
+
+      setPaymentResponse(data);
       setStatus('success');
 
     } catch (err) {
       console.error('x402 payment error:', err);
-      setError(err.message || 'Payment failed');
+      setError(err.message || 'Payment failed. Please try again.');
       setStatus('error');
     }
   };
-
-  return (
-    <Web3Provider>
-      <X402PaymentInner
-        price={price}
-        description={description}
-        serviceName={serviceName}
-        status={status}
-        setStatus={setStatus}
-        error={error}
-        setError={setError}
-        paymentResponse={paymentResponse}
-        setPaymentResponse={setPaymentResponse}
-        handlePayment={handleX402Payment}
-      />
-    </Web3Provider>
-  );
-}
-
-// Inner component that receives Web3Provider context
-function X402PaymentInner({
-  price,
-  description,
-  serviceName,
-  status,
-  setStatus,
-  error,
-  setError,
-  paymentResponse,
-  setPaymentResponse,
-  handlePayment,
-}) {
-  const { address, isConnected } = useAccount();
 
   return (
     <div className="x402-payment-card">
@@ -120,7 +129,7 @@ function X402PaymentInner({
             ) : (
               <button
                 className="x402-btn x402-btn-primary"
-                onClick={() => handlePayment(address)}
+                onClick={handleX402Payment}
                 disabled={status !== 'idle'}
               >
                 Pay with x402

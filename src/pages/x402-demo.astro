@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { signIn, signOut, useSession } from '../auth/auth';
+
+const session = useSession();
+---
+
+<Layout title="x402 Demo - Pay 0.001 ETH">
+  <main class="max-w-2xl mx-auto px-4 py-12">
+    <div class="bg-white/5 backdrop-blur border border-white/10 rounded-lg p-8">
+      <h1 class="text-3xl font-bold mb-4">x402 Payment Demo</h1>
+
+      {session?.user ? (
+        <div>
+          <p class="text-gray-300 mb-6">
+            Click the button below to pay 0.001 ETH via x402. This demonstrates the complete payment flow.
+          </p>
+
+          <div id="payment-status" class="mb-4 text-sm"></div>
+
+          <button
+            id="pay-button"
+            class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+          >
+            Pay 0.001 ETH
+          </button>
+
+          <p class="text-xs text-gray-400 mt-4">
+            Powered by x402 Protocol. suchbot facilitates payments with a small fee.
+          </p>
+
+          <script>
+            const payButton = document.getElementById('pay-button');
+            const statusDiv = document.getElementById('payment-status');
+
+            payButton.addEventListener('click', async () => {
+              statusDiv.innerHTML = '<span class="text-yellow-400">Initiating payment...</span>';
+              payButton.disabled = true;
+
+              try {
+                // x402 payment integration
+                // Note: Full x402 SDK integration requires backend setup
+                // This demo shows the frontend flow structure
+
+                // Step 1: Create payment intent (would call your backend)
+                const paymentRequest = {
+                  amount: '0.001',
+                  currency: 'ETH',
+                  description: 'x402 Demo Payment',
+                  metadata: {
+                    demo: true,
+                    timestamp: new Date().toISOString()
+                  }
+                };
+
+                // Step 2: Initialize x402 payment
+                // In production, you would use @x402/core here
+                // const x402 = new X402({ apiKey: 'your-api-key' });
+                // const payment = await x402.createPayment(paymentRequest);
+
+                // For demo: simulate successful payment
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                statusDiv.innerHTML = '<span class="text-green-400">✓ Payment successful!</span>';
+                payButton.textContent = 'Paid ✓';
+
+                // Log successful payment
+                console.log('Payment completed:', paymentRequest);
+              } catch (error) {
+                console.error('Payment error:', error);
+                statusDiv.innerHTML = '<span class="text-red-400">✗ Payment failed: ' + error.message + '</span>';
+                payButton.disabled = false;
+              }
+            });
+          </script>
+        </div>
+      ) : (
+        <div>
+          <p class="text-gray-300 mb-6">
+            Please sign in with your wallet to try the x402 payment demo.
+          </p>
+          <button
+            class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+            onClick={signIn}
+          >
+            Sign In with Wallet
+          </button>
+        </div>
+      )}
+    </div>
+
+    <div class="mt-8 text-sm text-gray-400">
+      <h2 class="font-semibold mb-2">About x402</h2>
+      <p>
+        x402 is a payment protocol that enables seamless Ethereum transactions through
+        familiar payment UIs. This demo showcases the integration with Farcaster Mini Apps.
+      </p>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>
