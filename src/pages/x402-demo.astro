@@ -1,8 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { signIn, signOut, useSession } from '../auth/auth';
 
-const session = useSession();
 ---
 
 <Layout title="x402 Demo - Pay 0.001 ETH">
@@ -10,11 +8,10 @@ const session = useSession();
     <div class="bg-white/5 backdrop-blur border border-white/10 rounded-lg p-8">
       <h1 class="text-3xl font-bold mb-4">x402 Payment Demo</h1>
 
-      {session?.user ? (
-        <div>
-          <p class="text-gray-300 mb-6">
-            Click the button below to pay 0.001 ETH via x402. This demonstrates the complete payment flow.
-          </p>
+      <div>
+        <p class="text-gray-300 mb-6">
+          Click the button below to pay 0.001 ETH via x402. This demonstrates the complete payment flow.
+        </p>
 
           <div id="payment-status" class="mb-4 text-sm"></div>
 
@@ -142,7 +139,6 @@ const session = useSession();
             Sign In with Wallet
           </button>
         </div>
-      )}
     </div>
 
     <div class="mt-8 text-sm text-gray-400">
