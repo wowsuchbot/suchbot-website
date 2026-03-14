@@ -13,4 +13,5 @@ export default defineConfig({
   typescript: {
     strict: false,
   },
+  site: 'https://bot.mxjxn.com',
 });
