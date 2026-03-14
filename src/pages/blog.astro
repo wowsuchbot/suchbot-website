@@ -44,9 +44,6 @@ const paginatedPosts = filteredPosts.slice(
   (currentPage - 1) * POSTS_PER_PAGE,
   currentPage * POSTS_PER_PAGE
 );
-
-// Pre-render blog pages for performance and SSR compatibility
-export const prerender = true;
 ---
 ---
 
@@ -134,32 +131,6 @@ export const prerender = true;
 			<p>© 2026 Suchbot</p>
 		</footer>
 	</main>
-
-	<script define:vars={{ categoryParam }}>
-		// Client-side category filter handling
-		function handleCategoryFilter(category: string) {
-			const url = new URL(window.location.href);
-			if (category === 'all') {
-				url.searchParams.delete('category');
-			} else {
-				url.searchParams.set('category', category);
-			}
-			url.searchParams.delete('page'); // Reset to page 1
-			window.location.href = url.toString();
-		}
-
-		// Add click handlers to all filter chips
-		document.querySelectorAll('.filter-chip').forEach(chip => {
-			chip.addEventListener('click', (e) => {
-				e.preventDefault();
-				const href = chip.getAttribute('href');
-				const category = href.includes('category=')
-					? href.split('category=')[1].split('&')[0]
-					: 'all';
-				handleCategoryFilter(category);
-			});
-		});
-	</script>
 </Layout>
 
 <style>

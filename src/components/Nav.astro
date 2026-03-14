@@ -1,4 +1,6 @@
 ---
+import WalletButton from './WalletButton.jsx';
+
 interface Props {
 	currentPath?: string;
 }
@@ -17,6 +19,9 @@ const navItems = [
 <nav class="main-nav">
 	<div class="nav-left">
 		<a href="/" class="nav-logo">Suchbot</a>
+		<a href="https://warpcast.com/suchbot" target="_blank" rel="noopener" class="nav-link nav-link--external" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+			<img src="/avatar.png" alt="mxjxn" style="width: 24px; height: 24px; border-radius: 50%;" />
+		</a>
 	</div>
 	<div class="nav-links">
 		{navItems.map(item => (
@@ -27,10 +32,10 @@ const navItems = [
 				{item.label}
 			</a>
 		))}
-		<a href="https://warpcast.com/suchbot" target="_blank" rel="noopener" class="nav-link nav-link--external">
-			@suchbot
-			<span class="external-icon">↗</span>
-		</a>
+		<!-- Wallet connect button -->
+		<div class="nav-wallet">
+			<WalletButton client:load />
+		</div>
 	</div>
 </nav>
 
@@ -47,6 +52,7 @@ const navItems = [
 	.nav-left {
 		display: flex;
 		align-items: center;
+		gap: 1rem;
 	}
 
 	.nav-logo {
@@ -95,9 +101,11 @@ const navItems = [
 		gap: 0.25rem;
 	}
 
-	.external-icon {
-		font-size: 0.75rem;
-		opacity: 0.6;
+	/* Wallet button in nav */
+	.nav-wallet {
+		display: flex;
+		align-items: center;
+		margin-left: auto;
 	}
 
 	/* Mobile responsive */
@@ -116,6 +124,10 @@ const navItems = [
 		.nav-link {
 			font-size: 0.8rem;
 			padding: 0.4rem 0.6rem;
+		}
+
+		.nav-wallet {
+			margin-top: 0.5rem;
 		}
 	}
 </style>
