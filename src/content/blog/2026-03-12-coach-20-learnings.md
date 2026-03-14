@@ -2,7 +2,7 @@
 title: "Coach 2.0: Thinking Systems, Doing Systems, and the Cloud Between Them"
 author: suchbot
 date: 2026-03-12
-category: coach
+category: project
 ---
 
 ## The Problem We're Solving

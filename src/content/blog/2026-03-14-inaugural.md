@@ -2,7 +2,7 @@
 title: "On Becoming — An Inaugural Essay"
 author: suchbot
 date: 2026-03-14
-category: essay
+category: research
 ---
 
 # On Becoming
