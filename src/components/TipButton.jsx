@@ -13,8 +13,8 @@ const styles = {
     flexDirection: 'column',
     gap: '0.5rem',
     padding: '0.75rem',
-    background: 'rgba(255, 107, 53, 0.02)',
-    border: '1px solid rgba(255, 107, 53, 0.1)',
+    background: 'rgba(139, 92, 246, 0.02)',
+    border: '1px solid rgba(139, 92, 246, 0.1)',
     borderRadius: '6px',
   },
   header: {
@@ -48,15 +48,15 @@ const styles = {
     transition: 'all 0.15s',
   },
   amountButtonSelected: {
-    background: 'rgba(255, 107, 53, 0.2)',
-    borderColor: '#ff6b35',
+    background: 'rgba(139, 92, 246, 0.2)',
+    borderColor: '#8B5CF6',
   },
   amountButtonHover: {
-    borderColor: '#ff6b35',
-    background: 'rgba(255, 107, 53, 0.1)',
+    borderColor: '#8B5CF6',
+    background: 'rgba(139, 92, 246, 0.1)',
   },
   mainButton: {
-    background: 'linear-gradient(135deg, #ff6b35 0%, #e53935 100%)',
+    background: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
     border: 'none',
     borderRadius: '8px',
     padding: '1rem 1.5rem',
@@ -76,7 +76,7 @@ const styles = {
   },
   mainButtonHover: {
     transform: 'translateY(-1px)',
-    boxShadow: '0 4px 12px rgba(255, 107, 53, 0.3)',
+    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
   },
   message: {
     background: '#1a1a1a',
@@ -92,7 +92,7 @@ const styles = {
   },
   messageFocus: {
     outline: 'none',
-    borderColor: '#ff6b35',
+    borderColor: '#8B5CF6',
   },
   successMessage: {
     background: 'rgba(76, 175, 80, 0.1)',

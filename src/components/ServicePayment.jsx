@@ -32,10 +32,10 @@ const styles = {
   },
   textareaFocus: {
     outline: 'none',
-    borderColor: '#ff6b35',
+    borderColor: '#8B5CF6',
   },
   button: {
-    background: 'linear-gradient(135deg, #ff6b35 0%, #e53935 100%)',
+    background: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
     border: 'none',
     borderRadius: '8px',
     padding: '1rem 1.5rem',
@@ -56,7 +56,7 @@ const styles = {
   },
   buttonHover: {
     transform: 'translateY(-1px)',
-    boxShadow: '0 4px 12px rgba(255, 107, 53, 0.3)',
+    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
   },
   successMessage: {
     background: 'rgba(76, 175, 80, 0.1)',

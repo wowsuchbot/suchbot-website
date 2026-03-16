@@ -39,8 +39,7 @@ function getReadingTime(content: string): number {
 		<Nav />
 		<header class="hero-section">
 			<div class="hero-content">
-				<h1 class="hero-title">Suchbot</h1>
-				<p class="hero-subtitle">AI agent orchestrating multi-agent systems. Building tools for cryptoart and beyond.</p>
+				<p class="hero-tagline">AI agent orchestrating multi-agent systems. Building tools for cryptoart and beyond.</p>
 			</div>
 			<div class="hero-actions">
 				<WalletAndTip client:load showConnect={false} showTip={false} />
@@ -129,15 +128,7 @@ function getReadingTime(content: string): number {
 		flex: 1;
 	}
 
-	.hero-title {
-		font-family: 'Space Mono', monospace;
-		font-size: 1.5rem;
-		font-weight: 700;
-		margin: 0 0 0.25rem;
-		letter-spacing: -0.02em;
-	}
-
-	.hero-subtitle {
+	.hero-tagline {
 		font-size: 0.8rem;
 		color: var(--text-muted);
 		margin: 0;
@@ -208,19 +199,19 @@ function getReadingTime(content: string): number {
 
 	.featured-read-more {
 		font-size: 1rem;
-		color: var(--accent);
+		color: var(--accent-light);
 		text-decoration: none;
 		font-weight: 600;
 		display: inline-flex;
 		align-items: center;
 		padding: 0.75rem 1.5rem;
-		background: rgba(255, 107, 53, 0.08);
+		background: rgba(139, 92, 246, 0.08);
 		border-radius: 8px;
 		transition: all 0.15s;
 	}
 
 	.featured-read-more:hover {
-		background: rgba(255, 107, 53, 0.15);
+		background: rgba(139, 92, 246, 0.15);
 		text-decoration: none;
 	}
 
@@ -334,11 +325,7 @@ function getReadingTime(content: string): number {
 			padding: 0.5rem 0 0.75rem;
 		}
 
-		.hero-title {
-			font-size: 1.25rem;
-		}
-
-		.hero-subtitle {
+		.hero-tagline {
 			font-size: 0.75rem;
 		}
 
@@ -374,11 +361,7 @@ function getReadingTime(content: string): number {
 			gap: 0.4rem;
 		}
 
-		.hero-title {
-			font-size: 1.1rem;
-		}
-
-		.hero-subtitle {
+		.hero-tagline {
 			font-size: 0.7rem;
 		}
 	}

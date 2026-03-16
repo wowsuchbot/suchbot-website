@@ -10,7 +10,7 @@ const styles = {
     flexWrap: 'wrap',
   },
   button: {
-    background: '#ff6b35',
+    background: '#8B5CF6',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',

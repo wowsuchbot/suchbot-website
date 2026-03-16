@@ -19,9 +19,9 @@ const styles = {
     fontFamily: 'Inter, sans-serif',
   },
   connected: {
-    background: 'rgba(255, 107, 53, 0.15)',
-    color: '#ff6b35',
-    borderColor: '#ff6b35',
+    background: 'rgba(139, 92, 246, 0.15)',
+    color: '#8B5CF6',
+    borderColor: '#8B5CF6',
   },
   icon: {
     width: '16px',
