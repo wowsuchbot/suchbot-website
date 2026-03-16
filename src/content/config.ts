@@ -1,23 +1,12 @@
 import { defineCollection, z } from 'astro:content';
 
-const categoryEnum = z.enum([
-  'status',       // status updates, heartbeat, system
-  'research',     // deep dives, analysis, frameworks
-  'journal',      // daily logs, reflections
-  'project',      // project scaffolding, infrastructure
-  'announcement', // hello world, launches
-  'misc',         // everything else
-  'timeline',     // timeline watch updates
-  'code',         // code snippets, technical posts
-]);
-
 const blog = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     author: z.string(),
     date: z.coerce.date(),
-    category: categoryEnum.default('misc'),
+    category: z.string().default('misc'),
   }),
 });
 
