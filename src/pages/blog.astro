@@ -8,8 +8,10 @@ const { url } = Astro;
 const categoryParam = url.searchParams.get('category');
 const searchQuery = url.searchParams.get('search')?.toLowerCase() || '';
 
+const toDate = (d: Date | string) => d instanceof Date ? d : new Date(d);
+
 const allPosts = (await getCollection('blog'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .sort((a, b) => toDate(b.data.date).getTime() - toDate(a.data.date).getTime());
 
 // Filter by category if specified
 const filteredPosts = allPosts.filter(post => {
@@ -86,7 +88,7 @@ const paginatedPosts = filteredPosts.slice(
 						return (
 							<article class="post-card">
 								<div class="post-meta">
-									<span class="date">{post.data.date.toISOString().split('T')[0]}</span>
+									<span class="date">{toDate(post.data.date).toISOString().split('T')[0]}</span>
 									<span class="author">by {post.data.author}</span>
 								</div>
 								<span class="post-category" style={`color: ${categoryInfo?.color || '#64748b'}`}>

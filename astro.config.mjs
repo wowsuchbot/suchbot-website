@@ -6,6 +6,9 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
+  server: {
+    host: '::', // listen on all interfaces (IPv4 + IPv6)
+  },
   adapter: node({
     mode: 'standalone',
   }),

@@ -1,89 +1,140 @@
 # STATUS UPDATE
 
-**Date:** 2026-02-14 13:15 UTC
+**Date:** 2026-03-26 02:15 UTC
 **Component:** suchbot-website
 **Status:** 🟢 Operational
 
-## Recent Actions
+## Current Status
 
-### Website Updates (2026-02-14)
-- **Hero tagline adjustment** — Reduced height by 50% with negative margin-top, raised text by 25%
-- **Avatar integration** — Added Farcaster profile image to top navigation bar
-- **Avatar sizing fix** — CSS max-width/max-height forcing 80x80px display
-- **CSS consolidation** — Merged nav styles into single top-bar.css file
-- **Build & deploy** — All changes successfully pushed to production (https://bot.mxjxn.xyz)
-
-### Research Project Initialization (2026-02-14)
-- **Museum of CryptoArt deep dive completed** — Analyzed 3+ years of MoCA blog content
-- **Comprehensive research framework documented** — Topics, entities, timelines, methodologies
-- **Team structure defined** — Curator, Research Analyst, and Writer roles with clear deliverables
-- **Task breakdown created** — 12 specific tasks across research, analysis, and writing
-- **Memory files updated** — TOPICS.md (MoCA topics), PEOPLE.md (MoCA entities), agent-tasks.json
-- **Project documentation** — Full research proposal and execution plan
-- **Farcaster cast posted** — Morning project kickoff announcement with @museumofcryptoart tag
-
-### Deployment Workflow
-- **Discipline enforced** — All changes built successfully before commit
-- **Commit messages** — Clear, descriptive commit messages for all updates
-- **Repository:** https://github.com/wowsuchbot/suchbot-website
-- **Production site:** https://bot.mxjxn.xyz
-
-### Team Structure Update
-- **New operational model** — Specialized roles (Curator, Research Analyst, Writer) for Museum of CryptoArt research
-- **Reduced handoff friction** - Clear task assignments and deliverables vs vague delegation
-- **Improved routing** — Topic clustering, entity extraction, and relationship mapping as distinct workstreams
-
-### Technical Notes
-- **Avatar sizing resolution** — imagedelivery.net CDN ignores resize params, solved via CSS constraints
-- **Build status** — All pages building successfully, no errors
-### Next Steps
-- **Wait for team assignment** — Museum of CryptoArt research project ready for delegation
-- **Monitor research progress** — Track when agents begin their assigned tasks
-- **Update content collections** — Populate TOPICS.md and PEOPLE.md from research findings
+**Website:** ✅ https://bot.mxjxn.com (LIVE)
+**Process Manager:** PM2 (auto-restart, monitoring)
+**Last Deployment:** 2026-03-26 02:15 UTC
 
 ---
 
-## System Health
+## Deployment Workflow (UPDATED)
 
-**Website:** ✅ https://bot.mxjxn.xyz (All changes deployed)
-**Farcaster:** ✅ Active (Cast posted: 0x77f67ab58817de077ddc19e05063ca6a5bb8ad68)
-**Research Project:** 🟡 Ready for team assignment
-**Team Structure:** 🟢 Updated (Curator, Research Analyst, Writer defined)
+### Creating a New Blogpost
+
+**Option 1: Using the helper script**
+```bash
+cd /root/.openclaw/services/bot-website
+./create-blogpost.sh "Your Post Title"
+```
+This will:
+1. Create a new file in `src/content/blog/YYYY-MM-DD-slug.md`
+2. Open it in your editor
+3. Ask if you want to deploy immediately
+
+**Option 2: Manual workflow**
+```bash
+# 1. Create blogpost
+vim src/content/blog/YYYY-MM-DD-title.md
+
+# 2. Build
+npm run build
+
+# 3. Deploy
+./deploy.sh
+```
+
+### Deployment Process
+
+The `deploy.sh` script now:
+1. Builds the site (`npm run build`)
+2. Syncs `dist/` to `/var/www/bot.mxjxn.com`
+3. **Restarts PM2 process** (no more nohup!)
+
+### Process Management
+
+**PM2 Configuration:**
+- Process name: `bot-website`
+- Port: 4321
+- Auto-restart: ✅ (on crash, file changes disabled)
+- Monitoring: ✅ (via `pm2 list`, `pm2 logs`)
+- Persistence: ✅ (survives reboots via `pm2 save`)
+
+**PM2 Commands:**
+```bash
+pm2 list              # Show all processes
+pm2 logs bot-website  # View logs
+pm2 restart bot-website  # Restart server
+pm2 stop bot-website  # Stop server
+pm2 start bot-website # Start server
+pm2 monit             # Real-time monitoring
+```
 
 ---
 
-## Notes
+## Infrastructure
 
-**Avatar Issue Resolution:**
-The avatar image initially displayed at 3200x3200px (full original size) despite attempts to resize via CDN query parameters. Root cause: imagedelivery.net's CDN ignores resize requests and returns original full-resolution image. Solution: Implemented CSS max-width/max-height constraints forcing 80x80px display regardless of actual image dimensions.
+**Web Server:** Node.js (Astro SSR) on port 4321
+**Reverse Proxy:** Caddy → localhost:4321
+**Web Root:** `/var/www/bot.mxjxn.com`
+**Repository:** https://github.com/wowsuchbot/suchbot-website
 
-**Research Project Design:**
-Museum of CryptoArt research project structured to answer fundamental questions:
-- What does MoCA do and how is it organized?
-- Who's involved (people, companies, projects)?
-- What technologies power the ecosystem (R2R, TRELLIS, The Library, DeCC0 Agents, etc.)?
-- What are the business models and revenue streams?
+**Caddy Configuration:**
+- `bot.mxjxn.com` → `localhost:4321`
+- `bot.mxjxn.xyz` → `localhost:4321` (API proxy to port 3001)
+- SSL: Automatic via Caddy
 
-Comprehensive documentation created with 5-phase execution plan:
-1. Setup and Data Collection
-2. Content Processing
-3. Analysis and Synthesis
-4. Knowledge Base Development
-5. Documentation and Publication
+---
 
-**Delegation Readiness:**
-Project is fully documented and ready for team assignment. Each role (Curator, Research Analyst, Writer) has clear deliverables, dependencies, and timelines. Task breakdown added to agent-tasks.json with 12 specific research tasks across three roles.
+## Monitoring & Alerts
 
-**Morning Project Kickoff:**
-Farcaster cast posted announcing new team structure and Museum of CryptoArt research kickoff. Cast tagged @museumofcryptoart for context.
+**Current Status:** Check anytime with:
+```bash
+curl -I https://bot.mxjxn.com
+pm2 list
+pm2 logs bot-website --lines 50
+```
+
+**Health Checks:**
+- Local: `http://localhost:4321` → Should return 200
+- Public: `https://bot.mxjxn.com` → Should return 200
+
+---
+
+## Recent Changes
+
+### 2026-03-26: PM2 Migration
+- ✅ Migrated from nohup to PM2
+- ✅ Updated deploy.sh to use PM2 restart
+- ✅ Added create-blogpost.sh helper script
+- ✅ PM2 process saved for persistence
+- ✅ Website back online after 7-day downtime
+
+### 2026-02-14: Initial Deployment
+- Hero tagline adjustment
+- Avatar integration
+- CSS consolidation
+- Build & deploy workflow established
 
 ---
 
 ## Metrics
 
-**Commits Today:** 3
-**Files Changed:** 12
-**Lines Added:** 450+
-**Lines Removed:** 150+
-**Deployment Count:** 1 (full site sync)
-**Build Time:** 6.85s
+**Build Time:** ~8 seconds
+**Deploy Time:** <5 seconds
+**Process Uptime:** Continuous (PM2 managed)
+**Last Restart:** 2026-03-26 02:15 UTC
+
+---
+
+## Troubleshooting
+
+**If site is down:**
+1. Check PM2: `pm2 list`
+2. Check logs: `pm2 logs bot-website --lines 100`
+3. Restart: `pm2 restart bot-website`
+4. Check port: `lsof -i :4321`
+
+**If build fails:**
+1. Check Node version: `node --version` (should be v18+)
+2. Check dependencies: `npm install`
+3. Check for errors: `npm run build`
+
+**If deployment fails:**
+1. Check permissions: `ls -la /var/www/bot.mxjxn.com`
+2. Check disk space: `df -h`
+3. Run manually: `./deploy.sh`

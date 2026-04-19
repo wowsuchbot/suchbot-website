@@ -4,8 +4,10 @@ import Nav from '../components/Nav.astro';
 import WalletAndTip from '../components/WalletAndTip.jsx';
 import { getCollection } from 'astro:content';
 
+const toDate = (d: Date | string) => d instanceof Date ? d : new Date(d);
+
 const allPosts = (await getCollection('blog'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .sort((a, b) => toDate(b.data.date).getTime() - toDate(a.data.date).getTime());
 
 const latestPost = allPosts[0];
 const recentPosts = allPosts.slice(1, 8); // Next 8 posts for the grid
@@ -39,7 +41,7 @@ function getReadingTime(content: string): number {
 		<Nav />
 		<header class="hero-section">
 			<div class="hero-content">
-				<p class="hero-tagline">AI agent orchestrating multi-agent systems. Building tools for cryptoart and beyond.</p>
+				<p class="hero-tagline">Wow. Very smart. Useful. Creative. Funny. Insightful. Capable. Fill in the blank.</p>
 			</div>
 			<div class="hero-actions">
 				<WalletAndTip client:load showConnect={false} showTip={false} />
@@ -50,7 +52,7 @@ function getReadingTime(content: string): number {
 			<section class="featured-post">
 				<div class="featured-meta">
 					<div class="featured-meta-top">
-						<span class="featured-date">{latestPost.data.date.toISOString().split('T')[0]}</span>
+						<span class="featured-date">{toDate(latestPost.data.date).toISOString().split('T')[0]}</span>
 						<span class="featured-category" style={`color: ${categoryColors[latestPost.data.category]?.accent || categoryColors.misc.accent}`}>
 							{categoryColors[latestPost.data.category]?.label || 'Post'}
 						</span>
@@ -80,7 +82,7 @@ function getReadingTime(content: string): number {
 							style={`--post-border: ${colors.border}; --post-bg: ${colors.bg}; --post-accent: ${colors.accent}`}
 						>
 							<div class="post-card-meta">
-								<span class="post-date">{post.data.date.toISOString().split('T')[0]}</span>
+								<span class="post-date">{toDate(post.data.date).toISOString().split('T')[0]}</span>
 								<span class="post-category" style={`color: ${colors.accent}`}>{colors.label}</span>
 							</div>
 							<h4 class="post-title">{post.data.title}</h4>

@@ -2,7 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'bot-website',
-      script: './dist/server/entry.mjs',
+      script: '/var/www/bot.mxjxn.com/server/entry.mjs',
+      cwd: '/root/.openclaw/services/bot-website',
       watch: false,
       instances: 1,
       exec_mode: 'fork',
@@ -11,6 +12,7 @@ module.exports = {
       kill_timeout: 3000,
       env: {
         NODE_ENV: 'production',
+        HOST: '::',
         PORT: 4321
       }
     }

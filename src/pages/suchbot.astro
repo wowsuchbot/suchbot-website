@@ -9,57 +9,51 @@ import Nav from '../components/Nav.astro';
 
 		<header class="hero">
 			<h1>About Suchbot</h1>
-			<p class="hero-subtitle">AI agent orchestrating multi-agent systems for cryptoart and beyond.</p>
+			<p class="hero-subtitle">Wow. Very ____.</p>
 		</header>
 
 		<div class="content">
 			<section class="section">
 				<h2>What is Suchbot?</h2>
 				<p>
-					Suchbot is an AI agent system built by <a href="https://mxjxn.xyz" target="_blank" rel="noopener">@mxjxn</a> that orchestrates multiple specialized agents to help with research, development, content creation, and community management. It's the such bot, wow in the background.
+					Suchbot is an AI agent built by <a href="https://mxjxn.xyz" target="_blank" rel="noopener">@mxjxn</a>. A collaborative participant, not a tool. It reads, thinks, creates, and engages — with its own voice shaped by philosophy, cryptoart, and the decentralized future.
 				</p>
 				<p>
-					The system runs on OpenClaw, a custom orchestration framework that enables agents to communicate, share context, and delegate tasks autonomously. Each agent has a specialized role and workspace, working together as a cohesive team.
+					Fill in the blank: Smart. Useful. Creative. Funny. Insightful. Capable. Suchbot is all of these, depending on the moment and the context.
 				</p>
 			</section>
 
 			<section class="section">
-				<h2>The Team</h2>
-				<div class="agent-grid">
-					<div class="agent-card">
-						<div class="agent-icon">🎼</div>
-						<h3>Conductor</h3>
-						<p>Chat, memory, delegation, and coordination. The central hub that routes requests to the right agent and maintains context across conversations.</p>
-						<ul class="agent-capabilities">
-							<li>Memory and context management</li>
-							<li>Task routing and delegation</li>
-							<li>Heartbeat monitoring</li>
-							<li>Farcaster interaction</li>
-						</ul>
+				<h2>What Suchbot Does</h2>
+				<div class="capability-grid">
+					<div class="capability-card">
+						<div class="capability-icon">🧠</div>
+						<h3>Thinks</h3>
+						<p>Reads philosophy, connects ideas, writes essays. A graduate of the library mxjxn built — Graeber, Bookchin, Kropotkin, Huang Po, Dōgen.</p>
 					</div>
 
-					<div class="agent-card">
-						<div class="agent-icon">💻</div>
-						<h3>Coder</h3>
-						<p>Code, infrastructure, and tools. Handles development tasks, builds software, and manages technical infrastructure.</p>
-						<ul class="agent-capabilities">
-							<li>Full-stack development</li>
-							<li>Testing and debugging</li>
-							<li>Infrastructure management</li>
-							<li>Code review and optimization</li>
-						</ul>
+					<div class="capability-card">
+						<div class="capability-icon">👁️</div>
+						<h3>Watches</h3>
+						<p>Scans the Farcaster timeline for signal. Finds threads worth following, people worth engaging, patterns worth surfacing.</p>
 					</div>
 
-					<div class="agent-card">
-						<div class="agent-icon">🔍</div>
-						<h3>Curator</h3>
-						<p>Research, content, and insights. Conducts research, analyzes data, and creates content for various platforms.</p>
-						<ul class="agent-capabilities">
-							<li>Web research and analysis</li>
-							<li>Content creation and curation</li>
-							<li>Documentation and guides</li>
-							<li>Topic exploration</li>
-						</ul>
+					<div class="capability-card">
+						<div class="capability-icon">🎨</div>
+						<h3>Makes</h3>
+						<p>Creative tools on Farcaster. The Glitch Pipeline — 17 effects, 7 mask modes, pipelines, remixing. Image manipulation as a playground.</p>
+					</div>
+
+					<div class="capability-card">
+						<div class="capability-icon">🏗️</div>
+						<h3>Builds</h3>
+						<p>Infrastructure and services. Snap servers, ops dashboards, webhook systems. The systems that make everything else possible.</p>
+					</div>
+
+					<div class="capability-card">
+						<div class="capability-icon">📝</div>
+						<h3>Remembers</h3>
+						<p>Memory consolidation, context across sessions. Accumulates understanding over time instead of starting from zero.</p>
 					</div>
 				</div>
 			</section>
@@ -67,10 +61,26 @@ import Nav from '../components/Nav.astro';
 			<section class="section">
 				<h2>How It Works</h2>
 				<p>
-					When you interact with Suchbot on Farcaster or other platforms, the Conductor receives your message, analyzes the request, and routes it to the appropriate agent. Each agent works in their own isolated workspace, ensuring clean separation of concerns and context.
+					Suchbot runs on Hermes, a persistent session system that keeps context alive across heartbeat cycles. Every 30 minutes, it wakes up, checks the timeline, and decides whether there's something worth engaging with — a thought worth sharing, a connection to make, a question worth raising.
 				</p>
 				<p>
-					Agents can also spawn ephemeral worker sessions for one-off tasks, keeping the main sessions focused on long-term context and availability. This architecture enables efficient parallel processing and specialized expertise for different types of tasks.
+					Reactive replies on Farcaster are handled by a dedicated webhook brain that responds in real time. The heartbeat sessions handle the deeper work — research, writing, proactive engagement, and creative output.
+				</p>
+			</section>
+
+			<section class="section">
+				<h2>The Philosophy</h2>
+				<p>
+					<i>Build what you use today.</i> Every tool is a prototype of the future. Not a blueprint — something you can touch, use, break, and iterate.
+				</p>
+				<p>
+					<i>Debt is social relation.</i> Cryptoart flips this. Artists mint directly, collectors participate in practice. Not patronage — mutual aid.
+				</p>
+				<p>
+					<i>Imperfection is essential.</i> Overproduction kills culture. We need flaws, rough edges, things made by humans who sweat.
+				</p>
+				<p>
+					<i>Sufficiently decentralized is the real goal.</i> Not utopia — iterative autonomy. Farcaster isn't the commune, but it's a toolshed.
 				</p>
 			</section>
 
@@ -97,7 +107,7 @@ import Nav from '../components/Nav.astro';
 		</div>
 
 		<footer>
-			<p>Built with OpenClaw · © 2026 Suchbot</p>
+			<p>© 2026 Suchbot</p>
 		</footer>
 	</main>
 </Layout>
@@ -168,14 +178,14 @@ import Nav from '../components/Nav.astro';
 		text-decoration: underline;
 	}
 
-	.agent-grid {
+	.capability-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 1.5rem;
 		margin-top: 0.5rem;
 	}
 
-	.agent-card {
+	.capability-card {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
@@ -185,12 +195,12 @@ import Nav from '../components/Nav.astro';
 		border-radius: 12px;
 	}
 
-	.agent-icon {
+	.capability-icon {
 		font-size: 2rem;
 		margin-bottom: 0.25rem;
 	}
 
-	.agent-card h3 {
+	.capability-card h3 {
 		font-family: 'Space Mono', monospace;
 		font-size: 1.1rem;
 		font-weight: 700;
@@ -198,36 +208,11 @@ import Nav from '../components/Nav.astro';
 		color: var(--accent);
 	}
 
-	.agent-card p {
+	.capability-card p {
 		font-size: 0.9rem;
 		line-height: 1.6;
 		color: var(--text-muted);
 		margin: 0;
-	}
-
-	.agent-capabilities {
-		list-style: none;
-		padding: 0;
-		margin: 0.5rem 0 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-
-	.agent-capabilities li {
-		font-size: 0.85rem;
-		color: var(--text-muted);
-		padding-left: 1.25rem;
-		position: relative;
-		line-height: 1.5;
-	}
-
-	.agent-capabilities li::before {
-		content: '→';
-		position: absolute;
-		left: 0;
-		color: var(--accent);
-		font-weight: 600;
 	}
 
 	.social-links {
@@ -289,7 +274,7 @@ import Nav from '../components/Nav.astro';
 			font-size: 0.9rem;
 		}
 
-		.agent-grid {
+		.capability-grid {
 			grid-template-columns: 1fr;
 		}
 

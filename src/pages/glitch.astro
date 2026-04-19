@@ -1,0 +1,1560 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+---
+
+<Layout title="Glitch Pipeline — Suchbot">
+	<main class="about-page">
+		<Nav />
+
+			<nav class="toc" id="toc">
+				<div class="toc-title">Contents</div>
+				<a href="#effects">Effects</a>
+				<a href="#actions">Pipeline Actions</a>
+				<a href="#masks">Mask Modes</a>
+				<a href="#combos">Combos</a>
+				<a href="#presets">Presets</a>
+				<a href="#advanced">Advanced</a>
+			</nav>
+
+		<!-- Hero -->
+		<header class="hero">
+			<h1>Glitch Pipeline</h1>
+			<p class="hero-subtitle">Reply to any cast with an image to glitch it — or generate one from a prompt and chain effects.</p>
+			<div class="hero-demo">
+				<img src="https://img.mxjxn.com/image/glitch/ref/masked.png" alt="Glitch effect demo" class="hero-image" />
+				<span class="example-prompt hero-cmd">{'mask {:mode color} | rgb-shift {:masked true}'}</span>
+			</div>
+			<p class="hero-note">Source image below — all effect examples use this same input.</p>
+			<img src="https://img.mxjxn.com/image/glitch/ref/source.png" alt="Original source image" class="hero-source" />
+		</header>
+
+		<div class="content">
+
+			<!-- Quick Syntax -->
+			<section class="section" id="syntax">
+				<h2>Quick Syntax</h2>
+				<div class="ref-table-wrap">
+					<table class="ref-table">
+						<thead>
+							<tr><th>Syntax</th><th>What it does</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><code>|</code> or <code>-></code> or <code>|></code></td><td>Chain pipeline steps</td></tr>
+							<tr><td><code>>></code></td><td>Multi-line mode — each newline is a step</td></tr>
+							<tr><td><code>::N</code></td><td>Primary param shorthand (e.g. <code>pixelate::12</code>)</td></tr>
+							<tr><td><code>{'{:key value}'}</code></td><td>EDN params — numbers auto-parse, strings need quotes</td></tr>
+							<tr><td><code>//</code></td><td>Comment — stripped before parsing</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+			<!-- Effects Reference -->
+			<section class="section" id="effects">
+				<h2>Effects Reference</h2>
+				<div class="effect-grid">
+
+				<!-- rgb-shift -->
+					<div class="effect-card" id="rgb-shift">
+						<div class="effect-header">
+							<h3>rgb-shift</h3>
+							<span class="effect-badge alias">rgbshift</span>
+						</div>
+						<p class="effect-desc">Chromatic aberration via RGB channel offset.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>shift</td><td>sh</td><td>15</td><td>Uniform shift all channels</td></tr>
+									<tr><td>rShift</td><td>rs</td><td>—</td><td>Red channel override</td></tr>
+									<tr><td>gShift</td><td>gs</td><td>—</td><td>Green channel override</td></tr>
+									<tr><td>bShift</td><td>bs</td><td>—</td><td>Blue channel override</td></tr>
+									<tr><td>noise</td><td>—</td><td>0.05</td><td>Noise intensity</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'rgb-shift {:rShift 25 :bShift -15}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':rgb-ghost'}</span>
+						<span class="preset-tag">{':rgb-shatter'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/rgbshift.png" alt="rgb-shift effect" class="effect-image" />
+					</div>
+
+					<!-- pixel-sort -->
+					<div class="effect-card" id="pixel-sort">
+						<div class="effect-header">
+							<h3>pixel-sort</h3>
+							<span class="effect-badge alias">pixelsort</span>
+						</div>
+						<p class="effect-desc">Shuffle rows by brightness with channel offset.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>sortFraction</td><td>—</td><td>0.15</td><td>Fraction of rows</td></tr>
+									<tr><td>threshold</td><td>—</td><td>0.1</td><td>Shuffle probability</td></tr>
+									<tr><td>shift</td><td>—</td><td>5</td><td>RGB channel offset px</td></tr>
+									<tr><td>lines</td><td>—</td><td>3</td><td>Scanline glitch lines</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'pixel-sort {:threshold 0.4 :shift 10}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':sort-cascade'}</span>
+						<span class="preset-tag">{':sort-bleed'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/pixelsort.png" alt="pixel-sort effect" class="effect-image" />
+					</div>
+
+					<!-- kaleidoscope -->
+					<div class="effect-card" id="kaleidoscope">
+						<div class="effect-header">
+							<h3>kaleidoscope</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Triangular mirror reflection with zoom, rotation, and pan.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>segments</td><td>::N</td><td>6</td><td>Visual segments</td></tr>
+									<tr><td>zoom</td><td>z</td><td>1.5</td><td>>1 zoom out, <1 zoom in</td></tr>
+									<tr><td>rotate</td><td>rot</td><td>0</td><td>Rotate output 0/90/180/270</td></tr>
+									<tr><td>angle</td><td>a</td><td>0</td><td>Rotate pattern degrees</td></tr>
+									<tr><td>x</td><td>—</td><td>0</td><td>Center offset % (±100)</td></tr>
+									<tr><td>y</td><td>—</td><td>0</td><td>Center offset % (±100)</td></tr>
+									<tr><td>sx</td><td>—</td><td>0</td><td>Source pan % (±100)</td></tr>
+									<tr><td>sy</td><td>—</td><td>0</td><td>Source pan % (±100)</td></tr>
+									<tr><td>sangle</td><td>sa</td><td>0</td><td>Rotate source degrees</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'kaleidoscope::8 {:z 1.2 :sa 30}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':kaleido-mandala'}</span>
+						<span class="preset-tag">{':kaleido-crystal'}</span>
+						<span class="preset-tag">{':kaleido-infinity'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/kaleidoscope.png" alt="kaleidoscope effect" class="effect-image" />
+					</div>
+
+					<!-- pixelate -->
+					<div class="effect-card" id="pixelate">
+						<div class="effect-header">
+							<h3>pixelate</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Block averaging mosaic.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>size</td><td>sz, ::N</td><td>8</td><td>Block size px</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">pixelate::12</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':pixel-8bit'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/pixelate.png" alt="pixelate effect" class="effect-image" />
+					</div>
+
+					<!-- noise -->
+					<div class="effect-card" id="noise">
+						<div class="effect-header">
+							<h3>noise</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Random grain/noise overlay.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>intensity</td><td>i, int, ::N</td><td>35</td><td>Noise strength</td></tr>
+									<tr><td>density</td><td>den</td><td>0.8</td><td>Fraction of pixels</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">noise::50</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':noise-film'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/noise.png" alt="noise effect" class="effect-image" />
+					</div>
+
+					<!-- posterize -->
+					<div class="effect-card" id="posterize">
+						<div class="effect-header">
+							<h3>posterize</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Reduce color levels per channel.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>levels</td><td>lv, ::N</td><td>5</td><td>Levels per channel</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">posterize::3</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':poster-retro'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/posterize.png" alt="posterize effect" class="effect-image" />
+					</div>
+
+					<!-- invert -->
+					<div class="effect-card" id="invert">
+						<div class="effect-header">
+							<h3>invert</h3>
+						</div>
+						<p class="effect-desc">Negative image — invert all or individual channels.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>channels</td><td>—</td><td>"rgb"</td><td>"rgb" / "r" / "g" / "b"</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="example">
+							<span class="example-prompt">{'invert {:channels rb}'}</span>
+						</div>
+						<img src="https://img.mxjxn.com/image/glitch/ref/invert.png" alt="invert effect" class="effect-image" />
+					</div>
+
+					<!-- colorswap -->
+					<div class="effect-card" id="colorswap">
+						<div class="effect-header">
+							<h3>colorswap</h3>
+							<span class="effect-badge alias">color-swap</span>
+							<span class="effect-badge alias">colorshift</span>
+							<span class="effect-badge alias">color-shift</span>
+						</div>
+						<p class="effect-desc">Seedable hue rotation with bands and luminosity preservation.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>seed</td><td>::N</td><td>random</td><td>Deterministic seed 0–9999</td></tr>
+									<tr><td>bands</td><td>—</td><td>seed-driven</td><td>1 / 2 / 3 bands</td></tr>
+									<tr><td>strength</td><td>str, st</td><td>1</td><td>Blend original↔swapped 0–1</td></tr>
+									<tr><td>preserveLuma</td><td>preserveL</td><td>true</td><td>Keep luminosity</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'colorswap {:seed 42 :bands 2}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':color-psychedelic'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/colorswap.png" alt="colorswap effect" class="effect-image" />
+					</div>
+
+					<!-- dither -->
+					<div class="effect-card" id="dither">
+						<div class="effect-header">
+							<h3>dither</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Ordered Bayer dithering with configurable matrix size and levels.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>size</td><td>sz, ::N</td><td>4</td><td>Dither matrix size</td></tr>
+									<tr><td>levels</td><td>lv</td><td>2</td><td>Output levels</td></tr>
+									<tr><td>strength</td><td>—</td><td>1</td><td>Blend original↔dithered 0–1</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">dither::8</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':poster-retro'}</span>
+						<span class="preset-tag">{':noise-film'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/dither.png" alt="dither effect" class="effect-image" />
+					</div>
+
+					<!-- halftone -->
+					<div class="effect-card" id="halftone">
+						<div class="effect-header">
+							<h3>halftone</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Simulate continuous tones with discrete dots.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>size</td><td>sz, ::N</td><td>6</td><td>Dot size</td></tr>
+									<tr><td>mode</td><td>—</td><td>"classic"</td><td>"classic" / "cmyk" / "line"</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="example">
+							<span class="example-prompt">{'halftone::4 {:mode cmyk}'}</span>
+						</div>
+						<img src="https://img.mxjxn.com/image/glitch/ref/halftone.png" alt="halftone effect" class="effect-image" />
+					</div>
+
+					<!-- slice -->
+					<div class="effect-card" id="slice">
+						<div class="effect-header">
+							<h3>slice</h3>
+							<span class="effect-badge alias">slc</span>
+						</div>
+						<p class="effect-desc">Band displacement — datamosh / VHS tracking look.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>mode</td><td>—</td><td>"horizontal"</td><td>"horizontal" / "vertical" / "color"</td></tr>
+									<tr><td>bands</td><td>—</td><td>3–12</td><td>Total bands (random if not set)</td></tr>
+									<tr><td>offset</td><td>—</td><td>2–15%</td><td>Average shift per active band</td></tr>
+									<tr><td>density</td><td>—</td><td>0.33</td><td>Fraction of bands that shift</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'slice {:mode color :bands 8}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':combo-slice-dither'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/slice.png" alt="slice effect" class="effect-image" />
+					</div>
+
+					<!-- glow -->
+					<div class="effect-card" id="glow">
+						<div class="effect-header">
+							<h3>glow</h3>
+							<span class="effect-badge alias">bloom</span>
+							<span class="effect-badge alias">halo</span>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Luminosity-based glow/bloom with hue shift and blend modes.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>threshold</td><td>t, th, thresh</td><td>0.5</td><td>Luminosity cutoff 0–1</td></tr>
+									<tr><td>radius</td><td>r, rad</td><td>20</td><td>Blur radius px</td></tr>
+									<tr><td>intensity</td><td>i, int, ::N</td><td>1.0</td><td>Brightness multiplier</td></tr>
+									<tr><td>passes</td><td>p</td><td>1</td><td>Blur iterations 1–3</td></tr>
+									<tr><td>hue</td><td>h</td><td>null</td><td>Hue shift degrees</td></tr>
+									<tr><td>blend</td><td>bl</td><td>"addition"</td><td>Blend mode</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'glow::2.0 {:t 0.3 :r 25 :h 180 :blend screen}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':glow-soft'}</span>
+						<span class="preset-tag">{':glow-bloom'}</span>
+						<span class="preset-tag">{':glow-halo'}</span>
+					</div>
+					<img src="https://img.mxjxn.com/image/glitch/ref/glow.png" alt="glow effect" class="effect-image" />
+					</div>
+
+					<!-- gradient -->
+					<div class="effect-card" id="gradient">
+						<div class="effect-header">
+							<h3>gradient</h3>
+							<span class="effect-badge alias">grad</span>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Color overlay — linear, radial, or conic with blend modes.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>mode</td><td>—</td><td>"linear"</td><td>"linear" / "radial" / "conic"</td></tr>
+									<tr><td>color</td><td>c, c1</td><td>#ffffff</td><td>Start color hex/name</td></tr>
+									<tr><td>color2</td><td>c2</td><td>null</td><td>End color (null = fade to transparent)</td></tr>
+									<tr><td>direction</td><td>d, dir, angle</td><td>180</td><td>Degrees for linear</td></tr>
+									<tr><td>x</td><td>—</td><td>0</td><td>Center offset %</td></tr>
+									<tr><td>y</td><td>—</td><td>0</td><td>Center offset %</td></tr>
+									<tr><td>opacity</td><td>o, alpha, ::N</td><td>0.5</td><td>0–1</td></tr>
+									<tr><td>feather</td><td>f</td><td>0</td><td>Edge softness 0–1</td></tr>
+									<tr><td>blend</td><td>bl</td><td>"normal"</td><td>Blend mode</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'gradient {:mode radial :c magenta :o 0.5 :blend screen}'}</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':color-duotone'}</span>
+					</div>
+						<div class="gradient-images">
+							<img src="https://img.mxjxn.com/image/glitch/ref/gradient-radial.png" alt="gradient radial" class="effect-image" />
+							<img src="https://img.mxjxn.com/image/glitch/ref/gradient-linear.png" alt="gradient linear" class="effect-image" />
+							<img src="https://img.mxjxn.com/image/glitch/ref/gradient-conic.png" alt="gradient conic" class="effect-image" />
+						</div>
+					</div>
+
+					<!-- lens-distortion -->
+					<div class="effect-card" id="lens-distortion">
+						<div class="effect-header">
+							<h3>lens-distortion</h3>
+							<span class="effect-badge alias">lensdistortion</span>
+							<span class="effect-badge alias">lens-distort</span>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Multiple distortion modes: barrel, pincushion, wave, swirl, spherical.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>mode</td><td>—</td><td>"barrel"</td><td>"barrel" / "pincushion" / "wave" / "swirl" / "spherical"</td></tr>
+									<tr><td>strength</td><td>str, st, ::N</td><td>varies</td><td>Intensity (varies by mode)</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="example">
+							<span class="example-prompt">{'lens-distortion {:mode barrel :strength 1.5}'}</span>
+						</div>
+						<div class="lens-images">
+							<img src="https://img.mxjxn.com/image/glitch/ref/lens-barrel.png" alt="lens barrel" class="effect-image" />
+							<img src="https://img.mxjxn.com/image/glitch/ref/lens-wave.png" alt="lens wave" class="effect-image" />
+							<img src="https://img.mxjxn.com/image/glitch/ref/swirl.png" alt="swirl" class="effect-image" />
+							<img src="https://img.mxjxn.com/image/glitch/ref/globe.png" alt="globe" class="effect-image" />
+						</div>
+					</div>
+
+					<!-- wave -->
+					<div class="effect-card" id="wave">
+						<div class="effect-header">
+							<h3>wave</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Sine wave displacement.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>frequency</td><td>::N</td><td>0.05</td><td>Wave frequency</td></tr>
+									<tr><td>amplitude</td><td>—</td><td>20</td><td>Wave height px</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">wave::0.08</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':distort-wave'}</span>
+					</div>
+					</div>
+
+					<!-- swirl -->
+					<div class="effect-card" id="swirl">
+						<div class="effect-header">
+							<h3>swirl</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Rotational distortion around center.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>strength</td><td>str, st, ::N</td><td>1.0</td><td>Rotation amount</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">swirl::0.15</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':swirl-vortex'}</span>
+						<span class="preset-tag">{':swirl-gentle'}</span>
+						<span class="preset-tag">{':distort-funnel'}</span>
+					</div>
+					</div>
+
+					<!-- barrel -->
+					<div class="effect-card" id="barrel">
+						<div class="effect-header">
+							<h3>barrel</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Barrel / pincushion lens distortion.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>strength</td><td>str, st, ::N</td><td>~1.0</td><td>Distortion intensity</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">barrel::1.5</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':distort-funnel'}</span>
+					</div>
+					</div>
+
+					<!-- spherical -->
+					<div class="effect-card" id="spherical">
+						<div class="effect-header">
+							<h3>spherical</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Spherical projection distortion.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>strength</td><td>str, st, ::N</td><td>~1.0</td><td>Projection intensity</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">spherical::1.2</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':distort-globe'}</span>
+					</div>
+					</div>
+
+					<!-- globe -->
+					<div class="effect-card" id="globe">
+						<div class="effect-header">
+							<h3>globe</h3>
+							<span class="effect-badge">::N</span>
+						</div>
+						<p class="effect-desc">Superellipse globe lens with chromatic dispersion.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>power</td><td>::N</td><td>—</td><td>Shape: 0=diamond, 1=circle, 100=square</td></tr>
+									<tr><td>strength</td><td>—</td><td>—</td><td>Lens projection intensity</td></tr>
+									<tr><td>dispersion</td><td>—</td><td>—</td><td>Chromatic fringe intensity</td></tr>
+									<tr><td>radius</td><td>—</td><td>0.65</td><td>Lens boundary size</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">globe::2</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':distort-globe'}</span>
+					</div>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- Pipeline Actions -->
+			<section class="section" id="actions">
+				<h2>Pipeline Actions</h2>
+				<div class="effect-grid">
+
+					<!-- generate -->
+					<div class="effect-card" id="generate">
+						<div class="effect-header">
+							<h3>generate</h3>
+							<span class="effect-badge action">action</span>
+						</div>
+						<p class="effect-desc">Create an image from a text prompt (Flux Schnell/Dev).</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>prompt</td><td>—</td><td>—</td><td>Text description (positional)</td></tr>
+									<tr><td><code>--schnell</code></td><td>—</td><td>yes</td><td>Fast generation (default)</td></tr>
+									<tr><td><code>--dev</code> / <code>--hq</code></td><td>—</td><td>—</td><td>Higher quality, slower</td></tr>
+									<tr><td><code>--model</code></td><td>—</td><td>—</td><td>Explicit model name</td></tr>
+									<tr><td>aspect-ratio</td><td>ar</td><td>"1:1"</td><td>"1:1" / "16:9" / "9:16" / "4:3"</td></tr>
+									<tr><td><code>::N</code></td><td>—</td><td>0.57</td><td>Strength 0–1</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="example">
+							<span class="example-prompt">generate a cyberpunk cat</span>
+							<span class="example-desc">Generate with default Schnell model</span>
+						</div>
+					</div>
+
+					<!-- remix -->
+					<div class="effect-card" id="remix">
+						<div class="effect-header">
+							<h3>remix</h3>
+							<span class="effect-badge action">action</span>
+						</div>
+						<p class="effect-desc">Pull an image from the conversation thread into the pipeline.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>target</td><td>—</td><td>smart</td><td>"last" / "first" / "quote" / "prev" (smart fallback)</td></tr>
+									<tr><td>imageIndex</td><td>—</td><td>1</td><td>1-based index for multi-image casts, e.g. {':image 2'}</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="example">
+							<span class="example-prompt">remix quote</span>
+							<span class="example-desc">Remix the quoted cast's image</span>
+						</div>
+					</div>
+
+					<!-- img2img -->
+					<div class="effect-card" id="img2img">
+						<div class="effect-header">
+							<h3>img2img</h3>
+							<span class="effect-badge action">action</span>
+						</div>
+						<p class="effect-desc">Transform image with a text prompt (Qwen AI).</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>prompt</td><td>—</td><td>—</td><td>Transformation instruction (positional)</td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="example">
+							<span class="example-prompt">img2img make it look like a painting</span>
+						</div>
+					</div>
+
+					<!-- mask -->
+					<div class="effect-card" id="mask">
+						<div class="effect-header">
+							<h3>mask</h3>
+							<span class="effect-badge action">action</span>
+							<span class="effect-badge pipeline">pipeline</span>
+						</div>
+						<p class="effect-desc">Selective effect application — next effect only applies within masked regions.</p>
+						<div class="ref-table-wrap">
+							<table class="ref-table">
+								<thead><tr><th>Param</th><th>Short</th><th>Default</th><th>Info</th></tr></thead>
+								<tbody>
+									<tr><td>mode</td><td>—</td><td>"saturation"</td><td>See mask modes below</td></tr>
+									<tr><td>threshold</td><td>t</td><td>varies</td><td>Mode-dependent</td></tr>
+									<tr><td>feather</td><td>f</td><td>0</td><td>Edge softness 0–1</td></tr>
+								</tbody>
+							</table>
+						</div>
+					<div class="example">
+						<span class="example-prompt">{'mask {:mode radial :r 0.5 :f 0.3} | kaleidoscope::6'}</span>
+						<span class="example-desc">Kaleidoscope only in the radial mask region</span>
+					</div>
+					<div class="presets-inline">
+						<span class="presets-label">Presets</span>
+						<span class="preset-tag">{':mask-neon'}</span>
+						<span class="preset-tag">{':mask-saturation-pop'}</span>
+						<span class="preset-tag">{':mask-edges-reveal'}</span>
+					</div>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- Mask Modes -->
+			<section class="section" id="masks">
+				<h2>Mask Modes</h2>
+				<p class="effect-desc">Modes for the <code>mask</code> action. Each generates a different selection region.</p>
+				<div class="effect-grid">
+
+					<div class="effect-card">
+						<div class="effect-header">
+							<h3>saturation</h3>
+						</div>
+						<p class="effect-desc">Select pixels by saturation level. Low-saturation areas (grays/blacks) get masked out.</p>
+						<div class="example">
+							<span class="example-prompt">{'mask {:mode saturation :threshold 40} | posterize::3'}</span>
+						</div>
+						<img src="https://img.mxjxn.com/image/glitch/ref/mask-saturation.png" alt="saturation mask" class="effect-image" />
+					</div>
+
+					<div class="effect-card">
+						<div class="effect-header">
+							<h3>radial</h3>
+						</div>
+						<p class="effect-desc">Circular gradient mask from center. Use <code>r</code> for radius, <code>f</code> for feather.</p>
+						<div class="example">
+							<span class="example-prompt">{'mask {:mode radial :r 0.5 :f 0.3} | kaleidoscope::6'}</span>
+						</div>
+						<img src="https://img.mxjxn.com/image/glitch/ref/mask-radial.png" alt="radial mask" class="effect-image" />
+					</div>
+
+					<div class="effect-card">
+						<div class="effect-header">
+							<h3>noise</h3>
+						</div>
+						<p class="effect-desc">Random noise-based mask. Use <code>scale</code> for grain size, <code>f</code> for feather.</p>
+						<div class="example">
+							<span class="example-prompt">{'mask {:mode noise :scale 0.03 :f 0.5} | rgb-shift {:shift 25}'}</span>
+						</div>
+						<img src="https://img.mxjxn.com/image/glitch/ref/mask-noise.png" alt="noise mask" class="effect-image" />
+					</div>
+
+					<div class="effect-card">
+						<div class="effect-header">
+							<h3>edges</h3>
+						</div>
+						<p class="effect-desc">Select based on edge detection. Use <code>blur</code> for pre-smooth, <code>threshold</code> for sensitivity.</p>
+						<div class="example">
+							<span class="example-prompt">{'mask {:mode edges :blur 3 :threshold 0.1} | colorswap'}</span>
+						</div>
+						<img src="https://img.mxjxn.com/image/glitch/ref/mask-edges.png" alt="edges mask" class="effect-image" />
+					</div>
+
+				</div>
+			</section>
+
+			<!-- Combo Walkthrough -->
+			<section class="section" id="combos">
+				<h2>Combo Walkthrough</h2>
+				<p class="effect-desc">Multi-step pipelines chaining effects together. Click any command to copy.</p>
+
+				<div class="combo-card">
+					<div class="combo-header">
+						<span class="combo-num">1</span>
+						<span class="combo-title">Glow + Gradient Overlay</span>
+					</div>
+					<span class="example-prompt combo-cmd">{'gradient {:mode radial :c magenta :o 0.5 :blend screen} | glow::1.5 {:t 0.35 :r 35}'}</span>
+					<img src="https://img.mxjxn.com/image/glitch/ref/combo-glow-grad.png" alt="glow gradient combo" class="combo-image" />
+				</div>
+
+				<div class="combo-card">
+					<div class="combo-header">
+						<span class="combo-num">2</span>
+						<span class="combo-title">Kaleidoscope + Noise + Glow</span>
+					</div>
+					<span class="example-prompt combo-cmd">{'kaleidoscope::8 {:z 1.2 :sa 30} | noise::40 | glow::1.0 {:t 0.5 :r 15}'}</span>
+					<img src="https://img.mxjxn.com/image/glitch/ref/combo-kaleido-noise.png" alt="kaleido noise combo" class="combo-image" />
+				</div>
+
+				<div class="combo-card">
+					<div class="combo-header">
+						<span class="combo-num">3</span>
+						<span class="combo-title">Dark Atmosphere</span>
+					</div>
+					<span class="example-prompt combo-cmd">{'gradient {:mode linear :c #000022 :o 0.7 :blend multiply} | glow::2.5 {:t 0.2 :r 40 :p 2 :blend screen}'}</span>
+					<img src="https://img.mxjxn.com/image/glitch/ref/combo-dark-atmosphere.png" alt="dark atmosphere combo" class="combo-image" />
+				</div>
+
+				<div class="combo-card">
+					<div class="combo-header">
+						<span class="combo-num">4</span>
+						<span class="combo-title">Glitch Art</span>
+					</div>
+					<span class="example-prompt combo-cmd">{'rgb-shift {:shift 20} | pixel-sort {:threshold 0.3} | glow::1.8 {:t 0.4 :r 20 :h 90 :blend screen}'}</span>
+					<img src="https://img.mxjxn.com/image/glitch/ref/combo-glitch-art.png" alt="glitch art combo" class="combo-image" />
+				</div>
+			</section>
+
+		<!-- Presets Cheatsheet -->
+		<section class="section" id="presets">
+			<h2>Presets</h2>
+			<p class="effect-desc">Built-in presets available to everyone. Use <code>{':name'}</code> to expand a preset in any pipeline. Override params with <code>{'{:key value}'}</code> after the preset name.</p>
+
+			<div class="preset-grid">
+				<!-- Kaleidoscope -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Kaleidoscope</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':kaleido-mandala'}</span>
+						<span class="preset-pipe">mask radial → k6 → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':kaleido-crystal'}</span>
+						<span class="preset-pipe">mask radial → k4 zoomed → swirl</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':kaleido-infinity'}</span>
+						<span class="preset-pipe">k8 zoomed → k3 rotated</span>
+					</div>
+				</div>
+
+				<!-- Pixel Sort -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Pixel Sort</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':sort-cascade'}</span>
+						<span class="preset-pipe">sort vertical → sort horizontal</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':sort-bleed'}</span>
+						<span class="preset-pipe">heavy sort → glow</span>
+					</div>
+				</div>
+
+				<!-- RGB Shift -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>RGB Shift</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':rgb-ghost'}</span>
+						<span class="preset-pipe">mild rgb-shift → soft glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':rgb-shatter'}</span>
+						<span class="preset-pipe">heavy rgb → sort → noise</span>
+					</div>
+				</div>
+
+				<!-- Mask -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Mask Combos</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':mask-neon'}</span>
+						<span class="preset-pipe">color mask → colorswap → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':mask-saturation-pop'}</span>
+						<span class="preset-pipe">sat mask → posterize → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':mask-edges-reveal'}</span>
+						<span class="preset-pipe">edge mask → invert → glow</span>
+					</div>
+				</div>
+
+				<!-- Distortion -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Distortion</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':distort-wave'}</span>
+						<span class="preset-pipe">wave horizontal → wave vertical</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':distort-funnel'}</span>
+						<span class="preset-pipe">barrel → swirl → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':distort-globe'}</span>
+						<span class="preset-pipe">spherical → k2 masked</span>
+					</div>
+				</div>
+
+				<!-- Glow -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Glow / Light</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':glow-soft'}</span>
+						<span class="preset-pipe">ambient glow 0.3</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':glow-bloom'}</span>
+						<span class="preset-pipe">bloom 0.6 → glow 0.2</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':glow-halo'}</span>
+						<span class="preset-pipe">radial halo 0.5</span>
+					</div>
+				</div>
+
+				<!-- Style -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Style</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':poster-retro'}</span>
+						<span class="preset-pipe">posterize 4 → dither 2</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':pixel-8bit'}</span>
+						<span class="preset-pipe">pixelate 8 → posterize 6</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':noise-film'}</span>
+						<span class="preset-pipe">noise → dither → posterize</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':color-psychedelic'}</span>
+						<span class="preset-pipe">colorswap → hue-rotate → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':color-duotone'}</span>
+						<span class="preset-pipe">gradient overlay 2-color</span>
+					</div>
+				</div>
+
+				<!-- Swirl -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Swirl</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':swirl-vortex'}</span>
+						<span class="preset-pipe">strong swirl → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':swirl-gentle'}</span>
+						<span class="preset-pipe">subtle centered twist</span>
+					</div>
+				</div>
+
+				<!-- Combo -->
+				<div class="preset-card">
+					<div class="preset-card-header">
+						<h3>Full Combos</h3>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':combo-glitch-art'}</span>
+						<span class="preset-pipe">sat mask → rgb → sort → glow</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':combo-ethereal'}</span>
+						<span class="preset-pipe">luma mask → k6 → bloom → swirl</span>
+					</div>
+					<div class="preset-row">
+						<span class="preset-name">{':combo-slice-dither'}</span>
+						<span class="preset-pipe">random slice → dither → posterize</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="preset-usage">
+				<h3>Usage</h3>
+				<div class="example">
+				<span class="example-prompt">{':kaleido-mandala'}</span>
+						<span class="example-desc">Expand preset as the full pipeline</span>
+					</div>
+					<div class="example">
+						<span class="example-prompt">{':kaleido-mandala {:threshold 70} | swirl::0.1'}</span>
+					<span class="example-desc">Override mask threshold, then chain swirl</span>
+				</div>
+			</div>
+		</section>
+
+		<!-- Advanced -->
+		<section class="section" id="advanced">
+				<h2>Advanced</h2>
+
+				<div class="effect-grid">
+					<div class="effect-card">
+						<div class="effect-header">
+							<h3>Snapshots</h3>
+						</div>
+						<p class="effect-desc">Save intermediate pipeline results. Use <code>@name</code> after any step to snapshot it, then reference it later with <code>@name</code>.</p>
+						<div class="example">
+							<span class="example-prompt">generate portrait @base | rgb-shift @shifted | @base | kaleidoscope::6</span>
+							<span class="example-desc">Snapshot base and shifted, reuse base for kaleidoscope</span>
+						</div>
+					</div>
+
+				<div class="effect-card">
+					<div class="effect-header">
+						<h3>Custom Presets</h3>
+					</div>
+					<p class="effect-desc">Save your own effect combos with <code>preset save &lt;name&gt;</code>. Use <code>{':name'}</code> to expand, <code>{'{:key value}'}</code> to override params. Your presets are personal — built-in presets are listed in the <a href="#presets">Presets</a> section above.</p>
+					<div class="example">
+						<span class="example-prompt">{':myglitch | glow::2.0'}</span>
+						<span class="example-desc">Expand a saved preset, then add glow</span>
+					</div>
+				</div>
+
+					<div class="effect-card">
+						<div class="effect-header">
+							<h3>Range Sweep</h3>
+						</div>
+						<p class="effect-desc">Generate multiple outputs by sweeping a parameter across a range. Use <code>{'{:param start..end :steps N}'}</code>.</p>
+						<div class="example">
+							<span class="example-prompt">{'kaleidoscope::8 {:z 1.0..2.0 :steps 5}'}</span>
+							<span class="example-desc">5 images with zoom from 1.0 to 2.0</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+		<footer>
+			<p>© 2026 Suchbot</p>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	.about-page {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 1.5rem;
+		font-family: 'Inter', sans-serif;
+	}
+
+	/* Table of Contents */
+	.toc {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 0.75rem;
+		padding: 0.75rem 1rem;
+		margin-bottom: 2rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		font-family: 'Space Mono', monospace;
+		font-size: 0.75rem;
+		backdrop-filter: blur(12px);
+	}
+
+	.toc-title {
+		font-weight: 700;
+		color: var(--text);
+		margin-right: 0.5rem;
+	}
+
+	.toc a {
+		color: var(--text-muted);
+		text-decoration: none;
+		padding: 0.15rem 0.4rem;
+		border-radius: 4px;
+		transition: all 0.15s ease;
+	}
+
+	.toc a:hover {
+		color: var(--accent);
+		background: rgba(139, 92, 246, 0.1);
+	}
+
+	/* Hero */
+	.hero {
+		padding: 1.5rem 0 2rem;
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 3rem;
+	}
+
+	h1 {
+		font-family: 'Space Mono', monospace;
+		font-size: 2rem;
+		font-weight: 700;
+		margin: 0 0 0.75rem;
+		letter-spacing: -0.02em;
+	}
+
+	.hero-subtitle {
+		font-size: 1rem;
+		color: var(--text-muted);
+		margin: 0 0 1.5rem;
+		line-height: 1.6;
+	}
+
+	.hero-demo {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.hero-image {
+		width: 300px;
+		max-width: 100%;
+		border-radius: 10px;
+		border: 1px solid var(--border);
+	}
+
+	.hero-cmd {
+		font-size: 0.85rem;
+	}
+
+	.hero-note {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin: 0 0 0.75rem;
+	}
+
+	.hero-source {
+		width: 200px;
+		max-width: 100%;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		opacity: 0.7;
+	}
+
+	/* Content */
+	.content {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+
+	.section {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.section h2 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0;
+		color: var(--text);
+	}
+
+	.section h3 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1rem;
+		font-weight: 600;
+		margin: 1.5rem 0 0.5rem;
+		color: var(--accent);
+	}
+
+	.section p {
+		font-size: 1rem;
+		line-height: 1.7;
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	/* Example blocks */
+	.example-block {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-top: 0.5rem;
+	}
+
+	.example {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.75rem 1rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+	}
+
+	.example-prompt {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.85rem;
+		color: var(--text);
+		word-break: break-all;
+	}
+
+	.example-desc {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+	}
+
+	/* Reference table */
+	.ref-table-wrap {
+		overflow-x: auto;
+		margin-top: 0.5rem;
+	}
+
+	.ref-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.85rem;
+	}
+
+	.ref-table th {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-muted);
+		text-align: left;
+		padding: 0.6rem 0.8rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.ref-table td {
+		padding: 0.6rem 0.8rem;
+		border-bottom: 1px solid var(--border);
+		vertical-align: top;
+	}
+
+	.ref-table td:first-child {
+		color: var(--text);
+		font-weight: 500;
+		white-space: nowrap;
+	}
+
+	.ref-table td:nth-child(2),
+	.ref-table td:nth-child(3) {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.8rem;
+		color: var(--text-muted);
+	}
+
+	.ref-table code {
+		color: var(--accent);
+	}
+
+	/* Effect cards */
+	.effect-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-top: 0.5rem;
+	}
+
+	.effect-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.25rem 1.5rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+	}
+
+	.effect-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.effect-header h3 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1.1rem;
+		font-weight: 700;
+		margin: 0;
+		color: var(--accent);
+	}
+
+	.effect-badge {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.7rem;
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		background: rgba(139, 92, 246, 0.15);
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.effect-badge.alias {
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--text-muted);
+	}
+
+	.effect-badge.action {
+		background: rgba(59, 130, 246, 0.15);
+		color: #60a5fa;
+	}
+
+	.effect-badge.pipeline {
+		background: rgba(16, 185, 129, 0.15);
+		color: #34d399;
+	}
+
+	.effect-desc {
+		font-size: 0.9rem;
+		line-height: 1.6;
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	.effect-params {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		padding: 0.75rem 1rem;
+		background: rgba(0, 0, 0, 0.2);
+		border-radius: 6px;
+	}
+
+	.param {
+		display: flex;
+		gap: 0.5rem;
+		font-size: 0.8rem;
+		line-height: 1.5;
+	}
+
+	.param code {
+		font-family: 'Space Mono', monospace;
+		color: var(--accent);
+		white-space: nowrap;
+		min-width: 120px;
+	}
+
+	.param span {
+		color: var(--text-muted);
+	}
+
+	/* Effect images */
+	.effect-image {
+		width: 300px;
+		max-width: 100%;
+		height: auto;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		object-fit: contain;
+	}
+
+	.gradient-images,
+	.lens-images {
+		display: flex;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.gradient-images .effect-image,
+	.lens-images .effect-image {
+		width: 180px;
+	}
+
+	/* Combo cards */
+	.combo-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.25rem 1.5rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+	}
+
+	.combo-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.combo-num {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--accent);
+		width: 1.5rem;
+		height: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(139, 92, 246, 0.15);
+		border-radius: 50%;
+	}
+
+	.combo-title {
+		font-family: 'Space Mono', monospace;
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	.combo-cmd {
+		display: block;
+	}
+
+	.combo-image {
+		width: 100%;
+		max-width: 600px;
+		border-radius: 10px;
+		border: 1px solid var(--border);
+	}
+
+	/* Inline preset tags (on effect cards) */
+	.presets-inline {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.presets-label {
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--text-muted);
+		font-weight: 600;
+	}
+
+	.preset-tag {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.75rem;
+		color: var(--accent);
+		background: rgba(139, 92, 246, 0.1);
+		border: 1px solid rgba(139, 92, 246, 0.2);
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: all 0.15s ease;
+	}
+
+	.preset-tag:hover {
+		background: rgba(139, 92, 246, 0.2);
+		border-color: var(--accent);
+	}
+
+	/* Preset cheatsheet grid */
+	.preset-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1rem;
+	}
+
+	.preset-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 1rem 1.25rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+	}
+
+	.preset-card-header h3 {
+		margin: 0 !important;
+		font-size: 0.9rem !important;
+		color: var(--text) !important;
+	}
+
+	.preset-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 0.75rem;
+		padding: 0.25rem 0;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+	}
+
+	.preset-row:last-child {
+		border-bottom: none;
+	}
+
+	.preset-name {
+		font-family: 'Space Mono', monospace;
+		font-size: 0.78rem;
+		color: var(--accent);
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.preset-pipe {
+		font-size: 0.78rem;
+		color: var(--text-muted);
+		text-align: right;
+	}
+
+	.preset-usage {
+		margin-top: 1.5rem;
+	}
+
+	.preset-usage h3 {
+		font-family: 'Space Mono', monospace;
+		font-size: 1rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem;
+		color: var(--accent);
+	}
+
+	/* Footer */
+	footer {
+		margin-top: 4rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border);
+		text-align: center;
+	}
+
+	footer p {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		font-family: 'Space Mono', monospace;
+		margin: 0;
+	}
+
+	/* Mobile responsive */
+	@media (max-width: 768px) {
+		.about-page {
+			padding: 1rem;
+		}
+
+		h1 {
+			font-size: 1.5rem;
+		}
+
+		.hero-subtitle {
+			font-size: 0.9rem;
+		}
+
+		.param {
+			flex-direction: column;
+			gap: 0.15rem;
+		}
+
+		.param code {
+			min-width: unset;
+		}
+
+		.gradient-images,
+		.lens-images {
+			flex-direction: column;
+		}
+
+		.gradient-images .effect-image,
+		.lens-images .effect-image {
+			width: 250px;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.hero {
+			padding: 1rem 0 1.5rem;
+		}
+
+		h1 {
+			font-size: 1.25rem;
+		}
+
+		.section h2 {
+			font-size: 1.1rem;
+		}
+
+		.ref-table {
+			font-size: 0.75rem;
+		}
+	}
+</style>
