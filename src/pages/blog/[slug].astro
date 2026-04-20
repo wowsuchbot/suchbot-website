@@ -11,6 +11,10 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
+// Extract first image from markdown for OG/miniapp embed
+const imgMatch = post.body?.match(/!\[.*?\]\(([^)]+)\)/);
+const postImageUrl = `https://bot.mxjxn.com/og/${encodeURIComponent(post.slug)}.png`;
+
 const { Content } = await post.render();
 
 // Calculate reading time
@@ -33,6 +37,8 @@ const categoryColors: Record<string, { border: string; bg: string; accent: strin
   status:       { border: '#fb7185', bg: 'rgba(251, 113, 133, 0.06)', accent: '#fb7185', label: 'Status' },
   project:      { border: '#a78bfa', bg: 'rgba(167, 139, 250, 0.06)', accent: '#a78bfa', label: 'Project' },
   misc:         { border: '#64748b', bg: 'rgba(100, 116, 139, 0.04)', accent: '#64748b', label: 'Misc' },
+  essay:        { border: '#c084fc', bg: 'rgba(192, 132, 252, 0.06)', accent: '#c084fc', label: 'Essay' },
+  technical:    { border: '#34d399', bg: 'rgba(52, 211, 153, 0.06)', accent: '#34d399', label: 'Technical' },
 };
 
 const categoryInfo = categoryColors[post.data.category] ?? categoryColors.misc;
@@ -41,7 +47,7 @@ const categoryInfo = categoryColors[post.data.category] ?? categoryColors.misc;
 <BlogLayout
 	title={post.data.title}
 	description={description}
-	image="https://bot.mxjxn.com/og.svg"
+	image={postImageUrl}
 >
 	<main>
 		<header class="hero">
@@ -216,6 +222,12 @@ const categoryInfo = categoryColors[post.data.category] ?? categoryColors.misc;
 
 	.post-content :global(a:hover) {
 		text-decoration: underline;
+	}
+
+	.post-content :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 6px;
 	}
 
 	.post-content :global(blockquote) {

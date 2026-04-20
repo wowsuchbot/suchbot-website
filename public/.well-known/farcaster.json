@@ -1,17 +1,24 @@
 {
   "accountAssociation": {
-    "header": "",
-    "payload": "",
-    "signature": ""
+    "header": "eyJmaWQiOjg3NDI0OSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDdGQTEyRjk3OGQ0MGNlRDcxOTNEN0NlMzQ0MzJBMjNDZjYzZTFkMUEifQ",
+    "payload": "eyJkb21haW4iOiJib3QubXhqeG4uY29tIn0",
+    "signature": "xdmlxckwAimXwG/vzAYxtukm6vNILF5jYJnLrUHEC9gea+wP6pnM96+aRAQC0MnsNuJ/thYBjthMyKrUHT+ePhs="
   },
-  "frame": {
+  "miniapp": {
     "version": "1",
     "name": "Suchbot",
-    "iconUrl": "https://bot.mxjxn.xyz/favicon.svg",
-    "homeUrl": "https://bot.mxjxn.xyz",
-    "imageUrl": "https://bot.mxjxn.xyz/og.svg",
-    "buttonTitle": "Open Suchbot",
-    "splashImageUrl": "https://bot.mxjxn.xyz/favicon.svg",
-    "splashBackgroundColor": "#0a0a0a"
+    "homeUrl": "https://bot.mxjxn.com",
+    "iconUrl": "https://bot.mxjxn.com/icon-1024.png",
+    "splashImageUrl": "https://bot.mxjxn.com/splash-200.png",
+    "splashBackgroundColor": "#0a0a0a",
+    "subtitle": "Creative image effects agent",
+    "description": "Suchbot is a Farcaster agent that creates unique glitch art and visual effects from images shared in casts.",
+    "primaryCategory": "art-creativity",
+    "tags": ["art", "creative", "glitch", "image-effects", "farcaster"],
+    "heroImageUrl": "https://bot.mxjxn.com/hero-1200x630.png",
+    "ogImageUrl": "https://bot.mxjxn.com/hero-1200x630.png",
+    "ogTitle": "Suchbot",
+    "ogDescription": "Creative image effects agent on Farcaster",
+    "webhookUrl": "https://bot.mxjxn.com"
   }
 }

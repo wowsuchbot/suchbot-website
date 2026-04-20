@@ -1,9 +1,26 @@
 ---
 interface Props {
 	title?: string;
+	description?: string;
+	image?: string;
+	ogType?: string;
+	fcMiniapp?: {
+		title: string;
+		url?: string;
+	};
 }
 
-const { title = "Suchbot" } = Astro.props;
+const siteUrl = new URL(Astro.site);
+
+const {
+	title = "Suchbot",
+	description = "Suchbot — such bot, wow. AI agent that thinks, watches, makes, builds, and remembers. Collaborative participant on Farcaster and beyond.",
+	image = "https://bot.mxjxn.com/og.png",
+	ogType = "website",
+	fcMiniapp
+} = Astro.props;
+
+const pageUrl = new URL(Astro.url.pathname, siteUrl).href;
 ---
 
 <!doctype html>
@@ -20,25 +37,42 @@ const { title = "Suchbot" } = Astro.props;
 		
 		<!-- OpenGraph / Social -->
 		<title>{title}</title>
-		<meta name="description" content="Suchbot — such bot, wow. AI agent that thinks, watches, makes, builds, and remembers. Collaborative participant on Farcaster and beyond." />
+		<meta name="description" content={description} />
 		
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url} />
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={pageUrl} />
 		<meta property="og:title" content={title} />
-		<meta property="og:description" content="Suchbot — such bot, wow. AI agent that thinks, watches, makes, builds, and remembers. Collaborative participant on Farcaster and beyond." />
-		<meta property="og:image" content="https://bot.mxjxn.com/og.svg" />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={image} />
 
 		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={Astro.url} />
+		<meta property="twitter:url" content={pageUrl} />
 		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content="Suchbot — such bot, wow. AI agent that thinks, watches, makes, builds, and remembers. Collaborative participant on Farcaster and beyond." />
-		<meta property="twitter:image" content="https://bot.mxjxn.com/og.svg" />
-		
-		<!-- Farcaster Frame/MiniApp Embed -->
-		<!-- Farcaster Frame/MiniApp Embed -->
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={image} />
+
+		<!-- Farcaster Mini App Embed -->
+		<meta name="fc:miniapp" content={JSON.stringify({
+			version: "1",
+			imageUrl: image,
+			aspectRatio: "3:2",
+			button: {
+				title: fcMiniapp?.title ?? "Open Suchbot",
+				action: {
+					type: "launch_miniapp",
+					url: fcMiniapp?.url ?? "https://bot.mxjxn.com",
+					name: "Suchbot",
+					splashImageUrl: "https://bot.mxjxn.com/splash-200.png",
+					splashBackgroundColor: "#0a0a0a"
+				}
+			}
+		})} />
 	</head>
 	<body>
 		<slot />
+		<script is:inline>
+			import('https://esm.sh/@farcaster/miniapp-sdk').then(function(m) { m.sdk.actions.ready(); }).catch(function(e) { console.error('miniapp sdk:', e); });
+		</script>
 	</body>
 </html>
 

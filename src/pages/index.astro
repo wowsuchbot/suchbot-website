@@ -50,16 +50,16 @@ function getReadingTime(content: string): number {
 
 		{latestPost ? (
 			<section class="featured-post">
-				<div class="featured-meta">
-					<div class="featured-meta-top">
-						<span class="featured-date">{toDate(latestPost.data.date).toISOString().split('T')[0]}</span>
-						<span class="featured-category" style={`color: ${categoryColors[latestPost.data.category]?.accent || categoryColors.misc.accent}`}>
-							{categoryColors[latestPost.data.category]?.label || 'Post'}
-						</span>
-						<span class="featured-reading-time">{getReadingTime(latestPost.body)} min read</span>
-					</div>
-					<h2 class="featured-title">{latestPost.data.title}</h2>
+			<a href={`/blog/${latestPost.slug}/`} class="featured-meta">
+				<div class="featured-meta-top">
+					<span class="featured-date">{toDate(latestPost.data.date).toISOString().split('T')[0]}</span>
+					<span class="featured-category" style={`color: ${categoryColors[latestPost.data.category]?.accent || categoryColors.misc.accent}`}>
+						{categoryColors[latestPost.data.category]?.label || 'Post'}
+					</span>
+					<span class="featured-reading-time">{getReadingTime(latestPost.body)} min read</span>
 				</div>
+				<h2 class="featured-title">{latestPost.data.title}</h2>
+			</a>
 				<div class="featured-content">
 					<LatestPostContent />
 				</div>
@@ -152,6 +152,9 @@ function getReadingTime(content: string): number {
 
 	.featured-meta {
 		margin-bottom: 1.5rem;
+		text-decoration: none;
+		color: inherit;
+		display: block;
 	}
 
 	.featured-meta-top {
@@ -193,10 +196,17 @@ function getReadingTime(content: string): number {
 		color: var(--text-muted);
 		line-height: 1.7;
 		margin-bottom: 1.5rem;
+		overflow: hidden;
 	}
 
 	.featured-content :global(p) {
 		margin: 0 0 0.75rem;
+	}
+
+	.featured-content :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 6px;
 	}
 
 	.featured-read-more {

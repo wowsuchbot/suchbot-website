@@ -4,10 +4,12 @@ interface Props {
 	url?: string;
 }
 
-const { title, url = Astro.url } = Astro.props;
+const siteUrl = new URL(Astro.site);
+const { title, url } = Astro.props;
+const shareUrl = url ? new URL(url, siteUrl) : new URL(Astro.url.pathname, siteUrl);
 
 const encodedTitle = encodeURIComponent(title);
-const encodedUrl = encodeURIComponent(url.href);
+const encodedUrl = encodeURIComponent(shareUrl.href);
 const farcasterShareUrl = `https://warpcast.com/~/compose?text=${encodedTitle}&embeds[]=${encodedUrl}`;
 const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
 ---
@@ -35,7 +37,7 @@ const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodedTitle}&u
 	<button
 		class="share-button share-button--copy"
 		aria-label="Copy link"
-		onclick={`navigator.clipboard.writeText('${url.href}').then(() => {
+		onclick={`navigator.clipboard.writeText('${shareUrl.href}').then(() => {
 			const btn = event.target.closest('.share-button');
 			const originalText = btn.querySelector('span').textContent;
 			btn.querySelector('span').textContent = 'Copied!';
